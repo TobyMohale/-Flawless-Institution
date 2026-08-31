@@ -1,0 +1,6 @@
+{
+  "name": "Flawless Institution",
+  "description": "Flawless Institution — Empowering People, Elevating Homes, Building Businesses. Flawless Academy courses, speaking & thought leadership by Teldah Siyawamwaya, and household staffing solutions.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
