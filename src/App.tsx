@@ -104,6 +104,7 @@ export function App() {
         setCurrentView={handleNavigate}
         onOpenSpeakingEnquiry={() => handleOpenSpeaking()}
         onOpenStudentPortal={() => setStudentPortalOpen(true)}
+        enrolledCount={enrolledCourses.length}
       />
 
       {/* Main View Router with Smooth View Transitions */}
@@ -266,7 +267,7 @@ export function App() {
         />
       )}
 
-      {/* 3. Speaking Enquiry Modal */}
+      {/* 2. Speaking Enquiry Modal */}
       {speakingModalOpen && (
         <SpeakingEnquiryModal
           initialTopic={speakingInitialTopic}
@@ -274,7 +275,7 @@ export function App() {
         />
       )}
 
-      {/* 4. Student Learning & Graduation Portal Modal */}
+      {/* 3. Student Learning & Graduation Portal Modal */}
       {studentPortalOpen && (
         <StudentPortalModal
           enrolledCourses={enrolledCourses}

@@ -12,6 +12,9 @@ import caregiverSkillBg from '../assets/images/caregiver_elderly_care_1788457595
 import nannySkillBg from '../assets/images/nanny_childcare_training_1788457620915.jpg';
 import housekeepingSkillBg from '../assets/images/executive_housekeeping_service_1788457637151.jpg';
 import chefSkillBg from '../assets/images/chef_culinary_assistant_1788457653512.jpg';
+import homepageSocialThumbnail from '../assets/images/flawless_homepage_social_thumbnail_1788458737248.jpg';
+
+export const SOCIAL_SHARE_THUMBNAIL = homepageSocialThumbnail;
 
 export interface SkillBackgroundImage {
   id: string;

@@ -246,12 +246,12 @@ export const Footer: React.FC<FooterProps> = ({ setCurrentView, onOpenSpeakingEn
           </div>
         </div>
 
-        {/* Bottom copyright and motto */}
+        {/* Bottom copyright, motto & share */}
         <div className="mt-14 pt-8 border-t border-neutral-800/80 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-neutral-500">
           <div>
             © {new Date().getFullYear()} Flawless Institution. All rights reserved. Founded 2016.
           </div>
-          <div className="text-neutral-400 font-cinzel text-xs tracking-wider">
+          <div className="text-neutral-400 font-cinzel text-xs tracking-wider text-center">
             Empowering People • Elevating Homes • Building Businesses
           </div>
           <div className="flex items-center gap-1 text-[11px] text-neutral-500">
