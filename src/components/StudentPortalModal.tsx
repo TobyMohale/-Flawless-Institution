@@ -150,10 +150,10 @@ export const StudentPortalModal: React.FC<StudentPortalModalProps> = ({
               )}
 
               {/* Navigation Tabs */}
-              <div className="flex border-b border-neutral-800 text-xs font-medium gap-1">
+              <div className="flex border-b border-neutral-800 text-xs font-medium gap-1 overflow-x-auto whitespace-nowrap no-scrollbar pb-0.5">
                 <button
                   onClick={() => setActiveTab('modules')}
-                  className={`py-2.5 px-4 rounded-t-lg transition-all flex items-center gap-1.5 ${
+                  className={`py-2.5 px-4 rounded-t-lg transition-all flex items-center gap-1.5 shrink-0 ${
                     activeTab === 'modules'
                       ? 'bg-[#181822] text-[#f3e1a9] border-t-2 border-x border-[#d4af37]/60'
                       : 'text-neutral-400 hover:text-white'
@@ -165,7 +165,7 @@ export const StudentPortalModal: React.FC<StudentPortalModalProps> = ({
 
                 <button
                   onClick={() => setActiveTab('certificate')}
-                  className={`py-2.5 px-4 rounded-t-lg transition-all flex items-center gap-1.5 ${
+                  className={`py-2.5 px-4 rounded-t-lg transition-all flex items-center gap-1.5 shrink-0 ${
                     activeTab === 'certificate'
                       ? 'bg-[#181822] text-[#f3e1a9] border-t-2 border-x border-[#d4af37]/60'
                       : 'text-neutral-400 hover:text-white'
@@ -177,7 +177,7 @@ export const StudentPortalModal: React.FC<StudentPortalModalProps> = ({
 
                 <button
                   onClick={() => setActiveTab('graduation')}
-                  className={`py-2.5 px-4 rounded-t-lg transition-all flex items-center gap-1.5 ${
+                  className={`py-2.5 px-4 rounded-t-lg transition-all flex items-center gap-1.5 shrink-0 ${
                     activeTab === 'graduation'
                       ? 'bg-[#181822] text-[#f3e1a9] border-t-2 border-x border-[#d4af37]/60'
                       : 'text-neutral-400 hover:text-white'
@@ -253,7 +253,7 @@ export const StudentPortalModal: React.FC<StudentPortalModalProps> = ({
               {activeTab === 'certificate' && activeEnrolment && (
                 <div className="space-y-6">
                   {/* Digital Certificate Render */}
-                  <div className="relative bg-[#fcfbf7] text-[#111] p-8 sm:p-12 rounded-2xl border-4 border-[#c5a059] shadow-2xl max-w-2xl mx-auto font-serif text-center space-y-4 overflow-hidden">
+                  <div className="relative bg-[#fcfbf7] text-[#111] p-5 sm:p-8 md:p-12 rounded-2xl border-4 border-[#c5a059] shadow-2xl max-w-2xl mx-auto font-serif text-center space-y-4 overflow-hidden">
                     <div className="absolute top-2 left-2 right-2 bottom-2 border border-[#d4af37]/40 pointer-events-none"></div>
 
                     {/* Certificate Crest */}

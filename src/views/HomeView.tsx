@@ -109,11 +109,11 @@ export const HomeView: React.FC<HomeViewProps> = ({
                   <div className="absolute inset-0 bg-gradient-to-t from-[#09090c] via-black/30 to-[#09090c]/65 group-hover/panel:bg-black/20 transition-colors"></div>
 
                   {/* Panel Identifier Badge */}
-                  <div className="absolute bottom-4 left-2.5 right-2.5 hidden md:flex items-center justify-between z-10 pointer-events-none">
-                    <span className="px-2.5 py-1 rounded-md text-[10px] font-cinzel font-semibold bg-black/85 border border-[#d4af37]/50 text-[#f3e1a9] backdrop-blur-sm shadow-lg">
+                  <div className="absolute bottom-2 sm:bottom-4 left-1.5 sm:left-2.5 right-1.5 sm:right-2.5 flex items-center justify-between z-10 pointer-events-none">
+                    <span className="px-1.5 sm:px-2.5 py-0.5 sm:py-1 rounded text-[8px] sm:text-[10px] font-cinzel font-semibold bg-black/85 border border-[#d4af37]/50 text-[#f3e1a9] backdrop-blur-sm shadow-lg line-clamp-1 max-w-[80%]">
                       {skill.title}
                     </span>
-                    <span className="w-5 h-5 rounded-full bg-[#d4af37]/90 text-black flex items-center justify-center text-[10px] font-bold shadow-md">
+                    <span className="w-4 h-4 sm:w-5 sm:h-5 rounded-full bg-[#d4af37]/90 text-black flex items-center justify-center text-[9px] sm:text-[10px] font-bold shadow-md shrink-0">
                       {sIdx + 1}
                     </span>
                   </div>

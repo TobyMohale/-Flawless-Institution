@@ -26,6 +26,7 @@ export const EnrolmentCheckoutModal: React.FC<EnrolmentCheckoutModalProps> = ({
   const [paymentMethod, setPaymentMethod] = useState<'instant-eft' | 'credit-card' | 'payfast' | 'bank-transfer'>('instant-eft');
   const [isProcessing, setIsProcessing] = useState(false);
   const [studentId, setStudentId] = useState('');
+  const [formError, setFormError] = useState<string | null>(null);
 
   // Form State
   const [formData, setFormData] = useState({
@@ -49,6 +50,7 @@ export const EnrolmentCheckoutModal: React.FC<EnrolmentCheckoutModalProps> = ({
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value, type } = e.target;
+    setFormError(null);
     if (type === 'checkbox') {
       const checked = (e.target as HTMLInputElement).checked;
       setFormData(prev => ({ ...prev, [name]: checked }));
@@ -59,10 +61,15 @@ export const EnrolmentCheckoutModal: React.FC<EnrolmentCheckoutModalProps> = ({
 
   const handleProceedToPayment = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.fullName || !formData.email || !formData.phone || !formData.agreedToTerms) {
-      alert('Please fill in all required fields and accept the course terms.');
+    if (!formData.fullName || !formData.email || !formData.phone) {
+      setFormError('Please fill in your full name, email address, and phone number.');
       return;
     }
+    if (!formData.agreedToTerms) {
+      setFormError('Please accept the course terms and no refunds policy to continue.');
+      return;
+    }
+    setFormError(null);
     setStep('payment');
   };
 
@@ -301,11 +308,19 @@ export const EnrolmentCheckoutModal: React.FC<EnrolmentCheckoutModalProps> = ({
                 </label>
               </div>
 
+              {/* Error Message */}
+              {formError && (
+                <div className="p-3 bg-red-950/70 border border-red-500/50 rounded-xl text-xs text-red-200 flex items-center gap-2">
+                  <AlertCircle className="w-4 h-4 text-red-400 shrink-0" />
+                  <span>{formError}</span>
+                </div>
+              )}
+
               {/* Action */}
               <button
                 type="submit"
                 id="submit-student-info-btn"
-                className="w-full py-3.5 px-4 rounded-xl text-xs sm:text-sm font-bold bg-gradient-to-r from-[#d4af37] via-[#c5a059] to-[#9e7b25] text-black hover:brightness-110 shadow-lg shadow-[#d4af37]/20 transition-all flex items-center justify-center gap-2 uppercase tracking-wider"
+                className="w-full min-h-[48px] py-3.5 px-4 rounded-xl text-xs sm:text-sm font-bold bg-gradient-to-r from-[#d4af37] via-[#c5a059] to-[#9e7b25] text-black hover:brightness-110 shadow-lg shadow-[#d4af37]/20 transition-all flex items-center justify-center gap-2 uppercase tracking-wider active:scale-[0.99]"
               >
                 <span>Proceed to Payment (R{totalAmount.toLocaleString()})</span>
                 <ArrowRight className="w-4 h-4" />

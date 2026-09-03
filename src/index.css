@@ -6,6 +6,15 @@
     --font-serif: 'Cormorant Garamond', Georgia, serif;
     --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
   }
+
+  html, body {
+    overflow-x: hidden;
+    width: 100%;
+    max-width: 100vw;
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
 }
 
 .font-cinzel {
@@ -38,6 +47,15 @@
 .gold-border-glow {
   border-color: rgba(212, 175, 55, 0.5);
   box-shadow: 0 0 15px rgba(212, 175, 55, 0.12);
+}
+
+/* Hide scrollbar on mobile horizontal lists */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
 /* Custom scrollbar */
