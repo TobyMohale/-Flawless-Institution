@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Course } from '../data/coursesData';
 import { 
-  X, BookOpen, CheckCircle, Award, Download, Play, 
-  Calendar, FileText, Sparkles, GraduationCap, MapPin 
+  X, BookOpen, CheckCircle, Award, Play, 
+  GraduationCap, ShieldCheck, CheckCircle2, AlertCircle, ArrowRight
 } from 'lucide-react';
 import { GRADUATION_INFO } from '../data/siteData';
 
@@ -21,14 +21,20 @@ export const StudentPortalModal: React.FC<StudentPortalModalProps> = ({
   onExploreMore
 }) => {
   const [selectedCourseIndex, setSelectedCourseIndex] = useState<number>(0);
-  const [activeTab, setActiveTab] = useState<'modules' | 'certificate' | 'handbook' | 'graduation'>('modules');
+  const [activeTab, setActiveTab] = useState<'modules' | 'certificate' | 'graduation'>('modules');
   const [completedModules, setCompletedModules] = useState<{ [key: string]: boolean }>({
     '0-0': true,
     '0-1': true
   });
-  const [certDownloaded, setCertDownloaded] = useState(false);
 
   const activeEnrolment = enrolledCourses[selectedCourseIndex] || null;
+
+  const totalModules = activeEnrolment?.course.modules.length || 0;
+  const completedCount = activeEnrolment
+    ? activeEnrolment.course.modules.filter((_, mIdx) => !!completedModules[`${selectedCourseIndex}-${mIdx}`]).length
+    : 0;
+  const isFullyQualified = totalModules > 0 && completedCount === totalModules;
+  const progressPercent = totalModules > 0 ? Math.round((completedCount / totalModules) * 100) : 0;
 
   const toggleModule = (courseIdx: number, moduleIdx: number) => {
     const key = `${courseIdx}-${moduleIdx}`;
@@ -143,7 +149,7 @@ export const StudentPortalModal: React.FC<StudentPortalModalProps> = ({
                       className="px-3.5 py-2 rounded-lg text-xs font-semibold bg-neutral-900 border border-[#d4af37]/50 text-[#f3e1a9] hover:bg-[#d4af37]/15 flex items-center gap-1.5"
                     >
                       <Award className="w-3.5 h-3.5 text-[#d4af37]" />
-                      <span>View Certificate</span>
+                      <span>Qualification Status</span>
                     </button>
                   </div>
                 </div>
@@ -172,7 +178,7 @@ export const StudentPortalModal: React.FC<StudentPortalModalProps> = ({
                   }`}
                 >
                   <Award className="w-3.5 h-3.5 text-[#d4af37]" />
-                  <span>Certificate & Credential</span>
+                  <span>Qualification & Certificate</span>
                 </button>
 
                 <button
@@ -249,12 +255,90 @@ export const StudentPortalModal: React.FC<StudentPortalModalProps> = ({
                 </div>
               )}
 
-              {/* TAB 2: CERTIFICATE PREVIEW */}
+              {/* TAB 2: QUALIFICATION & CERTIFICATION STATUS */}
               {activeTab === 'certificate' && activeEnrolment && (
                 <div className="space-y-6">
-                  {/* Digital Certificate Render */}
+                  {/* Institutional Certification Policy Alert */}
+                  <div className="bg-[#14141d] border border-[#d4af37]/40 rounded-xl p-4 sm:p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                    <div className="flex items-start gap-3">
+                      <div className="p-2.5 rounded-lg bg-[#d4af37]/15 text-[#d4af37] shrink-0 mt-0.5">
+                        <ShieldCheck className="w-5 h-5" />
+                      </div>
+                      <div className="space-y-1">
+                        <h4 className="font-cinzel text-sm sm:text-base font-bold text-white flex items-center gap-2">
+                          <span>Institutional Certification Standard</span>
+                          <span className="text-[10px] font-sans font-normal px-2 py-0.5 bg-[#d4af37]/20 text-[#f3e1a9] rounded border border-[#d4af37]/40 uppercase tracking-wider">
+                            Non-Downloadable
+                          </span>
+                        </h4>
+                        <p className="text-xs text-neutral-300 leading-relaxed max-w-2xl">
+                          To safeguard professional integrity and accreditation, certificates cannot be downloaded online by users. You must complete your training modules and practical evaluations; your official certificate is formally conferred and presented upon qualifying.
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="w-full sm:w-auto shrink-0">
+                      {isFullyQualified ? (
+                        <div className="px-3.5 py-2 rounded-lg bg-emerald-950/80 border border-emerald-500/50 text-emerald-300 text-xs font-semibold flex items-center justify-center gap-1.5">
+                          <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+                          <span>Qualified for Conferral</span>
+                        </div>
+                      ) : (
+                        <button
+                          onClick={() => setActiveTab('modules')}
+                          className="w-full sm:w-auto px-4 py-2 rounded-lg bg-[#d4af37] text-black text-xs font-bold hover:bg-[#f3e1a9] flex items-center justify-center gap-1.5 transition-colors"
+                        >
+                          <span>Continue Training</span>
+                          <ArrowRight className="w-3.5 h-3.5" />
+                        </button>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Qualification Progress Card */}
+                  <div className="bg-[#111117] border border-neutral-800 rounded-xl p-5 space-y-3">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
+                      <div>
+                        <span className="text-neutral-400">Current Candidate Standing: </span>
+                        <strong className={isFullyQualified ? 'text-emerald-400' : 'text-[#f3e1a9]'}>
+                          {isFullyQualified
+                            ? 'All Prescribed Modules Cleared • Approved for Graduation Award'
+                            : `In Training (${completedCount} of ${totalModules} Lessons Completed)`}
+                        </strong>
+                      </div>
+                      <span className="font-mono text-[#d4af37] font-semibold">{progressPercent}% Completed</span>
+                    </div>
+
+                    {/* Progress Bar */}
+                    <div className="w-full h-2 rounded-full bg-neutral-800 overflow-hidden">
+                      <div
+                        className={`h-full transition-all duration-500 ${
+                          isFullyQualified
+                            ? 'bg-gradient-to-r from-emerald-500 to-emerald-400'
+                            : 'bg-gradient-to-r from-[#d4af37] to-[#f3e1a9]'
+                        }`}
+                        style={{ width: `${progressPercent}%` }}
+                      ></div>
+                    </div>
+
+                    <div className="text-[11px] text-neutral-400 flex items-center gap-1.5">
+                      <AlertCircle className="w-3.5 h-3.5 text-[#d4af37] shrink-0" />
+                      <span>
+                        {isFullyQualified
+                          ? 'Your completed status is confirmed in the academic registry. Your certificate will be presented at the Annual Flawless Graduation in Fourways.'
+                          : 'Complete all remaining lessons in the Modules tab to meet qualification standards for certificate conferral.'}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Digital Certificate Specimen Render */}
                   <div className="relative bg-[#fcfbf7] text-[#111] p-5 sm:p-8 md:p-12 rounded-2xl border-4 border-[#c5a059] shadow-2xl max-w-2xl mx-auto font-serif text-center space-y-4 overflow-hidden">
                     <div className="absolute top-2 left-2 right-2 bottom-2 border border-[#d4af37]/40 pointer-events-none"></div>
+
+                    {/* Watermark Ribbon */}
+                    <div className="absolute -right-12 top-6 bg-[#8a6e27] text-[#fcfbf7] py-1 px-14 text-[9px] font-sans font-bold uppercase tracking-widest rotate-45 shadow-md pointer-events-none">
+                      Specimen
+                    </div>
 
                     {/* Certificate Crest */}
                     <div className="w-14 h-14 mx-auto rounded-full bg-[#111] text-[#d4af37] border-2 border-[#d4af37] flex items-center justify-center font-cinzel font-bold text-lg">
@@ -268,7 +352,7 @@ export const StudentPortalModal: React.FC<StudentPortalModalProps> = ({
                       <h2 className="font-cinzel text-xl sm:text-2xl font-bold text-neutral-900 uppercase tracking-wider">
                         Certificate of Completion
                       </h2>
-                      <div className="text-xs text-neutral-600 italic">This is to officially certify that</div>
+                      <div className="text-xs text-neutral-600 italic">Official Institutional Specimen</div>
                     </div>
 
                     <div className="py-2 border-b-2 border-[#c5a059] max-w-md mx-auto">
@@ -298,18 +382,14 @@ export const StudentPortalModal: React.FC<StudentPortalModalProps> = ({
                     </div>
                   </div>
 
-                  {/* Actions */}
-                  <div className="flex flex-col sm:flex-row justify-center gap-3 max-w-md mx-auto">
-                    <button
-                      onClick={() => {
-                        setCertDownloaded(true);
-                        setTimeout(() => setCertDownloaded(false), 3000);
-                      }}
-                      className="py-3 px-5 rounded-xl text-xs font-bold bg-[#d4af37] text-black hover:bg-[#f3e1a9] flex items-center justify-center gap-2"
-                    >
-                      <Download className="w-4 h-4" />
-                      <span>{certDownloaded ? 'Certificate Downloaded ✓' : 'Download Digital Certificate'}</span>
-                    </button>
+                  {/* Institutional Award Notice */}
+                  <div className="text-center text-xs text-neutral-400 max-w-md mx-auto space-y-1">
+                    <p className="font-medium text-neutral-300">
+                      Conferred in Person • Fourways Annual Graduation
+                    </p>
+                    <p className="text-[11px] text-neutral-500">
+                      The official embossed certificate bearing institutional seals is presented to graduates who successfully complete their training.
+                    </p>
                   </div>
                 </div>
               )}

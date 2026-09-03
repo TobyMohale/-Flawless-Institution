@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Course } from '../data/coursesData';
 import { 
   X, Check, ShieldCheck, CreditCard, Landmark, CheckCircle2, 
-  ArrowRight, Download, BookOpen, AlertCircle, Sparkles, MapPin, Globe, Lock 
+  ArrowRight, BookOpen, AlertCircle, Sparkles, MapPin, Globe, Lock 
 } from 'lucide-react';
 import { SEPTEMBER_PHYSICAL_INTAKE, GRADUATION_INFO } from '../data/siteData';
 
