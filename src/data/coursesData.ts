@@ -24,7 +24,7 @@ export const COURSES: Course[] = [
   // 1. CARE & SUPPORT
   {
     id: 'caregiver-elderly-care',
-    title: 'Caregiver & Elderly Care',
+    title: 'Caregiving & Elderly Care',
     category: 'Care & Support',
     normalPrice: 2000,
     specialPrice: 1500,
@@ -54,7 +54,7 @@ export const COURSES: Course[] = [
       'Module 6: Professional Ethics, Boundaries & Communication'
     ],
     format: 'Online & Physical (Fourways)',
-    duration: '4 - 6 Weeks (Self-Paced / In-Person)',
+    duration: '2 Days to 2 Weeks',
     level: 'Foundational',
     popular: true,
     featured: true,
@@ -63,7 +63,7 @@ export const COURSES: Course[] = [
   },
   {
     id: 'au-pair-nanny-training',
-    title: 'Au Pair / Nanny Training',
+    title: 'Nanny / Au Pair Childcare',
     category: 'Care & Support',
     normalPrice: 1600,
     specialPrice: 1200,
@@ -90,7 +90,7 @@ export const COURSES: Course[] = [
       'Module 5: Professional Employer-Au Pair Communication & Conduct'
     ],
     format: 'Online & Physical (Fourways)',
-    duration: '4 Weeks',
+    duration: '1 Day to 3 Days',
     level: 'Foundational',
     popular: true,
     physicalAvailableSeptember: true,
@@ -98,7 +98,7 @@ export const COURSES: Course[] = [
   },
   {
     id: 'first-aid-cpr',
-    title: 'First Aid & CPR',
+    title: 'CPR & First Aid',
     category: 'Care & Support',
     normalPrice: 800,
     specialPrice: 600,
@@ -123,8 +123,8 @@ export const COURSES: Course[] = [
       'Module 4: Wound Care, Bleeding Control, Burns & Shock Management',
       'Module 5: Handling Common Emergencies: Allergic Reactions, Poisoning & Seizures'
     ],
-    format: 'Online',
-    duration: '2 Weeks',
+    format: 'Online & Physical (Fourways)',
+    duration: '1 Day to 2 Days',
     level: 'Foundational',
     careerPathways: ['Certified Emergency Responder in Households', 'Workplace First Aider']
   },
@@ -473,7 +473,7 @@ export const COURSES: Course[] = [
       'Module 4: International Maritime Interview & Resume Preparation'
     ],
     format: 'Online & Physical (Fourways)',
-    duration: '4 Weeks',
+    duration: '2 Days to 7 Days',
     level: 'Intermediate',
     popular: true,
     physicalAvailableSeptember: true,
@@ -504,7 +504,7 @@ export const COURSES: Course[] = [
       'Module 4: Quality Inspection Checklists & Professional Self-Audits'
     ],
     format: 'Online & Physical (Fourways)',
-    duration: '4 Weeks',
+    duration: '2 Days to 7 Days',
     level: 'Intermediate',
     popular: true,
     physicalAvailableSeptember: true,
@@ -535,14 +535,14 @@ export const COURSES: Course[] = [
       'Module 4: Kitchen Station Organization & Service Support'
     ],
     format: 'Online & Physical (Fourways)',
-    duration: '4 - 6 Weeks',
+    duration: '2 Days to 7 Days',
     level: 'Intermediate',
     physicalAvailableSeptember: true,
     careerPathways: ['Commis Chef Assistant', 'Private Cook Helper', 'Kitchen Station Hand']
   },
   {
     id: 'waitron-training',
-    title: 'Waitron Training',
+    title: 'Waitron / Waitress Training',
     category: 'Hospitality & Housekeeping',
     normalPrice: 2000,
     specialPrice: 1500,
@@ -565,7 +565,7 @@ export const COURSES: Course[] = [
       'Module 4: Guest Complaints Resolution & Service Recovery'
     ],
     format: 'Online & Physical (Fourways)',
-    duration: '3 Weeks',
+    duration: '2 Days to 7 Days',
     level: 'Foundational',
     physicalAvailableSeptember: true,
     careerPathways: ['Fine Dining Waiter / Waitress', 'Banquet Server', 'VIP Lounge Server']
@@ -687,7 +687,7 @@ export const COURSES: Course[] = [
       'Module 4: Communication, Contracts & Employment Standards'
     ],
     format: 'Online & Physical (Fourways)',
-    duration: '3 Weeks',
+    duration: '1 Day',
     level: 'Foundational',
     popular: true,
     physicalAvailableSeptember: true,

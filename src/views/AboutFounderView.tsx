@@ -39,28 +39,34 @@ export const AboutFounderView: React.FC<AboutFounderViewProps> = ({
             <div className="lg:col-span-5 text-center lg:text-left">
               <ScrollReveal direction="scale">
                 <Tilt3DCard maxTilt={10} glareOpacity={0.2} className="inline-block mx-auto">
-                  <div className="w-64 h-80 sm:w-72 sm:h-96 rounded-2xl bg-gradient-to-b from-[#241e12] via-[#1a1711] to-[#0c0c10] border-2 border-[#d4af37]/60 p-3 shadow-2xl relative overflow-hidden flex flex-col justify-between backdrop-blur-md">
+                  <div className="w-72 sm:w-80 rounded-2xl bg-gradient-to-b from-[#241e12] via-[#1a1711] to-[#0c0c10] border-2 border-[#d4af37]/60 p-3 shadow-2xl relative overflow-hidden backdrop-blur-md">
                     {/* Decorative corner accents */}
-                    <div className="absolute top-2 left-2 w-4 h-4 border-t-2 border-l-2 border-[#d4af37]"></div>
-                    <div className="absolute top-2 right-2 w-4 h-4 border-t-2 border-r-2 border-[#d4af37]"></div>
-                    <div className="absolute bottom-2 left-2 w-4 h-4 border-b-2 border-l-2 border-[#d4af37]"></div>
-                    <div className="absolute bottom-2 right-2 w-4 h-4 border-b-2 border-r-2 border-[#d4af37]"></div>
+                    <div className="absolute top-2 left-2 w-4 h-4 border-t-2 border-l-2 border-[#d4af37] z-20"></div>
+                    <div className="absolute top-2 right-2 w-4 h-4 border-t-2 border-r-2 border-[#d4af37] z-20"></div>
+                    <div className="absolute bottom-2 left-2 w-4 h-4 border-b-2 border-l-2 border-[#d4af37] z-20"></div>
+                    <div className="absolute bottom-2 right-2 w-4 h-4 border-b-2 border-r-2 border-[#d4af37] z-20"></div>
 
-                    {/* Emblem / Monogram */}
-                    <div className="my-auto text-center space-y-4">
-                      <div className="w-24 h-24 rounded-full bg-gradient-to-br from-[#d4af37] via-[#c5a059] to-[#8f7023] p-[2px] mx-auto shadow-xl flex items-center justify-center">
-                        <div className="w-full h-full bg-[#0a0a0d] rounded-full flex flex-col items-center justify-center">
-                          <span className="font-cinzel text-3xl font-bold text-[#f3e1a9]">TS</span>
+                    {/* Authentic Founder Photograph from Cloudinary */}
+                    <div className="relative rounded-xl overflow-hidden border border-[#d4af37]/40 shadow-inner group">
+                      <img
+                        src="https://res.cloudinary.com/dagphoc0j/image/upload/v1788454926/Founder_rltzec.jpg"
+                        alt="Teldah Siyawamwaya - Founder & Director"
+                        referrerPolicy="no-referrer"
+                        className="w-full h-80 sm:h-96 object-cover object-top filter brightness-[1.02] contrast-[1.02] group-hover:scale-105 transition-transform duration-500"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#0c0c10] via-transparent to-transparent opacity-70"></div>
+                      
+                      <div className="absolute bottom-3 left-3 right-3 text-left">
+                        <div className="font-cinzel text-lg font-bold text-white tracking-wider drop-shadow-md">
+                          TELDAH SIYAWAMWAYA
                         </div>
-                      </div>
-                      <div>
-                        <div className="font-cinzel text-xl font-bold text-white tracking-wider">TELDAH</div>
-                        <div className="font-cinzel text-sm text-[#d4af37] tracking-widest uppercase">SIYAWAMWAYA</div>
-                        <div className="text-[11px] text-neutral-400 mt-1">Founder & Director • Flawless Institution</div>
+                        <div className="font-cinzel text-xs text-[#f3e1a9] tracking-widest uppercase">
+                          Founder & Director • Flawless Institution
+                        </div>
                       </div>
                     </div>
 
-                    <div className="bg-[#121217] p-2.5 rounded-lg border border-neutral-800 text-center">
+                    <div className="bg-[#121217] p-2.5 rounded-lg border border-neutral-800 text-center mt-3">
                       <span className="text-[10px] text-[#f3e1a9] uppercase font-bold tracking-wider font-cinzel">
                         <AnimatedCounter to={16} suffix="+" duration={1800} /> Years Experience • Est. <AnimatedCounter from={2000} to={2016} duration={2000} useGrouping={false} />
                       </span>

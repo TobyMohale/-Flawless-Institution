@@ -2,11 +2,12 @@ import React, { useState } from 'react';
 import { 
   GraduationCap, MapPin, Calendar, Clock, CheckCircle2, 
   Search, Award, ShieldCheck, ArrowRight, Sparkles, Building,
-  Users, Coffee, ChevronRight, Phone, Mail, FileText
+  Users, Coffee, ChevronRight, Phone, Mail, FileText, ZoomIn, HeartPulse, Image as ImageIcon
 } from 'lucide-react';
 import { COURSES, CATEGORIES, Course } from '../data/coursesData';
-import { BACKGROUND_IMAGES } from '../data/assetsData';
+import { BACKGROUND_IMAGES, HEALTHCARE_NURSING_GALLERY, GalleryImage } from '../data/assetsData';
 import { Tilt3DCard } from '../components/MotionEffects';
+import { ImageLightboxModal } from '../components/ImageLightboxModal';
 
 interface PhysicalClassesViewProps {
   onSelectCourse: (course: Course) => void;
@@ -23,6 +24,13 @@ export const PhysicalClassesView: React.FC<PhysicalClassesViewProps> = ({
 }) => {
   const [selectedCategory, setSelectedCategory] = useState<string>('All Programmes');
   const [searchQuery, setSearchQuery] = useState<string>('');
+  const [lightboxOpen, setLightboxOpen] = useState<boolean>(false);
+  const [lightboxIndex, setLightboxIndex] = useState<number>(0);
+
+  const openLightbox = (index: number) => {
+    setLightboxIndex(index);
+    setLightboxOpen(true);
+  };
 
   const triggerEnrol = (course: Course) => {
     if (onQuickEnrol) {
@@ -335,6 +343,106 @@ export const PhysicalClassesView: React.FC<PhysicalClassesViewProps> = ({
             ))}
           </div>
         )}
+      </section>
+
+      {/* Lightbox Modal for Healthcare & Nursing Photos */}
+      <ImageLightboxModal
+        isOpen={lightboxOpen}
+        onClose={() => setLightboxOpen(false)}
+        images={HEALTHCARE_NURSING_GALLERY}
+        currentIndex={lightboxIndex}
+        onNavigate={(newIdx) => setLightboxIndex(newIdx)}
+      />
+
+      {/* 5. HEALTHCARE & GERIATRIC NURSING PRACTICUM GALLERY */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="bg-[#111116] border border-[#d4af37]/40 rounded-3xl p-6 sm:p-10 shadow-2xl space-y-8">
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-neutral-800 pb-5">
+            <div>
+              <div className="inline-flex items-center gap-2 text-xs uppercase font-bold text-[#d4af37] tracking-widest font-cinzel">
+                <HeartPulse className="w-4 h-4 text-[#d4af37]" /> Practical Clinical Training
+              </div>
+              <h2 className="text-2xl sm:text-3xl font-cinzel font-bold text-white mt-1">
+                Healthcare & Old Age Nursing Practicum
+              </h2>
+              <p className="text-xs sm:text-sm text-neutral-300 mt-1 max-w-2xl leading-relaxed">
+                Step inside our practical simulations. Students in our Fourways healthcare cohorts master hands-on patient handling, vital signs assessment, sterile hygiene protocols, and dignified geriatric bedside care.
+              </p>
+            </div>
+            <div className="text-xs font-mono text-[#f3e1a9] bg-neutral-900 border border-neutral-800 px-3 py-1.5 rounded-lg self-start sm:self-auto">
+              {HEALTHCARE_NURSING_GALLERY.length} Practicum Photos
+            </div>
+          </div>
+
+          {/* Photo Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            {HEALTHCARE_NURSING_GALLERY.map((img, idx) => (
+              <div
+                key={img.id}
+                onClick={() => openLightbox(idx)}
+                className="group relative rounded-xl overflow-hidden border border-neutral-800 hover:border-[#d4af37]/60 bg-[#0d0d12] shadow-lg cursor-pointer transition-all duration-300 hover:-translate-y-1"
+              >
+                <div className="aspect-[4/3] overflow-hidden bg-black/40">
+                  <img
+                    src={img.url}
+                    alt={img.title}
+                    referrerPolicy="no-referrer"
+                    className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
+                    loading="lazy"
+                  />
+                </div>
+
+                {/* Overlay hover effect */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/25 to-transparent opacity-80 group-hover:opacity-100 transition-opacity"></div>
+
+                {/* Top Badge */}
+                <div className="absolute top-2.5 left-2.5">
+                  <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-black/75 border border-neutral-700 text-neutral-300">
+                    Practicum #{idx + 1}
+                  </span>
+                </div>
+
+                {/* Zoom icon */}
+                <div className="absolute top-2.5 right-2.5 p-1.5 rounded-full bg-[#d4af37] text-black opacity-0 group-hover:opacity-100 transition-opacity shadow-md">
+                  <ZoomIn className="w-3.5 h-3.5" />
+                </div>
+
+                {/* Bottom title & description */}
+                <div className="absolute bottom-3 left-3 right-3">
+                  <h4 className="font-cinzel text-xs font-bold text-white group-hover:text-[#f3e1a9] transition-colors">
+                    {img.title}
+                  </h4>
+                  {img.description && (
+                    <p className="text-[10px] text-neutral-400 line-clamp-1 mt-0.5">
+                      {img.description}
+                    </p>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Quick Enrolment CTA for Caregiver Course */}
+          <div className="bg-[#181822] border border-neutral-800 rounded-2xl p-5 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div className="space-y-1 text-center sm:text-left">
+              <h4 className="font-cinzel text-sm font-bold text-white">
+                Interested in Joining the Fourways Geriatric Care Cohort?
+              </h4>
+              <p className="text-xs text-neutral-400">
+                Classroom intake begins 7 September 2026. Practical training materials, clinical uniform orientation, and certification included.
+              </p>
+            </div>
+            <button
+              onClick={() => {
+                const careCourse = COURSES.find(c => c.id === 'caregiver-elderly-care');
+                if (careCourse) triggerEnrol(careCourse);
+              }}
+              className="py-2.5 px-5 rounded-xl text-xs font-bold bg-[#d4af37] text-black hover:bg-[#f3e1a9] uppercase tracking-wider font-cinzel shrink-0 shadow-lg active:scale-95"
+            >
+              Enrol for Caregiver Training
+            </button>
+          </div>
+        </div>
       </section>
 
       {/* 6. FOURWAYS CAMPUS INTAKE TIMELINE & ADMISSION STEPS */}

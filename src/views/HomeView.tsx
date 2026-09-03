@@ -1,15 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { 
   Sparkles, ArrowRight, ShieldCheck, Award, Heart, CheckCircle2, 
-  GraduationCap, Mic, Home, TrendingUp, Users, Clock, MapPin, Play, Briefcase
+  GraduationCap, Mic, Home, TrendingUp, Users, Clock, MapPin, Play, Briefcase,
+  ZoomIn, HeartPulse, Baby, UtensilsCrossed, Eye
 } from 'lucide-react';
 import { motion } from 'motion/react';
 import { INSTITUTIONAL_PILLARS, FOUNDATION_VALUES, SEPTEMBER_PHYSICAL_INTAKE, GRADUATION_INFO } from '../data/siteData';
 import { COURSES, Course } from '../data/coursesData';
 import { CourseCard } from '../components/CourseCard';
-import { BACKGROUND_IMAGES } from '../data/assetsData';
+import { BACKGROUND_IMAGES, HOMEPAGE_SKILLS_BACKGROUNDS, GalleryImage } from '../data/assetsData';
 import { AnimatedCounter } from '../components/AnimatedCounter';
 import { ScrollReveal, Tilt3DCard, Floating3D } from '../components/MotionEffects';
+import { ImageLightboxModal } from '../components/ImageLightboxModal';
 
 interface HomeViewProps {
   setCurrentView: (view: string) => void;
@@ -25,28 +27,108 @@ export const HomeView: React.FC<HomeViewProps> = ({
   onOpenSpeakingEnquiry // Kept in interface but unused here
 }) => {
   const featuredCourses = COURSES.filter(c => c.featured || c.popular).slice(0, 6);
+  const [activeSkillBgIndex, setActiveSkillBgIndex] = useState<number | null>(null);
+  const [lightboxOpen, setLightboxOpen] = useState<boolean>(false);
+  const [lightboxIndex, setLightboxIndex] = useState<number>(0);
+
+  // Preload skill background images so they are cached in browser memory and appear instantly on reload
+  React.useEffect(() => {
+    HOMEPAGE_SKILLS_BACKGROUNDS.forEach((skill) => {
+      const img = new Image();
+      img.src = skill.image;
+    });
+  }, []);
+
+  const skillsLightboxImages: GalleryImage[] = HOMEPAGE_SKILLS_BACKGROUNDS.map((s) => ({
+    id: s.id,
+    url: s.image,
+    title: s.title,
+    category: 'Professional Skills' as const,
+    description: `${s.subtitle} — ${s.description}`
+  }));
+
+  const openLightbox = (idx: number) => {
+    setLightboxIndex(idx);
+    setLightboxOpen(true);
+  };
 
   return (
     <div className="space-y-28 pb-20 font-sans-body">
-      {/* 1. HERO BANNER: British-Institutional Prestige & Authority */}
+      {/* Lightbox Modal for Full-Resolution Skills Images */}
+      <ImageLightboxModal
+        isOpen={lightboxOpen}
+        onClose={() => setLightboxOpen(false)}
+        images={skillsLightboxImages}
+        currentIndex={lightboxIndex}
+        onNavigate={(newIdx) => setLightboxIndex(newIdx)}
+      />
+
+      {/* 1. HERO BANNER: British-Institutional Prestige with 4 Fully Visible Skills Background Images */}
       <section className="relative overflow-hidden pt-16 pb-24 sm:pt-24 sm:pb-36 border-b border-[#d4af37]/20 bg-[#09090c]">
-        {/* Background Image with Dark Vignette Overlay */}
-        <div className="absolute inset-0 z-0 overflow-hidden">
-          <motion.img
-            initial={{ scale: 1.15, opacity: 0.15 }}
-            animate={{ scale: 1.05, opacity: 0.3 }}
-            transition={{ duration: 1.8, ease: 'easeOut' }}
-            src={BACKGROUND_IMAGES.hero}
-            alt="Flawless Institution Grand Heritage"
-            referrerPolicy="no-referrer"
-            className="w-full h-full object-cover object-center"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0d] via-[#0a0a0d]/80 to-[#0a0a0d]/90"></div>
-          <div className="absolute inset-0 bg-gradient-to-r from-[#0a0a0d] via-transparent to-[#0a0a0d]"></div>
+        {/* FOUR PROFESSIONAL SKILLS BACKGROUND IMAGES (Fully Visible Panoramic Multi-Panel / Spotlight) */}
+        <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none sm:pointer-events-auto">
+          {activeSkillBgIndex !== null ? (
+            /* Spotlight Single Selected Background */
+            <motion.div
+              key={activeSkillBgIndex}
+              initial={{ opacity: 0, scale: 1.05 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5, ease: 'easeOut' }}
+              className="relative w-full h-full"
+            >
+              <img
+                src={HOMEPAGE_SKILLS_BACKGROUNDS[activeSkillBgIndex].image}
+                alt={HOMEPAGE_SKILLS_BACKGROUNDS[activeSkillBgIndex].title}
+                referrerPolicy="no-referrer"
+                loading="eager"
+                decoding="async"
+                className="w-full h-full object-cover object-center brightness-[0.88] contrast-[1.05]"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#09090c] via-black/40 to-[#09090c]/70"></div>
+              <div className="absolute inset-0 bg-gradient-to-r from-[#09090c]/85 via-black/30 to-[#09090c]/85"></div>
+            </motion.div>
+          ) : (
+            /* All 4 Professional Skills Images Displayed Side-by-Side in Full Visibility */
+            <div className="grid grid-cols-2 lg:grid-cols-4 w-full h-full">
+              {HOMEPAGE_SKILLS_BACKGROUNDS.map((skill, sIdx) => (
+                <div
+                  key={skill.id}
+                  onClick={() => setActiveSkillBgIndex(sIdx)}
+                  className="relative h-full overflow-hidden border-r border-[#d4af37]/25 last:border-r-0 group/panel cursor-pointer transition-all"
+                  title={`Click to focus on ${skill.title}`}
+                >
+                  <img
+                    src={skill.image}
+                    alt={skill.title}
+                    referrerPolicy="no-referrer"
+                    loading="eager"
+                    decoding="async"
+                    className="w-full h-full object-cover object-center group-hover/panel:scale-105 transition-transform duration-700 brightness-[0.82] group-hover/panel:brightness-95 contrast-[1.05]"
+                  />
+                  {/* Fine transparent overlay for legibility while keeping photos crisp and clear */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#09090c] via-black/30 to-[#09090c]/65 group-hover/panel:bg-black/20 transition-colors"></div>
+
+                  {/* Panel Identifier Badge */}
+                  <div className="absolute bottom-4 left-2.5 right-2.5 hidden md:flex items-center justify-between z-10 pointer-events-none">
+                    <span className="px-2.5 py-1 rounded-md text-[10px] font-cinzel font-semibold bg-black/85 border border-[#d4af37]/50 text-[#f3e1a9] backdrop-blur-sm shadow-lg">
+                      {skill.title}
+                    </span>
+                    <span className="w-5 h-5 rounded-full bg-[#d4af37]/90 text-black flex items-center justify-center text-[10px] font-bold shadow-md">
+                      {sIdx + 1}
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* Vignette Gradients for Text Contrast */}
+          <div className="absolute inset-0 bg-gradient-to-t from-[#09090c] via-transparent to-[#09090c]/60 pointer-events-none"></div>
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,rgba(9,9,12,0.6)_100%)] pointer-events-none"></div>
         </div>
 
-        {/* Subtle Gold Aura Grid Background */}
-        <div className="absolute inset-0 bg-[radial-gradient(#d4af37_1px,transparent_1px)] [background-size:36px_36px] opacity-[0.06] pointer-events-none z-0"></div>
+        {/* Subtle Gold Aura Grid Accent */}
+        <div className="absolute inset-0 bg-[radial-gradient(#d4af37_1px,transparent_1px)] [background-size:36px_36px] opacity-[0.05] pointer-events-none z-0"></div>
         <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[350px] bg-[#d4af37]/10 blur-[140px] rounded-full pointer-events-none z-0"></div>
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-8">
@@ -67,22 +149,52 @@ export const HomeView: React.FC<HomeViewProps> = ({
                 Elevating Standards, <br className="hidden sm:inline" />
                 <span className="gold-gradient-text">Empowering Careers.</span>
               </h1>
-              <p className="text-base sm:text-xl text-neutral-200 font-serif max-w-2xl mx-auto leading-relaxed">
+              <p className="text-base sm:text-xl text-neutral-200 font-serif max-w-2xl mx-auto leading-relaxed drop-shadow-sm">
                 Flawless Institution provides world-class professional skills training, elite household staffing, and enterprise advisory services across South Africa.
               </p>
             </div>
           </ScrollReveal>
 
+          {/* Interactive 4-Skills Background View Switcher */}
+          <ScrollReveal direction="up" delay={0.15}>
+            <div className="inline-flex flex-wrap items-center justify-center gap-1.5 p-1.5 rounded-2xl bg-[#111116]/90 backdrop-blur-md border border-[#d4af37]/40 shadow-2xl max-w-3xl mx-auto">
+              <button
+                onClick={() => setActiveSkillBgIndex(null)}
+                className={`px-3 py-1.5 rounded-xl text-xs font-cinzel font-semibold transition-all ${
+                  activeSkillBgIndex === null
+                    ? 'bg-[#d4af37] text-black shadow-md'
+                    : 'text-neutral-300 hover:text-white hover:bg-neutral-800/80'
+                }`}
+              >
+                All 4 Skills Visible
+              </button>
+              {HOMEPAGE_SKILLS_BACKGROUNDS.map((skill, idx) => (
+                <button
+                  key={skill.id}
+                  onClick={() => setActiveSkillBgIndex(idx)}
+                  className={`px-3 py-1.5 rounded-xl text-xs font-cinzel font-semibold transition-all flex items-center gap-1.5 ${
+                    activeSkillBgIndex === idx
+                      ? 'bg-[#d4af37] text-black shadow-md'
+                      : 'text-neutral-300 hover:text-white hover:bg-neutral-800/80'
+                  }`}
+                >
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#d4af37] inline-block"></span>
+                  <span>{skill.title}</span>
+                </button>
+              ))}
+            </div>
+          </ScrollReveal>
+
           {/* Value Motto */}
           <ScrollReveal direction="up" delay={0.2}>
-            <p className="text-xs sm:text-sm text-neutral-300 max-w-2xl mx-auto leading-relaxed mt-4">
+            <p className="text-xs sm:text-sm text-neutral-300 max-w-2xl mx-auto leading-relaxed mt-2">
               Empowering People through targeted education. Elevating Homes through meticulous placements. Building Businesses through practical entrepreneurship.
             </p>
           </ScrollReveal>
 
           {/* CTA Buttons */}
           <ScrollReveal direction="up" delay={0.3}>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-6 flex-wrap">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-4 flex-wrap">
               <button
                 onClick={() => setCurrentView('academy')}
                 id="hero-explore-courses-btn"
@@ -115,9 +227,9 @@ export const HomeView: React.FC<HomeViewProps> = ({
 
           {/* Metric Bar with 3D Float and Hover Interactivity */}
           <ScrollReveal direction="3d-flip" delay={0.4}>
-            <div className="pt-10 grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto border-t border-neutral-800/80 text-center">
+            <div className="pt-8 grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto border-t border-neutral-800/80 text-center">
               <Tilt3DCard maxTilt={8} glareOpacity={0.15}>
-                <div className="p-4 bg-[#111116]/80 backdrop-blur-md rounded-xl border border-neutral-800/80 transition-all hover:border-[#d4af37]/50 hover:bg-[#15151c] shadow-lg">
+                <div className="p-4 bg-[#111116]/85 backdrop-blur-md rounded-xl border border-neutral-800/80 transition-all hover:border-[#d4af37]/50 hover:bg-[#15151c] shadow-lg">
                   <div className="font-cinzel text-2xl sm:text-3xl font-bold text-white">
                     <AnimatedCounter to={16} suffix="+" duration={1800} />
                   </div>
@@ -126,7 +238,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
               </Tilt3DCard>
 
               <Tilt3DCard maxTilt={8} glareOpacity={0.15}>
-                <div className="p-4 bg-[#111116]/80 backdrop-blur-md rounded-xl border border-neutral-800/80 transition-all hover:border-[#d4af37]/50 hover:bg-[#15151c] shadow-lg">
+                <div className="p-4 bg-[#111116]/85 backdrop-blur-md rounded-xl border border-neutral-800/80 transition-all hover:border-[#d4af37]/50 hover:bg-[#15151c] shadow-lg">
                   <div className="font-cinzel text-2xl sm:text-3xl font-bold text-[#f3e1a9]">
                     <AnimatedCounter from={2000} to={2016} duration={2000} useGrouping={false} />
                   </div>
@@ -135,7 +247,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
               </Tilt3DCard>
 
               <Tilt3DCard maxTilt={8} glareOpacity={0.15}>
-                <div className="p-4 bg-[#111116]/80 backdrop-blur-md rounded-xl border border-neutral-800/80 transition-all hover:border-[#d4af37]/50 hover:bg-[#15151c] shadow-lg">
+                <div className="p-4 bg-[#111116]/85 backdrop-blur-md rounded-xl border border-neutral-800/80 transition-all hover:border-[#d4af37]/50 hover:bg-[#15151c] shadow-lg">
                   <div className="font-cinzel text-2xl sm:text-3xl font-bold text-white">
                     <AnimatedCounter to={20} suffix="+" duration={1800} />
                   </div>
@@ -144,7 +256,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
               </Tilt3DCard>
 
               <Tilt3DCard maxTilt={8} glareOpacity={0.15}>
-                <div className="p-4 bg-[#111116]/80 backdrop-blur-md rounded-xl border border-neutral-800/80 transition-all hover:border-[#d4af37]/50 hover:bg-[#15151c] shadow-lg">
+                <div className="p-4 bg-[#111116]/85 backdrop-blur-md rounded-xl border border-neutral-800/80 transition-all hover:border-[#d4af37]/50 hover:bg-[#15151c] shadow-lg">
                   <div className="font-cinzel text-2xl sm:text-3xl font-bold text-[#f3e1a9]">Fourways</div>
                   <div className="text-[11px] text-neutral-400 uppercase tracking-wider mt-1">Annual Graduation Hub</div>
                 </div>
@@ -152,6 +264,109 @@ export const HomeView: React.FC<HomeViewProps> = ({
             </div>
           </ScrollReveal>
         </div>
+      </section>
+
+      {/* 2. CORE SKILLS & SERVICES IN ACTION (4 Flagship Disciplines Showcase) */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <ScrollReveal direction="up">
+          <div className="bg-[#101016] border border-[#d4af37]/40 rounded-3xl p-6 sm:p-10 shadow-2xl space-y-8">
+            <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-neutral-800 pb-5">
+              <div>
+                <div className="inline-flex items-center gap-2 text-xs uppercase font-bold text-[#d4af37] tracking-widest font-cinzel">
+                  <Award className="w-4 h-4 text-[#d4af37]" /> Core Skills & Services
+                </div>
+                <h2 className="text-2xl sm:text-3xl font-cinzel font-bold text-white mt-1">
+                  Four Flagship Disciplines in Action
+                </h2>
+                <p className="text-xs sm:text-sm text-neutral-300 mt-1 max-w-2xl leading-relaxed">
+                  Certified through rigorous curriculum, hands-on Fourways practicum simulations, and placed in premier households and corporate enterprises.
+                </p>
+              </div>
+              <div className="text-xs font-mono text-[#f3e1a9] bg-neutral-900 border border-neutral-800 px-3 py-1.5 rounded-lg self-start sm:self-auto">
+                4 Core Career Pathways
+              </div>
+            </div>
+
+            {/* 4 Fully Visible Images Grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+              {HOMEPAGE_SKILLS_BACKGROUNDS.map((skill, idx) => (
+                <div
+                  key={skill.id}
+                  className="group relative rounded-2xl overflow-hidden border border-neutral-800 hover:border-[#d4af37] bg-[#14141c] shadow-xl flex flex-col justify-between transition-all duration-300 hover:-translate-y-1.5"
+                >
+                  {/* Fully Visible 16:9 Image */}
+                  <div 
+                    className="relative aspect-[16/10] overflow-hidden bg-black/50 cursor-pointer"
+                    onClick={() => openLightbox(idx)}
+                  >
+                    <img
+                      src={skill.image}
+                      alt={skill.title}
+                      referrerPolicy="no-referrer"
+                      loading="eager"
+                      decoding="async"
+                      className="w-full h-full object-cover object-center group-hover:scale-108 transition-transform duration-500"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-60 group-hover:opacity-30 transition-opacity"></div>
+                    
+                    {/* Tag badge */}
+                    <span className="absolute top-2.5 left-2.5 px-2.5 py-1 rounded-md text-[10px] font-mono bg-black/85 border border-neutral-700 text-[#f3e1a9]">
+                      {skill.tag}
+                    </span>
+
+                    {/* Zoom button */}
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        openLightbox(idx);
+                      }}
+                      className="absolute top-2.5 right-2.5 p-1.5 rounded-full bg-[#d4af37] text-black opacity-0 group-hover:opacity-100 transition-opacity shadow-md"
+                      title="View Full Resolution"
+                    >
+                      <ZoomIn className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+
+                  {/* Card Body */}
+                  <div className="p-4 space-y-3 flex-1 flex flex-col justify-between">
+                    <div className="space-y-1.5">
+                      <h4 className="font-cinzel text-base font-bold text-white group-hover:text-[#f3e1a9] transition-colors">
+                        {skill.title}
+                      </h4>
+                      <p className="text-xs text-[#d4af37] font-medium">
+                        {skill.subtitle}
+                      </p>
+                      <p className="text-xs text-neutral-400 line-clamp-2 leading-relaxed">
+                        {skill.description}
+                      </p>
+                    </div>
+
+                    <div className="pt-3 border-t border-neutral-800/80 flex items-center gap-2">
+                      <button
+                        onClick={() => {
+                          const targetCourse = COURSES.find(c => c.id === skill.courseId);
+                          if (targetCourse) onSelectCourse(targetCourse);
+                        }}
+                        className="flex-1 py-2 px-3 rounded-lg text-xs font-semibold bg-neutral-900 border border-neutral-700 text-neutral-200 hover:text-white hover:border-[#d4af37]/60 transition-all text-center"
+                      >
+                        Syllabus
+                      </button>
+                      <button
+                        onClick={() => {
+                          const targetCourse = COURSES.find(c => c.id === skill.courseId);
+                          if (targetCourse) onQuickEnrol(targetCourse);
+                        }}
+                        className="flex-1 py-2 px-3 rounded-lg text-xs font-bold bg-[#d4af37] text-black hover:bg-[#f3e1a9] transition-all text-center font-cinzel uppercase tracking-wider"
+                      >
+                        Enrol
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </ScrollReveal>
       </section>
 
       {/* 2. THE THREE INSTITUTIONAL PILLARS */}
