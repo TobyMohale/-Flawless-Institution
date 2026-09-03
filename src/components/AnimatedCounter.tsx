@@ -9,6 +9,7 @@ interface AnimatedCounterProps {
   className?: string;
   decimals?: number;
   direction?: 'up' | 'down';
+  useGrouping?: boolean;
 }
 
 export const AnimatedCounter: React.FC<AnimatedCounterProps> = ({
@@ -19,7 +20,8 @@ export const AnimatedCounter: React.FC<AnimatedCounterProps> = ({
   prefix = '',
   className = '',
   decimals = 0,
-  direction
+  direction,
+  useGrouping = true
 }) => {
   // Determine start value based on direction or from prop
   const startingValue = from !== undefined 
@@ -78,7 +80,7 @@ export const AnimatedCounter: React.FC<AnimatedCounterProps> = ({
 
   const formattedNumber = decimals > 0 
     ? displayValue.toFixed(decimals) 
-    : Math.round(displayValue).toLocaleString();
+    : Math.round(displayValue).toLocaleString(undefined, { useGrouping });
 
   return (
     <span

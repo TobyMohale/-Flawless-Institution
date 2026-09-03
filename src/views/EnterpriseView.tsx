@@ -17,7 +17,7 @@ export const EnterpriseView: React.FC<EnterpriseViewProps> = ({ onOpenSpeakingEn
         {/* Executive Boardroom & Enterprise Heritage Backdrop */}
         <div className="absolute inset-0 z-0 pointer-events-none">
           <img
-            src={BACKGROUND_IMAGES.hero}
+            src={BACKGROUND_IMAGES.enterprise}
             alt="Flawless Enterprise Architecture"
             referrerPolicy="no-referrer"
             className="w-full h-full object-cover object-center opacity-25 scale-105"

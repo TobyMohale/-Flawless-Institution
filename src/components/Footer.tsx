@@ -182,23 +182,43 @@ export const Footer: React.FC<FooterProps> = ({ setCurrentView, onOpenSpeakingEn
                 </button>
               </li>
               <li>
+                <button onClick={() => navigateTo('household-advisory')} className="hover:text-[#f3e1a9] transition-colors">
+                  Household Advisory
+                </button>
+              </li>
+              <li>
+                <button onClick={() => navigateTo('private-household-training')} className="hover:text-[#f3e1a9] transition-colors">
+                  Private Household Training
+                </button>
+              </li>
+              <li>
+                <button onClick={() => navigateTo('private-households')} className="hover:text-[#f3e1a9] transition-colors">
+                  Professional Household Staffing
+                </button>
+              </li>
+              <li>
                 <button onClick={() => navigateTo('household-professionals')} className="hover:text-[#f3e1a9] transition-colors">
                   Household Professionals
                 </button>
               </li>
               <li>
-                <button onClick={() => navigateTo('private-households')} className="hover:text-[#f3e1a9] transition-colors">
-                  Private Households Advisory
+                <button onClick={() => navigateTo('coaching-mentorship')} className="hover:text-[#f3e1a9] transition-colors">
+                  Coaching & Mentorship
                 </button>
               </li>
               <li>
                 <button onClick={() => navigateTo('enterprise')} className="hover:text-[#f3e1a9] transition-colors">
-                  Flawless Enterprise & Coaching
+                  Flawless Enterprise
                 </button>
               </li>
               <li>
                 <button onClick={() => navigateTo('speaking')} className="hover:text-[#f3e1a9] transition-colors font-medium text-neutral-200">
                   Speaking & Thought Leadership
+                </button>
+              </li>
+              <li>
+                <button onClick={() => navigateTo('knowledge-store')} className="hover:text-[#f3e1a9] transition-colors">
+                  The Knowledge Store
                 </button>
               </li>
             </ul>

@@ -1,22 +1,25 @@
 import React, { useState } from 'react';
 import { 
-  GraduationCap, Search, Filter, Sparkles, MapPin, Globe, 
-  ArrowRight, ShieldAlert, Award, Clock, CheckCircle2, Tag 
+  GraduationCap, Search, Sparkles, MapPin, Globe, 
+  ArrowRight, ShieldAlert, Award, Clock, CheckCircle2, Tag, BookOpen, Laptop
 } from 'lucide-react';
 import { COURSES, CATEGORIES, Course } from '../data/coursesData';
 import { CourseCard } from '../components/CourseCard';
-import { SEPTEMBER_PHYSICAL_INTAKE, GRADUATION_INFO } from '../data/siteData';
 import { BACKGROUND_IMAGES } from '../data/assetsData';
 
 interface AcademyViewProps {
   onSelectCourse: (course: Course) => void;
   onQuickEnrol: (course: Course) => void;
+  onNavigateToPhysical?: () => void;
 }
 
-export const AcademyView: React.FC<AcademyViewProps> = ({ onSelectCourse, onQuickEnrol }) => {
+export const AcademyView: React.FC<AcademyViewProps> = ({ 
+  onSelectCourse, 
+  onQuickEnrol,
+  onNavigateToPhysical 
+}) => {
   const [selectedCategory, setSelectedCategory] = useState<string>('All Programmes');
   const [searchQuery, setSearchQuery] = useState<string>('');
-  const [modeFilter, setModeFilter] = useState<'all' | 'online' | 'physical'>('all');
   const [specialsOnly, setSpecialsOnly] = useState<boolean>(false);
 
   const filteredCourses = COURSES.filter(course => {
@@ -24,25 +27,20 @@ export const AcademyView: React.FC<AcademyViewProps> = ({ onSelectCourse, onQuic
     const matchesSearch = course.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
                           course.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
                           course.category.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesMode = modeFilter === 'all' 
-      ? true 
-      : modeFilter === 'physical' 
-        ? course.physicalAvailableSeptember 
-        : true;
     const matchesSpecial = !specialsOnly || (course.specialPrice < course.normalPrice);
 
-    return matchesCategory && matchesSearch && matchesMode && matchesSpecial;
+    return matchesCategory && matchesSearch && matchesSpecial;
   });
 
   return (
     <div className="space-y-16 pb-20 font-sans-body">
-      {/* 1. HERO HEADER */}
+      {/* 1. HERO HEADER: EXCLUSIVELY ONLINE DISTANCE LEARNING */}
       <section className="relative overflow-hidden pt-14 pb-16 border-b border-[#d4af37]/20 bg-[#09090c]">
-        {/* Dignified Butler Training Suite Background */}
+        {/* Background Image */}
         <div className="absolute inset-0 z-0">
           <img
             src={BACKGROUND_IMAGES.academy}
-            alt="Flawless Academy Training Suite"
+            alt="Flawless Academy Online Learning Suite"
             referrerPolicy="no-referrer"
             className="w-full h-full object-cover object-center opacity-25 scale-105"
           />
@@ -52,7 +50,7 @@ export const AcademyView: React.FC<AcademyViewProps> = ({ onSelectCourse, onQuic
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-5">
           <div className="inline-flex items-center gap-2 px-4 py-1 rounded-full bg-[#181822]/90 backdrop-blur-md border border-[#d4af37]/40 text-xs text-[#f3e1a9] font-cinzel uppercase tracking-widest shadow-lg">
-            <GraduationCap className="w-4 h-4 text-[#d4af37]" /> Flawless Academy • Established 2016
+            <Globe className="w-4 h-4 text-[#d4af37]" /> Flawless Academy • 100% Online Courses
           </div>
 
           <h1 className="text-3xl sm:text-5xl font-cinzel font-bold text-white tracking-tight leading-tight drop-shadow-md">
@@ -62,66 +60,61 @@ export const AcademyView: React.FC<AcademyViewProps> = ({ onSelectCourse, onQuic
 
           <p className="text-xs sm:text-base text-neutral-200 max-w-3xl mx-auto leading-relaxed">
             Professional Skills. Practical Training. A Stronger You. <br className="hidden sm:inline" />
-            Flawless Academy provides practical, career-focused training designed for individuals who are serious about developing their capabilities, strengthening their profile, and opening doors locally and internationally.
+            Flawless Academy provides flexible, 100% online distance learning designed for individuals who want to develop practical knowledge at their own pace.
           </p>
+
+          {/* Reassurance Banner that distance students DO NOT have to be in Fourways */}
+          <div className="max-w-2xl mx-auto bg-[#181824]/90 border border-neutral-800 rounded-2xl p-3.5 text-xs text-neutral-300">
+            <span className="text-[#f3e1a9] font-semibold">Study from anywhere in South Africa or internationally:</span> You complete your modules 100% online via phone or computer. Physical attendance in Fourways is NOT required for online training.
+          </div>
 
           <div className="flex flex-wrap items-center justify-center gap-3 pt-2 text-xs">
             <span className="bg-[#181822]/90 backdrop-blur-md text-[#f3e1a9] border border-[#d4af37]/40 px-3.5 py-1.5 rounded-full font-semibold shadow-md">
-              ✓ 100% Online Self-Paced Learning
+              ✓ 100% Online Distance Learning
             </span>
             <span className="bg-[#181822]/90 backdrop-blur-md text-[#f3e1a9] border border-[#d4af37]/40 px-3.5 py-1.5 rounded-full font-semibold shadow-md">
-              ✓ Fourways September Physical Intake
+              ✓ Active Promotional Tuition Specials
             </span>
             <span className="bg-[#181822]/90 backdrop-blur-md text-[#f3e1a9] border border-[#d4af37]/40 px-3.5 py-1.5 rounded-full font-semibold shadow-md">
-              ✓ Annual November Fourways Graduation
+              ✓ Recognized Completion Certificate
             </span>
           </div>
         </div>
       </section>
 
-      {/* 2. HIGHLY VISIBLE FOURWAYS SEPTEMBER INTAKE ANNOUNCEMENT */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div 
-          className="bg-gradient-to-r from-[#1d180f] via-[#292213] to-[#1d180f] border-2 border-[#d4af37] rounded-3xl p-6 sm:p-8 shadow-2xl relative overflow-hidden"
-          id="academy-september-intake-banner"
-        >
-          <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
-            <div className="space-y-3">
-              <div className="flex items-center gap-2">
-                <span className="bg-[#d4af37] text-black text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full font-cinzel">
-                  SEPTEMBER 2026 INTAKE — NOW OPEN
-                </span>
-                <span className="text-xs text-emerald-400 font-semibold hidden sm:inline">
-                  ● Limited Classroom Capacity
-                </span>
+      {/* 2. DEDICATED CALLOUT BANNER TO PHYSICAL CLASSES IN FOURWAYS */}
+      {onNavigateToPhysical && (
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="bg-gradient-to-r from-[#19150e] via-[#241d11] to-[#19150e] border border-[#d4af37]/50 rounded-3xl p-6 sm:p-7 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 shadow-2xl">
+            <div className="flex items-start gap-4">
+              <div className="p-3.5 rounded-2xl bg-[#d4af37]/15 text-[#d4af37] border border-[#d4af37]/30 shrink-0">
+                <MapPin className="w-6 h-6" />
               </div>
-
-              <h2 className="text-xl sm:text-3xl font-cinzel font-bold text-white">
-                FOURWAYS PHYSICAL TRAINING — CLASSES COMMENCE 7 SEPTEMBER 2026
-              </h2>
-
-              <p className="text-xs sm:text-sm text-neutral-300 max-w-2xl leading-relaxed">
-                Selected Flawless Academy programmes are available through in-person training in Fourways, South Africa. Our physical classes provide a structured learning environment for students who prefer face-to-face practical simulations in butler service, caregiving, housekeeping, and culinary support.
-              </p>
+              <div className="space-y-1.5">
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="text-xs font-cinzel font-bold text-[#f3e1a9] uppercase tracking-wider">
+                    Looking for Physical In-Person Classes in Fourways?
+                  </span>
+                  <span className="text-[10px] bg-emerald-950 text-emerald-300 border border-emerald-500/40 px-2.5 py-0.5 rounded-full font-semibold">
+                    Classes Commence 7 September 2026
+                  </span>
+                </div>
+                <p className="text-xs text-neutral-300 max-w-2xl leading-relaxed">
+                  Selected Flawless Academy programmes are available as in-person training with face-to-face practical simulations at our Fourways campus in Johannesburg. View dedicated physical tuition rates and reserve your classroom seat.
+                </p>
+              </div>
             </div>
 
-            <div className="flex flex-col sm:flex-row lg:flex-col gap-2.5 shrink-0 w-full lg:w-auto">
-              <button
-                onClick={() => setModeFilter('physical')}
-                className="py-3 px-6 rounded-xl text-xs font-bold bg-[#d4af37] text-black hover:bg-[#f3e1a9] uppercase tracking-wider transition-all text-center"
-              >
-                Filter Physical Programmes
-              </button>
-              <button
-                onClick={() => setModeFilter('all')}
-                className="py-2.5 px-4 rounded-xl text-xs font-medium text-neutral-300 hover:text-white bg-neutral-900 border border-neutral-700 text-center"
-              >
-                View All Programmes
-              </button>
-            </div>
+            <button
+              onClick={onNavigateToPhysical}
+              className="shrink-0 inline-flex items-center gap-2 py-3 px-6 rounded-xl text-xs font-bold bg-[#d4af37] text-black hover:bg-[#f3e1a9] uppercase tracking-wider transition-all shadow-lg shadow-[#d4af37]/10"
+            >
+              <span>View Fourways Physical Classes & Prices</span>
+              <ArrowRight className="w-4 h-4" />
+            </button>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* 3. PROMOTIONAL PRICING NOTICE BANNER */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -135,7 +128,7 @@ export const AcademyView: React.FC<AcademyViewProps> = ({ onSelectCourse, onQuic
                 ONLINE COURSE SPECIAL — SPECIAL PROMOTIONAL PRICES (LIMITED TIME ONLY)
               </div>
               <div className="text-xs text-neutral-400">
-                All course prices below feature active promotional tuition rates + separate R300 registration fee.
+                All online course prices below feature active promotional tuition rates + separate R300 registration fee.
               </div>
             </div>
           </div>
@@ -156,59 +149,34 @@ export const AcademyView: React.FC<AcademyViewProps> = ({ onSelectCourse, onQuic
         </div>
       </section>
 
-      {/* 4. SEARCH, CATEGORIES & MODE FILTER TOOLBAR */}
+      {/* 4. SEARCH & CATEGORIES TOOLBAR */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
-        {/* Search & Mode Switcher */}
         <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
           {/* Search Input */}
-          <div className="md:col-span-6 relative">
+          <div className="md:col-span-8 relative">
             <Search className="w-4 h-4 text-neutral-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
             <input
               type="text"
-              placeholder="Search programmes (e.g. Caregiver, Butler, Social Work, Au Pair)..."
+              placeholder="Search online programmes (e.g. Caregiver, Butler, Social Work, Au Pair)..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full bg-[#121217] border border-neutral-800 focus:border-[#d4af37] rounded-xl pl-10 pr-4 py-3 text-xs text-white placeholder-neutral-500 focus:outline-none transition-all"
             />
           </div>
 
-          {/* Mode Switcher (All / Online / Physical) */}
-          <div className="md:col-span-6 flex gap-2">
-            <button
-              onClick={() => setModeFilter('all')}
-              className={`flex-1 py-2.5 px-3 rounded-xl text-xs font-semibold transition-all flex items-center justify-center gap-1.5 ${
-                modeFilter === 'all'
-                  ? 'bg-[#d4af37] text-black shadow-md'
-                  : 'bg-[#121217] text-neutral-400 hover:text-white border border-neutral-800'
-              }`}
-            >
-              <span>All Formats ({COURSES.length})</span>
-            </button>
-
-            <button
-              onClick={() => setModeFilter('online')}
-              className={`flex-1 py-2.5 px-3 rounded-xl text-xs font-semibold transition-all flex items-center justify-center gap-1.5 ${
-                modeFilter === 'online'
-                  ? 'bg-[#d4af37] text-black shadow-md'
-                  : 'bg-[#121217] text-neutral-400 hover:text-white border border-neutral-800'
-              }`}
-            >
-              <Globe className="w-3.5 h-3.5" />
-              <span>100% Online</span>
-            </button>
-
-            <button
-              onClick={() => setModeFilter('physical')}
-              className={`flex-1 py-2.5 px-3 rounded-xl text-xs font-semibold transition-all flex items-center justify-center gap-1.5 ${
-                modeFilter === 'physical'
-                  ? 'bg-[#d4af37] text-black shadow-md'
-                  : 'bg-[#121217] text-neutral-400 hover:text-white border border-neutral-800'
-              }`}
-            >
-              <MapPin className="w-3.5 h-3.5" />
-              <span>Fourways Physical</span>
-            </button>
-          </div>
+          {/* Crosslink to physical classes */}
+          {onNavigateToPhysical && (
+            <div className="md:col-span-4 flex">
+              <button
+                onClick={onNavigateToPhysical}
+                className="w-full py-2.5 px-4 rounded-xl text-xs font-semibold bg-[#161622] hover:bg-[#1f1f30] text-[#f3e1a9] border border-[#d4af37]/30 transition-all flex items-center justify-center gap-2"
+              >
+                <MapPin className="w-3.5 h-3.5 text-[#d4af37]" />
+                <span>Fourways Physical Training</span>
+                <ArrowRight className="w-3 h-3 ml-auto" />
+              </button>
+            </div>
+          )}
         </div>
 
         {/* Category Pills */}
@@ -233,7 +201,7 @@ export const AcademyView: React.FC<AcademyViewProps> = ({ onSelectCourse, onQuic
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
         <div className="flex items-center justify-between text-xs text-neutral-400 border-b border-neutral-800 pb-3">
           <div>
-            Showing <strong className="text-white">{filteredCourses.length}</strong> available programmes in <strong className="text-[#f3e1a9]">{selectedCategory}</strong>
+            Showing <strong className="text-white">{filteredCourses.length}</strong> online distance learning programmes in <strong className="text-[#f3e1a9]">{selectedCategory}</strong>
           </div>
           {searchQuery && (
             <button 
@@ -252,7 +220,6 @@ export const AcademyView: React.FC<AcademyViewProps> = ({ onSelectCourse, onQuic
               onClick={() => {
                 setSelectedCategory('All Programmes');
                 setSearchQuery('');
-                setModeFilter('all');
                 setSpecialsOnly(false);
               }}
               className="text-xs text-[#d4af37] font-semibold underline"
@@ -268,6 +235,7 @@ export const AcademyView: React.FC<AcademyViewProps> = ({ onSelectCourse, onQuic
                 course={course}
                 onSelectCourse={onSelectCourse}
                 onQuickEnrol={onQuickEnrol}
+                displayMode="online"
               />
             ))}
           </div>
@@ -282,7 +250,7 @@ export const AcademyView: React.FC<AcademyViewProps> = ({ onSelectCourse, onQuic
               Your Journey With Flawless
             </span>
             <h2 className="text-2xl sm:text-4xl font-cinzel font-bold text-white">
-              From Enrolment to Graduation
+              From Online Enrolment to Graduation
             </h2>
             <p className="text-xs sm:text-sm text-neutral-400">
               A structured, transparent pathway designed to develop practical capabilities and recognised credentials.
@@ -293,42 +261,42 @@ export const AcademyView: React.FC<AcademyViewProps> = ({ onSelectCourse, onQuic
             <div className="bg-[#15151f] p-5 rounded-2xl border border-neutral-800 space-y-2">
               <div className="font-cinzel text-xl font-bold text-[#f3e1a9]">01 — CHOOSE YOUR PROGRAMME</div>
               <p className="text-xs text-neutral-300 leading-relaxed">
-                Select the course that aligns with your professional ambitions, care skills, or household career aspirations.
+                Select the online course that aligns with your career ambitions, care skills, or household management goals.
               </p>
             </div>
 
             <div className="bg-[#15151f] p-5 rounded-2xl border border-neutral-800 space-y-2">
               <div className="font-cinzel text-xl font-bold text-[#f3e1a9]">02 — REGISTER ONLINE</div>
               <p className="text-xs text-neutral-300 leading-relaxed">
-                Complete your registration and secure your place. Separate Registration Fee: <strong>R300</strong>.
+                Complete your online registration. Separate Registration Fee: <strong>R300</strong>.
               </p>
             </div>
 
             <div className="bg-[#15151f] p-5 rounded-2xl border border-neutral-800 space-y-2">
-              <div className="font-cinzel text-xl font-bold text-[#f3e1a9]">03 — BEGIN LEARNING</div>
+              <div className="font-cinzel text-xl font-bold text-[#f3e1a9]">03 — ACCESS LEARNING PORTAL</div>
               <p className="text-xs text-neutral-300 leading-relaxed">
-                Access your online learning platform immediately or attend physical classes in Fourways for scheduled intakes.
+                Receive instant student portal access to your modules, workbooks, video materials, and reading guidelines.
               </p>
             </div>
 
             <div className="bg-[#15151f] p-5 rounded-2xl border border-neutral-800 space-y-2">
-              <div className="font-cinzel text-xl font-bold text-[#f3e1a9]">04 — DEVELOP YOUR SKILLS</div>
+              <div className="font-cinzel text-xl font-bold text-[#f3e1a9]">04 — STUDY AT YOUR PACE</div>
               <p className="text-xs text-neutral-300 leading-relaxed">
-                Work through your modules, case studies, and practical assessments relevant to high-expectation environments.
+                Study anywhere in South Africa or worldwide on your smartphone, tablet, or PC without commute.
               </p>
             </div>
 
             <div className="bg-[#15151f] p-5 rounded-2xl border border-neutral-800 space-y-2">
-              <div className="font-cinzel text-xl font-bold text-[#f3e1a9]">05 — COMPLETE PROGRAMME</div>
+              <div className="font-cinzel text-xl font-bold text-[#f3e1a9]">05 — COMPLETE ASSESSMENTS</div>
               <p className="text-xs text-neutral-300 leading-relaxed">
-                Successfully satisfy the practical and theoretical requirements of your chosen programme.
+                Submit your module evaluations and practical case scenarios for academic review.
               </p>
             </div>
 
             <div className="bg-[#15151f] p-5 rounded-2xl border border-[#d4af37]/40 space-y-2">
-              <div className="font-cinzel text-xl font-bold text-[#f3e1a9]">06 — GRADUATE WITH FLAWLESS</div>
+              <div className="font-cinzel text-xl font-bold text-[#f3e1a9]">06 — RECEIVE CERTIFICATE</div>
               <p className="text-xs text-neutral-300 leading-relaxed">
-                Receive your official Flawless Academy Certificate during the annual November Graduation in Fourways.
+                Receive your digital certificate upon completion, with the option to attend the annual November Graduation in Fourways.
               </p>
             </div>
           </div>
@@ -353,7 +321,7 @@ export const AcademyView: React.FC<AcademyViewProps> = ({ onSelectCourse, onQuic
             <div className="space-y-1.5">
               <strong className="text-white font-cinzel block text-sm">CERTIFICATES</strong>
               <p className="text-neutral-400 leading-relaxed">
-                All students who successfully complete their selected training receive a Flawless Academy Certificate during the annual November Graduation in Fourways.
+                All students who successfully complete their selected training receive an official Flawless Academy Certificate.
               </p>
             </div>
 

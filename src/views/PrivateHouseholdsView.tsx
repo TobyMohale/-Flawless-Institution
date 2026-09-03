@@ -1,220 +1,214 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { 
-  Home, ShieldCheck, CheckCircle2, FileText, ArrowRight, 
-  Sparkles, Users, Lock, Compass, Send, Check 
+  Users, CheckCircle2, Home, Star, Shield, Search, ArrowRight, UserCheck 
 } from 'lucide-react';
 import { BACKGROUND_IMAGES } from '../data/assetsData';
 
-interface PrivateHouseholdsViewProps {
-  onOpenSpeakingEnquiry: () => void;
-}
-
-export const PrivateHouseholdsView: React.FC<PrivateHouseholdsViewProps> = ({
-  onOpenSpeakingEnquiry
-}) => {
-  const [submitted, setSubmitted] = useState(false);
-  const [formData, setFormData] = useState({
-    name: '',
-    estateOrArea: '',
-    email: '',
-    phone: '',
-    serviceNeeded: 'Household Operating Procedures (SOPs)',
-    details: ''
-  });
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setSubmitted(true);
-  };
-
+export const PrivateHouseholdsView: React.FC = () => {
   return (
     <div className="space-y-20 pb-20 font-sans-body">
-      {/* Hero */}
-      <section className="relative overflow-hidden pt-14 pb-16 sm:pt-20 sm:pb-24 border-b border-[#d4af37]/20 bg-[#09090c]">
-        {/* Luxury Private Estate Background */}
-        <div className="absolute inset-0 z-0 pointer-events-none">
+      {/* 1. HERO HEADER */}
+      <section className="relative pt-16 pb-20 border-b border-[#d4af37]/20 bg-[#09090c] overflow-hidden">
+        <div className="absolute inset-0 z-0 opacity-20">
           <img
-            src={BACKGROUND_IMAGES.estate}
-            alt="Private Estate & Household Excellence"
+            src={BACKGROUND_IMAGES.employers}
+            alt="Flawless Professional Household Staffing"
             referrerPolicy="no-referrer"
-            className="w-full h-full object-cover object-center opacity-25 scale-105"
+            className="w-full h-full object-cover object-center grayscale mix-blend-overlay"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0d] via-[#0a0a0d]/80 to-[#0a0a0d]/90"></div>
-          <div className="absolute inset-0 bg-gradient-to-r from-[#0a0a0d] via-transparent to-[#0a0a0d]"></div>
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0d] via-[#0a0a0d]/80 to-transparent"></div>
         </div>
 
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-5">
-          <div className="inline-flex items-center gap-2 px-4 py-1 rounded-full bg-[#181822]/90 backdrop-blur-md border border-[#d4af37]/40 text-xs text-[#f3e1a9] font-cinzel uppercase tracking-widest shadow-lg">
-            <Home className="w-3.5 h-3.5 text-[#d4af37]" /> Pillar II: Homes
+        <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#181822]/90 backdrop-blur-md border border-[#d4af37]/40 text-xs text-[#f3e1a9] font-cinzel uppercase tracking-widest shadow-lg">
+            <Home className="w-4 h-4 text-[#d4af37]" /> Professional Household Staffing
           </div>
 
-          <h1 className="text-3xl sm:text-5xl font-cinzel font-bold text-white tracking-tight leading-tight drop-shadow-md">
-            PRIVATE HOUSEHOLDS & ESTATES
+          <h1 className="text-3xl sm:text-5xl lg:text-6xl font-cinzel font-bold text-white tracking-tight leading-tight">
+            EXCEPTIONAL HOUSEHOLDS DESERVE <br />
+            <span className="gold-gradient-text">THE RIGHT PROFESSIONALS.</span>
           </h1>
 
-          <p className="text-sm sm:text-lg text-neutral-200 font-serif italic max-w-2xl mx-auto leading-relaxed">
-            “Structure, discretion, and operational excellence for high-expectation residences.”
+          <p className="text-sm text-[#f3e1a9] font-bold uppercase tracking-[0.2em] pt-2">
+            DISCREET. CONSIDERED. PROFESSIONAL.
           </p>
 
-          <p className="text-xs sm:text-sm text-neutral-300 max-w-2xl mx-auto leading-relaxed">
-            From establishing customized Household Standard Operating Procedures (SOPs) and conducting staff audits to private mediation and confidential staffing advisory.
+          <p className="text-sm sm:text-lg text-neutral-300 max-w-2xl mx-auto leading-relaxed font-light mt-4">
+            Your home deserves more than a vacancy being filled. It deserves the right person, for the right role, within the right household environment. Flawless Institution provides professional household staffing solutions across South Africa and beyond.
           </p>
+          
+          <div className="pt-6">
+            <button className="py-3.5 px-8 rounded-xl text-xs sm:text-sm font-bold bg-[#d4af37] text-black hover:bg-[#f3e1a9] uppercase tracking-wider transition-all shadow-lg shadow-[#d4af37]/20 active:scale-95">
+              Request Household Staffing
+            </button>
+          </div>
         </div>
       </section>
 
-      {/* Advisory Services */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <div className="bg-[#121218] border border-neutral-800 rounded-2xl p-6 space-y-3">
-            <div className="w-10 h-10 rounded-xl bg-[#d4af37]/15 text-[#f3e1a9] flex items-center justify-center font-bold">
-              <FileText className="w-5 h-5 text-[#d4af37]" />
-            </div>
-            <h3 className="font-cinzel text-base font-bold text-white">Household SOPs</h3>
-            <p className="text-xs text-neutral-300 leading-relaxed">
-              Customized operation manuals tailored to your residence, defining daily routines, hygiene protocols, grocery systems, and security standards.
+      {/* 2. THE FLAWLESS APPROACH */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="bg-[#121219] border border-neutral-800 rounded-3xl p-8 sm:p-12 text-center max-w-4xl mx-auto space-y-8">
+          <div className="space-y-4">
+            <h2 className="text-2xl font-cinzel font-bold text-white uppercase tracking-wider">
+              Start with the Household.
+            </h2>
+            <p className="text-neutral-400 text-sm leading-relaxed">
+              Every private household is different. The responsibilities, lifestyle, family structure, service expectations and working environment all influence the type of professional required. We therefore begin by understanding the household before considering the professional.
             </p>
           </div>
 
-          <div className="bg-[#121218] border border-neutral-800 rounded-2xl p-6 space-y-3">
-            <div className="w-10 h-10 rounded-xl bg-[#d4af37]/15 text-[#f3e1a9] flex items-center justify-center font-bold">
-              <ShieldCheck className="w-5 h-5 text-[#d4af37]" />
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-4 text-center text-xs">
+            <div className="space-y-1 p-4 bg-[#181822] rounded-xl border border-neutral-800">
+              <span className="text-[#d4af37] font-bold uppercase tracking-wider block font-cinzel">Household</span>
+              <span className="text-neutral-400">What does your home require?</span>
             </div>
-            <h3 className="font-cinzel text-base font-bold text-white">Household Audits</h3>
-            <p className="text-xs text-neutral-300 leading-relaxed">
-              Objective assessment of your existing domestic operations, staffing bottlenecks, efficiency gaps, and resource management.
-            </p>
-          </div>
-
-          <div className="bg-[#121218] border border-neutral-800 rounded-2xl p-6 space-y-3">
-            <div className="w-10 h-10 rounded-xl bg-[#d4af37]/15 text-[#f3e1a9] flex items-center justify-center font-bold">
-              <Users className="w-5 h-5 text-[#d4af37]" />
+            <div className="space-y-1 p-4 bg-[#181822] rounded-xl border border-neutral-800">
+              <span className="text-[#d4af37] font-bold uppercase tracking-wider block font-cinzel">Role</span>
+              <span className="text-neutral-400">What responsibilities?</span>
             </div>
-            <h3 className="font-cinzel text-base font-bold text-white">Staff Mediation</h3>
-            <p className="text-xs text-neutral-300 leading-relaxed">
-              Professional, neutral mediation for employer-employee communication, conflict resolution, and performance realignment.
-            </p>
-          </div>
-
-          <div className="bg-[#121218] border border-neutral-800 rounded-2xl p-6 space-y-3">
-            <div className="w-10 h-10 rounded-xl bg-[#d4af37]/15 text-[#f3e1a9] flex items-center justify-center font-bold">
-              <Lock className="w-5 h-5 text-[#d4af37]" />
+            <div className="space-y-1 p-4 bg-[#181822] rounded-xl border border-neutral-800">
+              <span className="text-[#d4af37] font-bold uppercase tracking-wider block font-cinzel">Standard</span>
+              <span className="text-neutral-400">What service level?</span>
             </div>
-            <h3 className="font-cinzel text-base font-bold text-white">Confidential Advisory</h3>
-            <p className="text-xs text-neutral-300 leading-relaxed">
-              High-discretion guidance for executive families, diplomats, and estate owners seeking structured household staffing solutions.
-            </p>
+            <div className="space-y-1 p-4 bg-[#181822] rounded-xl border border-neutral-800">
+              <span className="text-[#d4af37] font-bold uppercase tracking-wider block font-cinzel">Professional</span>
+              <span className="text-neutral-400">Skills & experience?</span>
+            </div>
+            <div className="space-y-1 p-4 bg-[#181822] rounded-xl border border-neutral-800 col-span-2 md:col-span-1">
+              <span className="text-[#d4af37] font-bold uppercase tracking-wider block font-cinzel">Fit</span>
+              <span className="text-neutral-400">Is it suitable?</span>
+            </div>
           </div>
         </div>
+      </section>
 
-        {/* Private Household Advisory Request Form */}
-        <div className="bg-[#101016] border border-[#d4af37]/40 rounded-3xl p-6 sm:p-10 shadow-2xl max-w-3xl mx-auto space-y-6">
-          <div className="text-center space-y-2">
-            <span className="text-xs uppercase font-bold text-[#d4af37] tracking-widest font-cinzel">
-              Confidential Consultation
-            </span>
-            <h2 className="text-2xl font-cinzel font-bold text-white">
-              Enquire About Household Advisory & SOPs
+      {/* 3. ROLES WE PLACE */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
+        <div className="text-center max-w-3xl mx-auto space-y-4">
+          <h2 className="text-3xl font-cinzel font-bold text-white uppercase tracking-wide">
+            Household Professionals
+          </h2>
+          <p className="text-sm text-[#f3e1a9] uppercase tracking-wider font-bold">Professionals for a range of private requirements.</p>
+          <div className="w-16 h-1 bg-[#d4af37] mx-auto rounded-full mt-4"></div>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          {[
+            { title: "Nannies & Au Pairs", desc: "Professional childcare and family support." },
+            { title: "Caregivers", desc: "Support for elderly, frail or vulnerable members." },
+            { title: "Housekeepers", desc: "Professional household cleaning, organisation." },
+            { title: "Domestic Helpers", desc: "Practical household support." },
+            { title: "Executive Housekeepers", desc: "Higher-level housekeeping and service." },
+            { title: "Butlers", desc: "Formal service, hospitality and household support." },
+            { title: "Household Managers", desc: "Coordination and oversight of household operations." },
+            { title: "Personal Assistants", desc: "Administrative and personal support." },
+            { title: "Chefs & Assistants", desc: "Kitchen and culinary support." },
+            { title: "Gardeners & Support", desc: "Specialised household and property support." },
+            { title: "Professional Cleaners", desc: "Cleaning services for private residences." },
+            { title: "Specialised Roles", desc: "Tailored to specific household requirements." }
+          ].map((role, idx) => (
+            <div key={idx} className="bg-[#101016] border border-neutral-800 rounded-2xl p-5 hover:border-[#d4af37]/40 transition-colors">
+              <h4 className="text-sm font-bold text-white font-cinzel uppercase mb-1">{role.title}</h4>
+              <p className="text-[11px] text-neutral-400 leading-relaxed">{role.desc}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* 4. OUR STAFFING PROCESS */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="bg-gradient-to-b from-[#14141b] to-[#0a0a0d] border border-[#d4af37]/20 rounded-3xl p-8 sm:p-12 space-y-10">
+          <div className="text-center max-w-2xl mx-auto space-y-2">
+            <h2 className="text-2xl font-cinzel font-bold text-white uppercase tracking-wider">
+              Our Staffing Process
             </h2>
-            <p className="text-xs text-neutral-400">
-              Strictly confidential advisory for private residences in Sandton, Fourways, Pretoria, Cape Town, and across SA.
-            </p>
+            <p className="text-sm text-neutral-400">A professional process from requirement to appointment.</p>
           </div>
 
-          {!submitted ? (
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <label className="text-xs font-medium text-neutral-300 block mb-1">Your Name</label>
-                  <input
-                    type="text"
-                    required
-                    placeholder="Full Name"
-                    value={formData.name}
-                    onChange={e => setFormData({ ...formData, name: e.target.value })}
-                    className="w-full bg-[#16161f] border border-neutral-800 rounded-lg p-2.5 text-xs text-white placeholder-neutral-500 focus:outline-none focus:border-[#d4af37]"
-                  />
-                </div>
-                <div>
-                  <label className="text-xs font-medium text-neutral-300 block mb-1">Residential Estate / Area</label>
-                  <input
-                    type="text"
-                    required
-                    placeholder="e.g. Steyn City, Dainfern, Waterfall, Bryanston"
-                    value={formData.estateOrArea}
-                    onChange={e => setFormData({ ...formData, estateOrArea: e.target.value })}
-                    className="w-full bg-[#16161f] border border-neutral-800 rounded-lg p-2.5 text-xs text-white placeholder-neutral-500 focus:outline-none focus:border-[#d4af37]"
-                  />
-                </div>
-                <div>
-                  <label className="text-xs font-medium text-neutral-300 block mb-1">Email Address</label>
-                  <input
-                    type="email"
-                    required
-                    placeholder="name@domain.com"
-                    value={formData.email}
-                    onChange={e => setFormData({ ...formData, email: e.target.value })}
-                    className="w-full bg-[#16161f] border border-neutral-800 rounded-lg p-2.5 text-xs text-white placeholder-neutral-500 focus:outline-none focus:border-[#d4af37]"
-                  />
-                </div>
-                <div>
-                  <label className="text-xs font-medium text-neutral-300 block mb-1">Contact Number</label>
-                  <input
-                    type="tel"
-                    required
-                    placeholder="+27 (0) ... "
-                    value={formData.phone}
-                    onChange={e => setFormData({ ...formData, phone: e.target.value })}
-                    className="w-full bg-[#16161f] border border-neutral-800 rounded-lg p-2.5 text-xs text-white placeholder-neutral-500 focus:outline-none focus:border-[#d4af37]"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label className="text-xs font-medium text-neutral-300 block mb-1">Service Required</label>
-                <select
-                  value={formData.serviceNeeded}
-                  onChange={e => setFormData({ ...formData, serviceNeeded: e.target.value })}
-                  className="w-full bg-[#16161f] border border-neutral-800 rounded-lg p-2.5 text-xs text-white focus:outline-none focus:border-[#d4af37]"
-                >
-                  <option>Household Operating Procedures (SOPs)</option>
-                  <option>Household Efficiency Audit</option>
-                  <option>Staff Conflict Mediation & Performance Review</option>
-                  <option>Executive Staff Upskilling & Private Masterclass</option>
-                  <option>Bespoke Advisory</option>
-                </select>
-              </div>
-
-              <div>
-                <label className="text-xs font-medium text-neutral-300 block mb-1">Requirements Overview</label>
-                <textarea
-                  rows={3}
-                  placeholder="Share details on your household layout, staff numbers, and primary goals..."
-                  value={formData.details}
-                  onChange={e => setFormData({ ...formData, details: e.target.value })}
-                  className="w-full bg-[#16161f] border border-neutral-800 rounded-lg p-2.5 text-xs text-white placeholder-neutral-500 focus:outline-none focus:border-[#d4af37]"
-                ></textarea>
-              </div>
-
-              <button
-                type="submit"
-                className="w-full py-3.5 px-6 rounded-xl text-xs font-bold bg-[#d4af37] text-black hover:bg-[#f3e1a9] uppercase tracking-wider transition-all"
-              >
-                Submit Household Advisory Enquiry
-              </button>
-            </form>
-          ) : (
-            <div className="text-center py-6 space-y-3">
-              <div className="w-12 h-12 rounded-full bg-emerald-950 text-emerald-400 border border-emerald-800 flex items-center justify-center mx-auto">
-                <Check className="w-6 h-6" />
-              </div>
-              <h3 className="font-cinzel text-xl font-bold text-white">Enquiry Transmitted</h3>
-              <p className="text-xs text-neutral-300 max-w-md mx-auto">
-                Thank you. A senior household consultant will contact you confidentially within 24 business hours.
-              </p>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="space-y-2">
+              <span className="text-[#d4af37] font-bold font-cinzel text-lg">01 — Private Consultation</span>
+              <p className="text-xs text-neutral-400">We begin by understanding your household and staffing requirements.</p>
             </div>
-          )}
+            <div className="space-y-2">
+              <span className="text-[#d4af37] font-bold font-cinzel text-lg">02 — Role Profiling</span>
+              <p className="text-xs text-neutral-400">We clarify the position, responsibilities, expectations and essential requirements.</p>
+            </div>
+            <div className="space-y-2">
+              <span className="text-[#d4af37] font-bold font-cinzel text-lg">03 — Candidate Sourcing</span>
+              <p className="text-xs text-neutral-400">Suitable professionals identified through networks and recruitment channels.</p>
+            </div>
+            <div className="space-y-2">
+              <span className="text-[#d4af37] font-bold font-cinzel text-lg">04 — Screening & Review</span>
+              <p className="text-xs text-neutral-400">Candidates considered against agreed requirements and processes.</p>
+            </div>
+            <div className="space-y-2">
+              <span className="text-[#d4af37] font-bold font-cinzel text-lg">05 — Presentation</span>
+              <p className="text-xs text-neutral-400">Suitable candidate profiles are presented to the employer for consideration.</p>
+            </div>
+            <div className="space-y-2">
+              <span className="text-[#d4af37] font-bold font-cinzel text-lg">06 — Interview & Decision</span>
+              <p className="text-xs text-neutral-400">The employer evaluates candidates and makes the final appointment decision.</p>
+            </div>
+            <div className="space-y-2 lg:col-span-2">
+              <span className="text-[#d4af37] font-bold font-cinzel text-lg">07 — Onboarding & Development</span>
+              <p className="text-xs text-neutral-400">Where appropriate, Flawless may provide guidance, professional development or private household training.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 5. AUDIENCES (Employers vs Candidates) */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="bg-[#121219] border border-neutral-800 rounded-3xl p-8 space-y-6">
+          <Shield className="w-8 h-8 text-[#d4af37]" />
+          <h3 className="text-xl font-cinzel font-bold text-white uppercase">For Private Employers</h3>
+          <p className="text-xs text-[#f3e1a9] font-bold uppercase tracking-wider">Your home is personal. Your staffing decisions matter.</p>
+          <p className="text-sm text-neutral-400 leading-relaxed">
+            Household Professionals may work closely with your family, your home and your daily routines. They may have access to personal spaces, family information, belongings and confidential matters. Professional household staffing therefore requires care, discretion and clear expectations.
+          </p>
+          <p className="text-sm text-neutral-300 font-semibold italic border-l-2 border-[#d4af37] pl-4">
+            Flawless helps employers think beyond: "Who can start immediately?" and consider: "Who is appropriate for our household?"
+          </p>
+        </div>
+
+        <div className="bg-[#121219] border border-[#d4af37]/20 rounded-3xl p-8 space-y-6 shadow-lg shadow-[#d4af37]/5">
+          <UserCheck className="w-8 h-8 text-[#d4af37]" />
+          <h3 className="text-xl font-cinzel font-bold text-white uppercase">For Household Professionals</h3>
+          <p className="text-xs text-[#f3e1a9] font-bold uppercase tracking-wider">Develop first. Opportunities follow.</p>
+          <p className="text-sm text-neutral-400 leading-relaxed">
+            Flawless Institution is not an open job-placement platform for private individuals. <strong className="text-white">WE DO NOT OFFER JOB PLACEMENTS TO PRIVATE JOB SEEKERS.</strong>
+          </p>
+          <p className="text-sm text-neutral-400 leading-relaxed">
+            Opportunities may be considered for eligible Flawless Graduates where suitable client requirements become available. Selection is not automatic. Completing a Flawless course does not guarantee employment.
+          </p>
+          <button className="py-2.5 px-4 rounded-lg text-xs font-bold bg-[#1a1a24] text-white border border-neutral-700 hover:border-[#d4af37] hover:text-[#d4af37] transition-all">
+            Explore Flawless Academy
+          </button>
+        </div>
+      </section>
+
+      {/* 6. CTA */}
+      <section className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="bg-gradient-to-r from-[#d4af37]/10 via-[#d4af37]/5 to-[#d4af37]/10 border border-[#d4af37]/30 rounded-3xl p-8 sm:p-12 text-center space-y-6">
+          <h2 className="text-2xl font-cinzel font-bold text-white uppercase tracking-wider">
+            Looking for a Household Professional?
+          </h2>
+          <p className="text-sm text-neutral-300">
+            Tell us about the role, your household and the professional you are looking for. Our team will review your requirements and advise you on the appropriate next step.
+          </p>
+          <div className="flex flex-col sm:flex-row justify-center gap-4 pt-4">
+            <button className="py-3.5 px-6 rounded-xl text-xs font-bold bg-[#d4af37] text-black hover:bg-[#f3e1a9] uppercase tracking-wider transition-all">
+              Request Household Staffing
+            </button>
+            <button className="py-3.5 px-6 rounded-xl text-xs font-bold bg-[#14141b] text-[#f3e1a9] border border-[#d4af37]/40 hover:border-[#d4af37] uppercase tracking-wider transition-all">
+              Book a Private Consultation
+            </button>
+          </div>
+          <p className="text-[10px] text-neutral-500 uppercase tracking-widest pt-2">Flawless Institution | Established 2016</p>
         </div>
       </section>
     </div>
   );
 };
+

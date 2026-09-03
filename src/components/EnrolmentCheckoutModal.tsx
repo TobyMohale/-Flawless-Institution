@@ -8,17 +8,21 @@ import { SEPTEMBER_PHYSICAL_INTAKE, GRADUATION_INFO } from '../data/siteData';
 
 interface EnrolmentCheckoutModalProps {
   course: Course | null;
+  initialMode?: 'Online' | 'Physical';
   onClose: () => void;
   onSuccessEnrol: (course: Course, studentData: any) => void;
+  onViewInPortal?: () => void;
 }
 
 export const EnrolmentCheckoutModal: React.FC<EnrolmentCheckoutModalProps> = ({ 
   course, 
+  initialMode = 'Online',
   onClose, 
-  onSuccessEnrol 
+  onSuccessEnrol,
+  onViewInPortal
 }) => {
   const [step, setStep] = useState<'details' | 'payment' | 'success'>('details');
-  const [learningMode, setLearningMode] = useState<'Online' | 'Physical'>('Online');
+  const [learningMode, setLearningMode] = useState<'Online' | 'Physical'>(initialMode);
   const [paymentMethod, setPaymentMethod] = useState<'instant-eft' | 'credit-card' | 'payfast' | 'bank-transfer'>('instant-eft');
   const [isProcessing, setIsProcessing] = useState(false);
   const [studentId, setStudentId] = useState('');
@@ -38,7 +42,10 @@ export const EnrolmentCheckoutModal: React.FC<EnrolmentCheckoutModalProps> = ({
 
   if (!course) return null;
 
-  const totalAmount = course.specialPrice + course.registrationFee;
+  const tuitionAmount = (learningMode === 'Physical' && course.physicalPrice) 
+    ? course.physicalPrice 
+    : course.specialPrice;
+  const totalAmount = tuitionAmount + course.registrationFee;
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value, type } = e.target;
@@ -316,17 +323,28 @@ export const EnrolmentCheckoutModal: React.FC<EnrolmentCheckoutModalProps> = ({
                 </div>
                 <div className="space-y-1.5 text-xs border-b border-neutral-800 pb-3">
                   <div className="flex justify-between text-neutral-300">
-                    <span>{course.title} ({learningMode} Mode)</span>
-                    <span className="font-semibold text-white">R{course.specialPrice.toLocaleString()}</span>
+                    <span>
+                      {course.title} ({learningMode === 'Physical' ? 'Fourways Physical Campus' : '100% Online'})
+                    </span>
+                    <span className="font-semibold text-white">
+                      R{tuitionAmount.toLocaleString()}
+                    </span>
                   </div>
                   <div className="flex justify-between text-neutral-400">
                     <span>Student Registration Fee</span>
                     <span className="font-semibold text-white">R{course.registrationFee.toLocaleString()}</span>
                   </div>
-                  <div className="flex justify-between text-emerald-400 text-[11px]">
-                    <span>Promotional Savings Applied</span>
-                    <span>-R{(course.normalPrice - course.specialPrice).toLocaleString()}</span>
-                  </div>
+                  {learningMode === 'Online' && course.normalPrice > course.specialPrice && (
+                    <div className="flex justify-between text-emerald-400 text-[11px]">
+                      <span>Promotional Savings Applied</span>
+                      <span>-R{(course.normalPrice - course.specialPrice).toLocaleString()}</span>
+                    </div>
+                  )}
+                  {learningMode === 'Physical' && (
+                    <div className="text-[11px] text-amber-400/90 pt-1">
+                      Includes physical classroom access, face-to-face practical simulations in Fourways, and printed training materials.
+                    </div>
+                  )}
                 </div>
                 <div className="flex justify-between items-baseline pt-1">
                   <div>

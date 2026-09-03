@@ -1,20 +1,24 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Course } from '../data/coursesData';
 import { 
-  X, CheckCircle, Clock, BookOpen, GraduationCap, MapPin, 
+  ArrowLeft, CheckCircle, Clock, BookOpen, GraduationCap, MapPin, 
   ShieldAlert, Sparkles, ArrowRight, Download, Share2, Award, Check
 } from 'lucide-react';
 import { GRADUATION_INFO, SEPTEMBER_PHYSICAL_INTAKE } from '../data/siteData';
 
-interface CourseDetailModalProps {
+interface CourseDetailViewProps {
   course: Course | null;
-  onClose: () => void;
+  onBack: () => void;
   onEnrol: (course: Course) => void;
 }
 
-export const CourseDetailModal: React.FC<CourseDetailModalProps> = ({ course, onClose, onEnrol }) => {
+export const CourseDetailView: React.FC<CourseDetailViewProps> = ({ course, onBack, onEnrol }) => {
   const [copiedLink, setCopiedLink] = useState(false);
   const [downloadedSyllabus, setDownloadedSyllabus] = useState(false);
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  }, [course]);
 
   if (!course) return null;
 
@@ -33,22 +37,17 @@ export const CourseDetailModal: React.FC<CourseDetailModalProps> = ({ course, on
   };
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-black/80 backdrop-blur-md flex items-center justify-center p-3 sm:p-4 md:p-6 animate-in fade-in duration-200">
-      <div 
-        className="relative bg-[#0e0e12] border border-[#d4af37]/40 rounded-2xl w-full max-w-4xl max-h-[92vh] overflow-y-auto shadow-2xl text-neutral-200 font-sans-body"
-        id="course-detail-modal"
-      >
-        {/* Top Header Bar */}
-        <div className="sticky top-0 z-20 bg-[#121218]/95 backdrop-blur-md border-b border-neutral-800 p-4 sm:p-6 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <span className="text-xs font-semibold text-[#f3e1a9] bg-[#d4af37]/15 border border-[#d4af37]/30 px-3 py-1 rounded-md">
-              {course.category}
-            </span>
-            <span className="text-xs text-neutral-400 font-medium hidden sm:inline">
-              Level: <strong className="text-neutral-200">{course.level}</strong>
-            </span>
-          </div>
-
+    <div className="min-h-screen bg-[#0a0a0d] pb-20 font-sans-body animate-in fade-in duration-300">
+      {/* Top Navigation Bar */}
+      <div className="sticky top-0 z-30 bg-[#0a0a0d]/90 backdrop-blur-md border-b border-neutral-800/80">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+          <button
+            onClick={onBack}
+            className="flex items-center gap-2 text-xs font-semibold text-neutral-400 hover:text-[#f3e1a9] transition-colors"
+          >
+            <ArrowLeft className="w-4 h-4" /> BACK TO ACADEMY
+          </button>
+          
           <div className="flex items-center gap-2">
             <button
               onClick={handleShare}
@@ -58,19 +57,12 @@ export const CourseDetailModal: React.FC<CourseDetailModalProps> = ({ course, on
               {copiedLink ? <Check className="w-4 h-4 text-emerald-400" /> : <Share2 className="w-4 h-4" />}
               <span className="hidden sm:inline">{copiedLink ? 'Copied' : 'Share'}</span>
             </button>
-            <button
-              onClick={onClose}
-              id="close-course-modal-btn"
-              className="p-2 rounded-lg bg-neutral-900 border border-neutral-800 hover:bg-neutral-800 text-neutral-400 hover:text-white transition-all"
-              aria-label="Close modal"
-            >
-              <X className="w-5 h-5" />
-            </button>
           </div>
         </div>
+      </div>
 
-        {/* Modal Body */}
-        <div className="p-4 sm:p-8 space-y-8">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 sm:pt-12">
+        <div className="space-y-12">
           {/* Hero Section */}
           <div className="space-y-4">
             <div className="inline-flex items-center gap-1.5 text-xs text-[#d4af37] font-semibold tracking-wider uppercase">
@@ -220,6 +212,12 @@ export const CourseDetailModal: React.FC<CourseDetailModalProps> = ({ course, on
                       <strong className="text-white">R{course.specialPrice.toLocaleString()}</strong>
                     </div>
                   </div>
+                  {course.physicalPrice && (
+                    <div className="flex justify-between text-neutral-400">
+                      <span>Physical Training Tuition (Fourways):</span>
+                      <strong className="text-white">R{course.physicalPrice.toLocaleString()}</strong>
+                    </div>
+                  )}
                   <div className="flex justify-between text-neutral-400">
                     <span>Registration Fee (Separate):</span>
                     <strong className="text-white">R{course.registrationFee.toLocaleString()}</strong>

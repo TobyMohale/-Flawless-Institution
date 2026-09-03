@@ -8,10 +8,14 @@ interface CourseCardProps {
   course: Course;
   onSelectCourse: (course: Course) => void;
   onQuickEnrol: (course: Course) => void;
+  displayMode?: 'all' | 'online' | 'physical';
 }
 
-export const CourseCard: React.FC<CourseCardProps> = ({ course, onSelectCourse, onQuickEnrol }) => {
-  const discountPercent = Math.round(((course.normalPrice - course.specialPrice) / course.normalPrice) * 100);
+export const CourseCard: React.FC<CourseCardProps> = ({ course, onSelectCourse, onQuickEnrol, displayMode = 'all' }) => {
+  const isPhysicalView = displayMode === 'physical' && course.physicalAvailableSeptember;
+  const currentPrice = isPhysicalView && course.physicalPrice ? course.physicalPrice : course.specialPrice;
+  const hasDiscount = currentPrice < course.normalPrice;
+  const discountPercent = hasDiscount ? Math.round(((course.normalPrice - currentPrice) / course.normalPrice) * 100) : 0;
 
   return (
     <Tilt3DCard
@@ -38,7 +42,15 @@ export const CourseCard: React.FC<CourseCardProps> = ({ course, onSelectCourse, 
                 {course.category}
               </span>
 
-              {course.physicalAvailableSeptember ? (
+              {isPhysicalView ? (
+                <span className="text-[10px] font-medium text-emerald-400 bg-emerald-950/40 border border-emerald-800/40 px-2 py-0.5 rounded-full flex items-center gap-1">
+                  <MapPin className="w-2.5 h-2.5" /> Fourways In-Person
+                </span>
+              ) : displayMode === 'online' ? (
+                <span className="text-[10px] font-medium text-neutral-400 bg-neutral-900 border border-neutral-800 px-2 py-0.5 rounded-full flex items-center gap-1">
+                  <Globe className="w-2.5 h-2.5" /> 100% Online
+                </span>
+              ) : course.physicalAvailableSeptember ? (
                 <span className="text-[10px] font-medium text-emerald-400 bg-emerald-950/40 border border-emerald-800/40 px-2 py-0.5 rounded-full flex items-center gap-1">
                   <MapPin className="w-2.5 h-2.5" /> Fourways In-Person Opt.
                 </span>
@@ -90,20 +102,24 @@ export const CourseCard: React.FC<CourseCardProps> = ({ course, onSelectCourse, 
             <div className="bg-[#17171d] rounded-lg p-3 border border-neutral-800 mb-4">
               <div className="flex items-baseline justify-between">
                 <div>
-                  <span className="text-[10px] text-neutral-400 block">Promotional Fee:</span>
+                  <span className="text-[10px] text-neutral-400 block">{isPhysicalView ? 'Physical Tuition:' : 'Promotional Fee:'}</span>
                   <div className="flex items-baseline gap-2">
                     <span className="text-xl font-bold text-[#f3e1a9] font-cinzel">
-                      R{course.specialPrice.toLocaleString()}
+                      R{currentPrice.toLocaleString()}
                     </span>
-                    <span className="text-xs text-neutral-500 line-through">
-                      R{course.normalPrice.toLocaleString()}
-                    </span>
+                    {hasDiscount && (
+                      <span className="text-xs text-neutral-500 line-through">
+                        R{course.normalPrice.toLocaleString()}
+                      </span>
+                    )}
                   </div>
                 </div>
                 <div className="text-right">
-                  <span className="text-[10px] font-bold text-amber-400 bg-amber-950/60 border border-amber-800/40 px-2 py-0.5 rounded">
-                    Save {discountPercent}%
-                  </span>
+                  {hasDiscount && (
+                    <span className="text-[10px] font-bold text-amber-400 bg-amber-950/60 border border-amber-800/40 px-2 py-0.5 rounded">
+                      Save {discountPercent}%
+                    </span>
+                  )}
                   <span className="text-[10px] text-neutral-400 block mt-0.5">
                     + R300 Reg. Fee
                   </span>

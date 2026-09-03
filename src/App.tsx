@@ -11,10 +11,14 @@ import { HouseholdProfessionalsView } from './views/HouseholdProfessionalsView';
 import { PrivateHouseholdsView } from './views/PrivateHouseholdsView';
 import { EnterpriseView } from './views/EnterpriseView';
 import { EventsGraduationView } from './views/EventsGraduationView';
-import { ResourcesView } from './views/ResourcesView';
+import { KnowledgeStoreView } from './views/KnowledgeStoreView';
 import { ContactView } from './views/ContactView';
+import { PhysicalClassesView } from './views/PhysicalClassesView';
+import { HouseholdAdvisoryView } from './views/HouseholdAdvisoryView';
+import { CoachingMentorshipView } from './views/CoachingMentorshipView';
+import { PrivateHouseholdTrainingView } from './views/PrivateHouseholdTrainingView';
 
-import { CourseDetailModal } from './components/CourseDetailModal';
+import { CourseDetailView } from './views/CourseDetailView';
 import { EnrolmentCheckoutModal } from './components/EnrolmentCheckoutModal';
 import { SpeakingEnquiryModal } from './components/SpeakingEnquiryModal';
 import { StudentPortalModal } from './components/StudentPortalModal';
@@ -26,6 +30,7 @@ export function App() {
   const [currentView, setCurrentView] = useState<string>('home');
   const [selectedCourseDetail, setSelectedCourseDetail] = useState<Course | null>(null);
   const [enrolmentCourse, setEnrolmentCourse] = useState<Course | null>(null);
+  const [enrolmentInitialMode, setEnrolmentInitialMode] = useState<'Online' | 'Physical'>('Online');
   const [speakingModalOpen, setSpeakingModalOpen] = useState<boolean>(false);
   const [speakingInitialTopic, setSpeakingInitialTopic] = useState<string | undefined>(undefined);
   const [studentPortalOpen, setStudentPortalOpen] = useState<boolean>(false);
@@ -74,10 +79,12 @@ export function App() {
 
   const handleSelectCourse = (course: Course) => {
     setSelectedCourseDetail(course);
+    handleNavigate('course-details');
   };
 
-  const handleQuickEnrol = (course: Course) => {
+  const handleQuickEnrol = (course: Course, mode: 'Online' | 'Physical' = 'Online') => {
     setSelectedCourseDetail(null);
+    setEnrolmentInitialMode(mode);
     setEnrolmentCourse(course);
   };
 
@@ -143,7 +150,29 @@ export function App() {
             <ViewTransition key="academy" viewKey="academy">
               <AcademyView
                 onSelectCourse={handleSelectCourse}
-                onQuickEnrol={handleQuickEnrol}
+                onQuickEnrol={(course) => handleQuickEnrol(course, 'Online')}
+                onNavigateToPhysical={() => handleNavigate('physical-classes')}
+              />
+            </ViewTransition>
+          )}
+
+          {currentView === 'physical-classes' && (
+            <ViewTransition key="physical-classes" viewKey="physical-classes">
+              <PhysicalClassesView
+                onSelectCourse={handleSelectCourse}
+                onQuickEnrol={(course) => handleQuickEnrol(course, 'Physical')}
+                onEnrolPhysical={(course) => handleQuickEnrol(course, 'Physical')}
+                onNavigateToOnline={() => handleNavigate('academy')}
+              />
+            </ViewTransition>
+          )}
+
+          {currentView === 'course-details' && (
+            <ViewTransition key="course-details" viewKey="course-details">
+              <CourseDetailView
+                course={selectedCourseDetail}
+                onBack={() => handleNavigate('academy')}
+                onEnrol={(course) => handleQuickEnrol(course)}
               />
             </ViewTransition>
           )}
@@ -173,7 +202,25 @@ export function App() {
             </ViewTransition>
           )}
 
-          {currentView === 'events' && (
+          {currentView === 'household-advisory' && (
+            <ViewTransition key="household-advisory" viewKey="household-advisory">
+              <HouseholdAdvisoryView />
+            </ViewTransition>
+          )}
+
+          {currentView === 'private-household-training' && (
+            <ViewTransition key="private-household-training" viewKey="private-household-training">
+              <PrivateHouseholdTrainingView />
+            </ViewTransition>
+          )}
+
+          {currentView === 'coaching-mentorship' && (
+            <ViewTransition key="coaching-mentorship" viewKey="coaching-mentorship">
+              <CoachingMentorshipView />
+            </ViewTransition>
+          )}
+
+          {(currentView === 'events' || currentView === 'events-graduation') && (
             <ViewTransition key="events" viewKey="events">
               <EventsGraduationView
                 setCurrentView={handleNavigate}
@@ -182,9 +229,9 @@ export function App() {
             </ViewTransition>
           )}
 
-          {(currentView === 'resources' || currentView === 'publications') && (
-            <ViewTransition key="resources" viewKey="resources">
-              <ResourcesView />
+          {(currentView === 'resources' || currentView === 'publications' || currentView === 'knowledge-store') && (
+            <ViewTransition key="knowledge-store" viewKey="knowledge-store">
+              <KnowledgeStoreView />
             </ViewTransition>
           )}
 
@@ -205,21 +252,13 @@ export function App() {
       />
 
       {/* MODALS */}
-      {/* 1. Course Details Modal */}
-      {selectedCourseDetail && (
-        <CourseDetailModal
-          course={selectedCourseDetail}
-          onClose={() => setSelectedCourseDetail(null)}
-          onEnrol={(course) => handleQuickEnrol(course)}
-        />
-      )}
-
-      {/* 2. Enrolment / Checkout Modal */}
+      {/* 1. Enrolment / Checkout Modal */}
       {enrolmentCourse && (
         <EnrolmentCheckoutModal
           course={enrolmentCourse}
+          initialMode={enrolmentInitialMode}
           onClose={() => setEnrolmentCourse(null)}
-          onEnrolSuccess={handleEnrolSuccess}
+          onSuccessEnrol={handleEnrolSuccess}
           onViewInPortal={() => {
             setEnrolmentCourse(null);
             setStudentPortalOpen(true);

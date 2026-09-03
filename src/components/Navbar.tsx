@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { 
   Menu, X, Phone, Mail, Award, BookOpen, Mic, Home as HomeIcon, 
-  Briefcase, Users, ChevronDown, Sparkles, GraduationCap, MapPin 
+  Briefcase, Users, ChevronDown, Sparkles, GraduationCap, MapPin, Globe 
 } from 'lucide-react';
 
 interface NavbarProps {
@@ -19,13 +19,17 @@ export const Navbar: React.FC<NavbarProps> = ({
   onOpenStudentPortal,
   enrolledCount
 }) => {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [aboutDropdownOpen, setAboutDropdownOpen] = useState(false);
+  const [servicesDropdownOpen, setServicesDropdownOpen] = useState(false);
+  const [academyDropdownOpen, setAcademyDropdownOpen] = useState(false);
 
   const navigateTo = (view: string) => {
     setCurrentView(view);
     setMobileMenuOpen(false);
     setAboutDropdownOpen(false);
+    setServicesDropdownOpen(false);
+    setAcademyDropdownOpen(false);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -34,13 +38,19 @@ export const Navbar: React.FC<NavbarProps> = ({
       {/* Top Banner for Intake & Quick Contact */}
       <div className="bg-gradient-to-r from-[#14120c] via-[#241e12] to-[#14120c] border-b border-[#d4af37]/15 py-1.5 px-4 text-xs font-sans-body">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2 text-neutral-300">
-          <div className="flex items-center gap-2 text-center sm:text-left">
+          <div className="flex items-center gap-2 text-center sm:text-left flex-wrap">
             <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold bg-[#d4af37] text-black tracking-wider uppercase">
               Physical Intake Open
             </span>
             <span className="text-neutral-300 text-[11px] sm:text-xs">
               Fourways September 2026 Classes Commence <strong className="text-[#f3e1a9]">7 September 2026</strong>
             </span>
+            <button 
+              onClick={() => navigateTo('physical-classes')}
+              className="text-[11px] text-[#f3e1a9] hover:text-white underline underline-offset-2 font-semibold transition-colors"
+            >
+              View Physical Classes & Prices →
+            </button>
           </div>
 
           <div className="flex items-center gap-4 text-[11px] sm:text-xs text-neutral-400">
@@ -163,56 +173,194 @@ export const Navbar: React.FC<NavbarProps> = ({
               )}
             </div>
 
+            {/* Services Dropdown */}
+            <div className="relative">
+              <button
+                onClick={() => setServicesDropdownOpen(!servicesDropdownOpen)}
+                onMouseEnter={() => setServicesDropdownOpen(true)}
+                id="nav-link-services-dropdown"
+                className={`px-3 py-2 rounded-md flex items-center gap-1 transition-all ${
+                  ['household-professionals', 'private-households', 'household-advisory', 'enterprise', 'coaching-mentorship'].includes(currentView) 
+                    ? 'text-[#f3e1a9] bg-[#d4af37]/10 border border-[#d4af37]/30' 
+                    : 'text-neutral-300 hover:text-white hover:bg-neutral-800/40'
+                }`}
+              >
+                <span>Services</span>
+                <ChevronDown className="w-3.5 h-3.5 text-neutral-400" />
+              </button>
+
+              {servicesDropdownOpen && (
+                <div 
+                  onMouseLeave={() => setServicesDropdownOpen(false)}
+                  className="absolute left-0 mt-1 w-64 bg-[#111115] border border-[#d4af37]/30 rounded-lg shadow-2xl p-2 z-50 animate-in fade-in slide-in-from-top-2 duration-150"
+                >
+                  <button
+                    onClick={() => navigateTo('household-advisory')}
+                    id="dropdown-link-household-advisory"
+                    className="w-full text-left px-3 py-2.5 rounded-md hover:bg-[#d4af37]/15 transition-colors group"
+                  >
+                    <div className="font-semibold text-neutral-200 group-hover:text-[#f3e1a9] text-xs">
+                      Household Advisory
+                    </div>
+                    <div className="text-[10px] text-neutral-400">
+                      Professional Expertise for the Home
+                    </div>
+                  </button>
+                  <button
+                    onClick={() => navigateTo('private-household-training')}
+                    id="dropdown-link-private-household-training"
+                    className="w-full text-left px-3 py-2.5 rounded-md hover:bg-[#d4af37]/15 transition-colors group"
+                  >
+                    <div className="font-semibold text-neutral-200 group-hover:text-[#f3e1a9] text-xs">
+                      Private Household Training
+                    </div>
+                    <div className="text-[10px] text-neutral-400">
+                      Bespoke Team Development
+                    </div>
+                  </button>
+                  <button
+                    onClick={() => navigateTo('private-households')}
+                    id="dropdown-link-private-households"
+                    className="w-full text-left px-3 py-2.5 rounded-md hover:bg-[#d4af37]/15 transition-colors group"
+                  >
+                    <div className="font-semibold text-neutral-200 group-hover:text-[#f3e1a9] text-xs">
+                      Household Staffing
+                    </div>
+                    <div className="text-[10px] text-neutral-400">
+                      Professional Household Staffing
+                    </div>
+                  </button>
+                  <button
+                    onClick={() => navigateTo('household-professionals')}
+                    id="dropdown-link-household-professionals"
+                    className="w-full text-left px-3 py-2.5 rounded-md hover:bg-[#d4af37]/15 transition-colors group"
+                  >
+                    <div className="font-semibold text-neutral-200 group-hover:text-[#f3e1a9] text-xs">
+                      Household Professionals
+                    </div>
+                    <div className="text-[10px] text-neutral-400">
+                      Individual Training & Development
+                    </div>
+                  </button>
+                  <div className="my-1 border-t border-neutral-800"></div>
+                  <button
+                    onClick={() => navigateTo('enterprise')}
+                    id="dropdown-link-enterprise"
+                    className="w-full text-left px-3 py-2.5 rounded-md hover:bg-[#d4af37]/15 transition-colors group"
+                  >
+                    <div className="font-semibold text-neutral-200 group-hover:text-[#f3e1a9] text-xs">
+                      Flawless Enterprise
+                    </div>
+                    <div className="text-[10px] text-neutral-400">
+                      Business Consulting & Strategy
+                    </div>
+                  </button>
+                  <button
+                    onClick={() => navigateTo('coaching-mentorship')}
+                    id="dropdown-link-coaching-mentorship"
+                    className="w-full text-left px-3 py-2.5 rounded-md hover:bg-[#d4af37]/15 transition-colors group"
+                  >
+                    <div className="font-semibold text-neutral-200 group-hover:text-[#f3e1a9] text-xs">
+                      Coaching & Mentorship
+                    </div>
+                    <div className="text-[10px] text-neutral-400">
+                      Strategic Mentorship & Growth
+                    </div>
+                  </button>
+                </div>
+              )}
+            </div>
+
+            {/* Academy Dropdown */}
+            <div className="relative">
+              <button
+                onClick={() => setAcademyDropdownOpen(!academyDropdownOpen)}
+                onMouseEnter={() => setAcademyDropdownOpen(true)}
+                id="nav-link-academy"
+                className={`px-3 py-2 rounded-md flex items-center gap-1.5 font-semibold transition-all ${
+                  currentView === 'academy' || currentView === 'physical-classes'
+                    ? 'text-[#0a0a0c] bg-gradient-to-r from-[#d4af37] to-[#c5a059] shadow-sm' 
+                    : 'text-[#f3e1a9] hover:bg-[#d4af37]/15 border border-[#d4af37]/40'
+                }`}
+              >
+                <GraduationCap className="w-3.5 h-3.5" />
+                <span>Flawless Academy</span>
+                <ChevronDown className="w-3 h-3" />
+              </button>
+
+              {academyDropdownOpen && (
+                <div 
+                  onMouseLeave={() => setAcademyDropdownOpen(false)}
+                  className="absolute left-0 mt-1 w-72 bg-[#111115] border border-[#d4af37]/30 rounded-lg shadow-2xl p-2 z-50 animate-in fade-in slide-in-from-top-2 duration-150"
+                >
+                  <button
+                    onClick={() => navigateTo('academy')}
+                    id="dropdown-link-online-courses"
+                    className="w-full text-left px-3 py-2.5 rounded-md hover:bg-[#d4af37]/15 transition-colors group"
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="font-semibold text-neutral-200 group-hover:text-[#f3e1a9] text-xs">
+                        100% Online Courses
+                      </span>
+                      <span className="text-[9px] bg-red-600 text-white font-bold px-1.5 py-0.2 rounded-full uppercase">
+                        Specials Active
+                      </span>
+                    </div>
+                    <div className="text-[10px] text-neutral-400">
+                      Study from anywhere at your own pace
+                    </div>
+                  </button>
+
+                  <div className="my-1 border-t border-neutral-800"></div>
+
+                  <button
+                    onClick={() => navigateTo('physical-classes')}
+                    id="dropdown-link-physical-classes"
+                    className="w-full text-left px-3 py-2.5 rounded-md hover:bg-[#d4af37]/15 transition-colors group"
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="font-semibold text-neutral-200 group-hover:text-[#f3e1a9] text-xs">
+                        Fourways Physical Classes
+                      </span>
+                      <span className="text-[9px] bg-emerald-600 text-white font-bold px-1.5 py-0.2 rounded-full uppercase">
+                        Sept 2026 Intake
+                      </span>
+                    </div>
+                    <div className="text-[10px] text-neutral-400">
+                      In-person practical simulations in Fourways
+                    </div>
+                  </button>
+                </div>
+              )}
+            </div>
+
             <button
-              onClick={() => navigateTo('household-professionals')}
-              id="nav-link-household-professionals"
-              className={`px-3 py-2 rounded-md transition-all ${
-                currentView === 'household-professionals' 
-                  ? 'text-[#f3e1a9] bg-[#d4af37]/10 border border-[#d4af37]/30' 
+              onClick={() => navigateTo('physical-classes')}
+              id="nav-link-physical-classes-direct"
+              className={`px-3 py-2 rounded-md flex items-center gap-1 transition-all ${
+                currentView === 'physical-classes' 
+                  ? 'text-[#f3e1a9] bg-[#d4af37]/20 border border-[#d4af37]/60 font-semibold' 
                   : 'text-neutral-300 hover:text-white hover:bg-neutral-800/40'
               }`}
             >
-              Household Professionals
-            </button>
-
-            <button
-              onClick={() => navigateTo('private-households')}
-              id="nav-link-private-households"
-              className={`px-3 py-2 rounded-md transition-all ${
-                currentView === 'private-households' 
-                  ? 'text-[#f3e1a9] bg-[#d4af37]/10 border border-[#d4af37]/30' 
-                  : 'text-neutral-300 hover:text-white hover:bg-neutral-800/40'
-              }`}
-            >
-              Private Households
-            </button>
-
-            <button
-              onClick={() => navigateTo('academy')}
-              id="nav-link-academy"
-              className={`px-3 py-2 rounded-md flex items-center gap-1.5 font-semibold transition-all ${
-                currentView === 'academy' 
-                  ? 'text-[#0a0a0c] bg-gradient-to-r from-[#d4af37] to-[#c5a059] shadow-sm' 
-                  : 'text-[#f3e1a9] hover:bg-[#d4af37]/15 border border-[#d4af37]/40'
-              }`}
-            >
-              <GraduationCap className="w-3.5 h-3.5" />
-              <span>Flawless Academy</span>
-              <span className="text-[9px] bg-red-600 text-white font-bold px-1.5 py-0.2 rounded-full uppercase">
-                Specials
+              <MapPin className="w-3.5 h-3.5 text-[#d4af37]" />
+              <span>Physical Classes</span>
+              <span className="text-[9px] bg-emerald-700/80 text-emerald-200 font-bold px-1 py-0.2 rounded">
+                Fourways
               </span>
             </button>
 
+            {/* Store / Shop link */}
             <button
-              onClick={() => navigateTo('enterprise')}
-              id="nav-link-enterprise"
-              className={`px-3 py-2 rounded-md transition-all ${
-                currentView === 'enterprise' 
+              onClick={() => navigateTo('knowledge-store')}
+              id="nav-link-knowledge-store"
+              className={`px-3 py-2 rounded-md flex items-center gap-1.5 transition-all ${
+                currentView === 'knowledge-store' 
                   ? 'text-[#f3e1a9] bg-[#d4af37]/10 border border-[#d4af37]/30' 
                   : 'text-neutral-300 hover:text-white hover:bg-neutral-800/40'
               }`}
             >
-              Flawless Enterprise
+              <span>Knowledge Store</span>
             </button>
 
             {/* Speaking is top-level as instructed */}
@@ -354,20 +502,60 @@ export const Navbar: React.FC<NavbarProps> = ({
             </button>
           </div>
 
-          <button
-            onClick={() => navigateTo('household-professionals')}
-            id="mobile-nav-household-professionals"
-            className="w-full text-left px-3 py-2.5 text-sm text-neutral-200 hover:bg-neutral-800/60 rounded-md"
-          >
-            Household Professionals
-          </button>
+          <div className="border-l-2 border-[#d4af37]/40 pl-3 space-y-1 my-1">
+            <div className="text-[11px] uppercase tracking-wider text-neutral-400 font-semibold pt-1">
+              Services & Advisory
+            </div>
+            <button
+              onClick={() => navigateTo('household-advisory')}
+              id="mobile-nav-household-advisory"
+              className="w-full text-left px-2 py-1.5 text-xs text-neutral-300 hover:text-white"
+            >
+              Household Advisory
+            </button>
+            <button
+              onClick={() => navigateTo('private-household-training')}
+              id="mobile-nav-private-household-training"
+              className="w-full text-left px-2 py-1.5 text-xs text-neutral-300 hover:text-white"
+            >
+              Private Household Training
+            </button>
+            <button
+              onClick={() => navigateTo('private-households')}
+              id="mobile-nav-private-households"
+              className="w-full text-left px-2 py-1.5 text-xs text-neutral-300 hover:text-white"
+            >
+              Professional Household Staffing
+            </button>
+            <button
+              onClick={() => navigateTo('household-professionals')}
+              id="mobile-nav-household-professionals"
+              className="w-full text-left px-2 py-1.5 text-xs text-neutral-300 hover:text-white"
+            >
+              Household Professionals
+            </button>
+            <button
+              onClick={() => navigateTo('enterprise')}
+              id="mobile-nav-enterprise"
+              className="w-full text-left px-2 py-1.5 text-xs text-neutral-300 hover:text-white"
+            >
+              Flawless Enterprise
+            </button>
+            <button
+              onClick={() => navigateTo('coaching-mentorship')}
+              id="mobile-nav-coaching-mentorship"
+              className="w-full text-left px-2 py-1.5 text-xs text-neutral-300 hover:text-white"
+            >
+              Coaching & Mentorship
+            </button>
+          </div>
 
           <button
-            onClick={() => navigateTo('private-households')}
-            id="mobile-nav-private-households"
+            onClick={() => navigateTo('knowledge-store')}
+            id="mobile-nav-knowledge-store"
             className="w-full text-left px-3 py-2.5 text-sm text-neutral-200 hover:bg-neutral-800/60 rounded-md"
           >
-            Private Households & Advisory
+            The Knowledge Store
           </button>
 
           <button
@@ -376,20 +564,26 @@ export const Navbar: React.FC<NavbarProps> = ({
             className="w-full text-left px-3 py-2.5 text-sm bg-gradient-to-r from-[#d4af37]/20 to-transparent border border-[#d4af37]/40 text-[#f3e1a9] rounded-md font-semibold flex items-center justify-between"
           >
             <span className="flex items-center gap-2">
-              <GraduationCap className="w-4 h-4 text-[#d4af37]" />
-              Flawless Academy (Course Store)
+              <Globe className="w-4 h-4 text-[#d4af37]" />
+              Online Courses (Distance Learning)
             </span>
             <span className="text-[10px] bg-red-600 text-white px-2 py-0.5 rounded-full font-bold">
-              Special Prices
+              Specials
             </span>
           </button>
 
           <button
-            onClick={() => navigateTo('enterprise')}
-            id="mobile-nav-enterprise"
-            className="w-full text-left px-3 py-2.5 text-sm text-neutral-200 hover:bg-neutral-800/60 rounded-md"
+            onClick={() => navigateTo('physical-classes')}
+            id="mobile-nav-physical-classes"
+            className="w-full text-left px-3 py-2.5 text-sm bg-[#161622] border border-emerald-500/40 text-emerald-200 rounded-md font-semibold flex items-center justify-between"
           >
-            Flawless Enterprise & Coaching
+            <span className="flex items-center gap-2">
+              <MapPin className="w-4 h-4 text-emerald-400" />
+              Fourways Physical Classes
+            </span>
+            <span className="text-[10px] bg-emerald-700 text-white px-2 py-0.5 rounded-full font-bold">
+              Sept 2026 Intake
+            </span>
           </button>
 
           <button
@@ -407,14 +601,6 @@ export const Navbar: React.FC<NavbarProps> = ({
             className="w-full text-left px-3 py-2.5 text-sm text-neutral-200 hover:bg-neutral-800/60 rounded-md"
           >
             Annual November Graduation
-          </button>
-
-          <button
-            onClick={() => navigateTo('resources')}
-            id="mobile-nav-resources"
-            className="w-full text-left px-3 py-2.5 text-sm text-neutral-200 hover:bg-neutral-800/60 rounded-md"
-          >
-            Resources & Publications
           </button>
 
           <button

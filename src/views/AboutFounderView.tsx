@@ -62,7 +62,7 @@ export const AboutFounderView: React.FC<AboutFounderViewProps> = ({
 
                     <div className="bg-[#121217] p-2.5 rounded-lg border border-neutral-800 text-center">
                       <span className="text-[10px] text-[#f3e1a9] uppercase font-bold tracking-wider font-cinzel">
-                        <AnimatedCounter to={16} suffix="+" duration={1800} /> Years Experience • Est. <AnimatedCounter from={2000} to={2016} duration={2000} />
+                        <AnimatedCounter to={16} suffix="+" duration={1800} /> Years Experience • Est. <AnimatedCounter from={2000} to={2016} duration={2000} useGrouping={false} />
                       </span>
                     </div>
                   </div>
@@ -109,7 +109,7 @@ export const AboutFounderView: React.FC<AboutFounderViewProps> = ({
                 <div className="bg-[#121218] p-3 rounded-lg border border-neutral-800 hover:border-[#d4af37]/40 transition-colors">
                   <span className="text-neutral-400 text-[10px] block">ESTABLISHED</span>
                   <strong className="text-[#f3e1a9] text-xs sm:text-sm font-cinzel font-bold">
-                    <AnimatedCounter from={2000} to={2016} duration={2000} /> in Fourways
+                    <AnimatedCounter from={2000} to={2016} duration={2000} useGrouping={false} /> in Fourways
                   </strong>
                 </div>
                 <div className="bg-[#121218] p-3 rounded-lg border border-neutral-800 col-span-2 sm:col-span-1 hover:border-[#d4af37]/40 transition-colors">

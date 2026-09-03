@@ -4,6 +4,7 @@ export interface Course {
   category: 'Care & Support' | 'Business & Professional' | 'Hospitality & Housekeeping' | 'Home & Family Services' | 'Education & Development';
   normalPrice: number;
   specialPrice: number;
+  physicalPrice?: number;
   registrationFee: number;
   description: string;
   overview: string;
@@ -27,6 +28,7 @@ export const COURSES: Course[] = [
     category: 'Care & Support',
     normalPrice: 2000,
     specialPrice: 1500,
+    physicalPrice: 3500,
     registrationFee: 300,
     description: 'Build foundational knowledge and practical skills for supporting elderly and care-dependent individuals with professionalism, dignity and compassion.',
     overview: 'This comprehensive programme prepares candidates to deliver dignified, compassionate, and technically sound care to elderly and vulnerable individuals in private residences, assisted living facilities, and care centres.',
@@ -65,6 +67,7 @@ export const COURSES: Course[] = [
     category: 'Care & Support',
     normalPrice: 1600,
     specialPrice: 1200,
+    physicalPrice: 1950,
     registrationFee: 300,
     description: 'Develop professional childcare knowledge and the skills required to support children and families in a professional household environment.',
     overview: 'Equips au pairs, nannies, and childminders with the developmental understanding, household safety protocols, structured routine planning, and emotional intelligence needed by modern high-standard families.',
@@ -131,6 +134,7 @@ export const COURSES: Course[] = [
     category: 'Care & Support',
     normalPrice: 1200,
     specialPrice: 800,
+    physicalPrice: 1450,
     registrationFee: 300,
     description: 'Develop foundational skills for supporting individuals requiring aged care or disability support.',
     overview: 'Learn the specialized nuances of supporting individuals experiencing chronic health challenges, physical mobility restrictions, or intellectual disabilities with maximum empowerment and respect.',
@@ -149,9 +153,10 @@ export const COURSES: Course[] = [
       'Module 3: Promoting Independence & Dignity in Daily Living',
       'Module 4: Emotional Support, Active Listening & Conflict De-escalation'
     ],
-    format: 'Online',
+    format: 'Online & Physical (Fourways)',
     duration: '3 Weeks',
     level: 'Foundational',
+    physicalAvailableSeptember: true,
     careerPathways: ['Disability Support Worker', 'Community Care Facilitator']
   },
   {
@@ -160,6 +165,7 @@ export const COURSES: Course[] = [
     category: 'Care & Support',
     normalPrice: 1200,
     specialPrice: 800,
+    physicalPrice: 1450,
     registrationFee: 300,
     description: 'Develop foundational knowledge and practical awareness for supporting individuals living with dementia.',
     overview: 'Specialised training designed to navigate the progressive stages of Alzheimer’s disease and other forms of dementia, minimizing distress and fostering comforting, structured routines.',
@@ -178,9 +184,10 @@ export const COURSES: Course[] = [
       'Module 3: Managing Behavioral Changes & Sundowning',
       'Module 4: Creating a Safe, Calming Household Environment'
     ],
-    format: 'Online',
+    format: 'Online & Physical (Fourways)',
     duration: '3 Weeks',
     level: 'Intermediate',
+    physicalAvailableSeptember: true,
     careerPathways: ['Specialist Memory Care Assistant', 'Elderly Companion']
   },
   {
@@ -189,6 +196,7 @@ export const COURSES: Course[] = [
     category: 'Care & Support',
     normalPrice: 1200,
     specialPrice: 800,
+    physicalPrice: 1450,
     registrationFee: 300,
     description: 'Develop practical knowledge for providing appropriate support and care for newborns and infants.',
     overview: 'Master the delicate arts of newborn bathing, sterilisation, sleep routines, swaddling, umbilical cord care, and maternal post-partum support.',
@@ -207,9 +215,10 @@ export const COURSES: Course[] = [
       'Module 3: Bathing, Cord Care, Nappy Changing & Skin Health',
       'Module 4: Sleep Training Foundations & SIDS Safety'
     ],
-    format: 'Online',
+    format: 'Online & Physical (Fourways)',
     duration: '3 Weeks',
     level: 'Foundational',
+    physicalAvailableSeptember: true,
     careerPathways: ['Night Nanny', 'Maternity Care Assistant']
   },
 
@@ -220,6 +229,7 @@ export const COURSES: Course[] = [
     category: 'Business & Professional',
     normalPrice: 2000,
     specialPrice: 1500,
+    physicalPrice: 3500,
     registrationFee: 300,
     description: 'Develop professional administrative, organisational, communication and executive-support skills.',
     overview: 'Learn how to become an indispensable right hand to executives, high-net-worth individuals, or corporate leaders by mastering diary management, itinerary coordination, discretion, and executive communication.',
@@ -254,6 +264,7 @@ export const COURSES: Course[] = [
     category: 'Business & Professional',
     normalPrice: 2000,
     specialPrice: 1500,
+    physicalPrice: 3500,
     registrationFee: 300,
     description: 'Develop professional front-office, communication, customer-service and administrative skills.',
     overview: 'The receptionist is the voice and first visual impression of any esteemed institution or corporate firm. Master professional telephonics, visitor greeting, switchboards, and front-desk diplomacy.',
@@ -284,6 +295,7 @@ export const COURSES: Course[] = [
     category: 'Business & Professional',
     normalPrice: 2000,
     specialPrice: 1500,
+    physicalPrice: 3500,
     registrationFee: 300,
     description: 'Develop foundational communication, listening and interpersonal skills relevant to supportive interactions.',
     overview: 'Learn active listening, empathetic questioning, non-verbal mirroring, and supportive communication to aid colleagues, community members, and clients facing emotional stress.',
@@ -302,9 +314,10 @@ export const COURSES: Course[] = [
       'Module 3: Boundaries, Transference & Ethical Responsibility',
       'Module 4: Crisis Support Fundamentals & Referral Pathways'
     ],
-    format: 'Online',
+    format: 'Online & Physical (Fourways)',
     duration: '4 Weeks',
     level: 'Intermediate',
+    physicalAvailableSeptember: true,
     careerPathways: ['Support Facilitator', 'Peer Supporter', 'Wellness Coordinator Assistant']
   },
   {
@@ -313,6 +326,7 @@ export const COURSES: Course[] = [
     category: 'Business & Professional',
     normalPrice: 1200,
     specialPrice: 800,
+    physicalPrice: 2250,
     registrationFee: 300,
     description: 'Develop foundational awareness and knowledge relating to mental health and wellbeing.',
     overview: 'Understand anxiety, depression, workplace stress, stigma reduction, and mental health first aid principles in family, community, and corporate environments.',
@@ -330,17 +344,19 @@ export const COURSES: Course[] = [
       'Module 3: Creating Supportive Workplaces & Households',
       'Module 4: Community Resources & Professional Medical Interventions'
     ],
-    format: 'Online',
+    format: 'Online & Physical (Fourways)',
     duration: '3 Weeks',
     level: 'Foundational',
+    physicalAvailableSeptember: true,
     careerPathways: ['Mental Health Champion', 'Community Wellness Helper']
   },
   {
     id: 'basics-of-social-work',
     title: 'Basics of Social Work',
-    category: 'Business & Professional',
+    category: 'Care & Support',
     normalPrice: 1200,
     specialPrice: 800,
+    physicalPrice: 3500,
     registrationFee: 300,
     description: 'Explore foundational concepts and principles relevant to social work, community support and professional service.',
     overview: 'Gain an understanding of community development, family support systems, vulnerable population advocacy, and NGO operational standards.',
@@ -358,9 +374,10 @@ export const COURSES: Course[] = [
       'Module 3: Family Support Systems & Child Protection Principles',
       'Module 4: Case Documentation & Reporting Protocols'
     ],
-    format: 'Online',
+    format: 'Online & Physical (Fourways)',
     duration: '3 Weeks',
     level: 'Foundational',
+    physicalAvailableSeptember: true,
     careerPathways: ['Community Welfare Officer', 'NGO Programme Assistant']
   },
 
@@ -371,6 +388,7 @@ export const COURSES: Course[] = [
     category: 'Hospitality & Housekeeping',
     normalPrice: 4500,
     specialPrice: 3500,
+    physicalPrice: 4500,
     registrationFee: 300,
     description: 'Develop elevated service, etiquette, household support and professional standards relevant to luxury private service environments.',
     overview: 'The pinnacle of private estate and luxury hospitality service. Master high-level formal table service, wine presentation, VIP protocol, wardrobe care, and seamless household coordination.',
@@ -405,6 +423,7 @@ export const COURSES: Course[] = [
     category: 'Hospitality & Housekeeping',
     normalPrice: 3500,
     specialPrice: 2800,
+    physicalPrice: 3500,
     registrationFee: 300,
     description: 'Develop knowledge of hotel operations, guest experience, service standards and professional hospitality management.',
     overview: 'Designed for supervisors and managers in boutique hotels, lodges, and resorts seeking to master revenue management, guest satisfaction, and operational efficiency.',
@@ -434,6 +453,7 @@ export const COURSES: Course[] = [
     category: 'Hospitality & Housekeeping',
     normalPrice: 2000,
     specialPrice: 1500,
+    physicalPrice: 3500,
     registrationFee: 300,
     description: 'Prepare yourself with professional housekeeping and hospitality knowledge relevant to cruise ship environments.',
     overview: 'Tailored for candidates preparing for global cruise line cabin steward interviews and maritime hospitality standards, focusing on speed, USPH sanitation, and maritime safety.',
@@ -465,6 +485,7 @@ export const COURSES: Course[] = [
     category: 'Hospitality & Housekeeping',
     normalPrice: 2000,
     specialPrice: 1500,
+    physicalPrice: 3500,
     registrationFee: 300,
     description: 'Develop elevated housekeeping skills and professional standards suitable for high-end residential and hospitality environments.',
     overview: 'Covers the care of luxury finishes (marble, solid wood, brass, silk), sanitisation protocols, detailed inspection checklists, and bespoke residential standards.',
@@ -495,6 +516,7 @@ export const COURSES: Course[] = [
     category: 'Hospitality & Housekeeping',
     normalPrice: 2000,
     specialPrice: 1500,
+    physicalPrice: 3500,
     registrationFee: 300,
     description: 'Develop foundational kitchen organisation, food preparation, hygiene and support skills.',
     overview: 'Step confidently into restaurant, lodge, or private estate kitchens with solid prep skills, knife handling, HACCP food hygiene, and recipe execution support.',
@@ -524,6 +546,7 @@ export const COURSES: Course[] = [
     category: 'Hospitality & Housekeeping',
     normalPrice: 2000,
     specialPrice: 1500,
+    physicalPrice: 3250,
     registrationFee: 300,
     description: 'Develop professional food-service, customer-service, presentation and table-service skills.',
     overview: 'Learn 3-plate carrying, beverage pouring, wine opening, upselling techniques, order memorisation, and polite dispute resolution for fine-dining restaurants.',
@@ -553,6 +576,7 @@ export const COURSES: Course[] = [
     category: 'Hospitality & Housekeeping',
     normalPrice: 2000,
     specialPrice: 1500,
+    physicalPrice: 3500,
     registrationFee: 300,
     description: 'Develop professional housekeeping knowledge and standards relevant to hotel environments.',
     overview: 'Focuses on commercial accommodation standards, linen control, trolley setup, room servicing speeds, and guest amenity replenishment.',
@@ -582,6 +606,7 @@ export const COURSES: Course[] = [
     category: 'Hospitality & Housekeeping',
     normalPrice: 2000,
     specialPrice: 1500,
+    physicalPrice: 3250,
     registrationFee: 300,
     description: 'Develop professional workplace cleaning, presentation and service-support skills.',
     overview: 'Master boardroom beverage catering, tea/coffee machine maintenance, executive office hygiene, and dignified corporate workspace upkeep.',
@@ -613,6 +638,7 @@ export const COURSES: Course[] = [
     category: 'Home & Family Services',
     normalPrice: 1200,
     specialPrice: 800,
+    physicalPrice: 2500,
     registrationFee: 300,
     description: 'Develop practical cooking and baking skills for household and family environments.',
     overview: 'Learn wholesome, family-friendly meal planning, kid-approved nutritious lunches, dinner staples, baking basics, and accommodating food allergies.',
@@ -642,6 +668,7 @@ export const COURSES: Course[] = [
     category: 'Home & Family Services',
     normalPrice: 1200,
     specialPrice: 800,
+    physicalPrice: 1250,
     registrationFee: 300,
     description: 'Develop professional household skills covering cleaning, organisation, household support and workplace standards.',
     overview: 'Flawless Institution’s foundational flagship programme. Elevates household work from informal chores into a respected, structured, and highly valued profession.',
@@ -672,6 +699,7 @@ export const COURSES: Course[] = [
     category: 'Home & Family Services',
     normalPrice: 1200,
     specialPrice: 800,
+    physicalPrice: 2250,
     registrationFee: 300,
     description: 'Develop practical knowledge of garment care, laundry management, organisation and household standards.',
     overview: 'Learn fabric identification, wash-care symbols, stain removal chemistry, steam ironing, shirt pressing, folding techniques, and luxury closet staging.',
@@ -696,39 +724,12 @@ export const COURSES: Course[] = [
     careerPathways: ['Garment Care Specialist', 'Laundress / Valet']
   },
   {
-    id: 'homework-assistance',
-    title: 'Homework Assistance & Academic Routines',
-    category: 'Home & Family Services',
-    normalPrice: 800,
-    specialPrice: 600,
-    registrationFee: 300,
-    description: 'Develop practical skills for supporting children with homework, organisation and learning routines.',
-    overview: 'Train au pairs and nannies to create distraction-free homework environments, encourage reading comprehension, and maintain positive study habits.',
-    targetAudience: [
-      'Au pairs, nannies, after-school care coordinators'
-    ],
-    learningOutcomes: [
-      'Establish productive after-school homework routines',
-      'Guide primary school mathematics, reading, and spelling exercises',
-      'Encourage self-discipline without doing the child’s work for them'
-    ],
-    modules: [
-      'Module 1: Creating an Inspiring Study Environment',
-      'Module 2: Effective Questioning & Reading Support',
-      'Module 3: Managing Homework Stress & Frustration',
-      'Module 4: Tracking School Projects & Communicating with Parents'
-    ],
-    format: 'Online',
-    duration: '2 Weeks',
-    level: 'Foundational',
-    careerPathways: ['After-School Tutor Assistant', 'Au Pair Study Facilitator']
-  },
-  {
     id: 'basic-gardening',
     title: 'Basic Gardening & Yard Maintenance',
     category: 'Home & Family Services',
     normalPrice: 1500,
     specialPrice: 1000,
+    physicalPrice: 1250,
     registrationFee: 300,
     description: 'Develop foundational gardening and garden-maintenance skills.',
     overview: 'Learn lawn mowing, edge trimming, seasonal pruning, soil nourishment, composting, watering schedules, and safe petrol/electric power tool operation.',
@@ -755,11 +756,42 @@ export const COURSES: Course[] = [
 
   // 5. EDUCATION & DEVELOPMENT
   {
+    id: 'homework-assistance',
+    title: 'Homework Assistance & Academic Routines',
+    category: 'Education & Development',
+    normalPrice: 800,
+    specialPrice: 600,
+    physicalPrice: 1250,
+    registrationFee: 300,
+    description: 'Develop practical skills for supporting children with homework, organisation and learning routines.',
+    overview: 'Train au pairs and nannies to create distraction-free homework environments, encourage reading comprehension, and maintain positive study habits.',
+    targetAudience: [
+      'Au pairs, nannies, after-school care coordinators'
+    ],
+    learningOutcomes: [
+      'Establish productive after-school homework routines',
+      'Guide primary school mathematics, reading, and spelling exercises',
+      'Encourage self-discipline without doing the child’s work for them'
+    ],
+    modules: [
+      'Module 1: Creating an Inspiring Study Environment',
+      'Module 2: Effective Questioning & Reading Support',
+      'Module 3: Managing Homework Stress & Frustration',
+      'Module 4: Tracking School Projects & Communicating with Parents'
+    ],
+    format: 'Online & Physical (Fourways)',
+    duration: '2 Weeks',
+    level: 'Foundational',
+    physicalAvailableSeptember: true,
+    careerPathways: ['After-School Tutor Assistant', 'Au Pair Study Facilitator']
+  },
+  {
     id: 'educare-fundamentals-ecd',
     title: 'Educare Fundamentals — ECD',
     category: 'Education & Development',
     normalPrice: 3000,
     specialPrice: 2500,
+    physicalPrice: 3550,
     registrationFee: 300,
     description: 'Build foundational knowledge in early childhood development and educational support.',
     overview: 'A deep dive into early childhood education for practitioners in creches, preschools, and private early learning pods, covering cognitive development, literacy, and numeracy foundations.',
@@ -791,6 +823,7 @@ export const COURSES: Course[] = [
     category: 'Education & Development',
     normalPrice: 1200,
     specialPrice: 800,
+    physicalPrice: 1250,
     registrationFee: 300,
     description: 'Develop practical activity knowledge designed to encourage creativity, engagement and development.',
     overview: 'Learn how to create hands-on sensory bins, DIY playdough, tactile games, and gross-motor challenges using affordable household materials.',
@@ -808,9 +841,10 @@ export const COURSES: Course[] = [
       'Module 3: Creative Art, Recycled Crafts & Motor Skill Challenges',
       'Module 4: Age-Graded Activity Planning & Clean-Up Routines'
     ],
-    format: 'Online',
+    format: 'Online & Physical (Fourways)',
     duration: '3 Weeks',
     level: 'Foundational',
+    physicalAvailableSeptember: true,
     careerPathways: ['Child Activity Coordinator', 'Creative Play Facilitator']
   }
 ];
