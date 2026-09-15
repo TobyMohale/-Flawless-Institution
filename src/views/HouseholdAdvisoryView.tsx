@@ -1,11 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { 
   Building, CheckCircle2, ArrowRight, ShieldCheck, FileText, 
   Users, UserCheck, Briefcase, Sparkles
 } from 'lucide-react';
 import { BACKGROUND_IMAGES } from '../data/assetsData';
+import { HouseholdBriefModal } from '../components/HouseholdBriefModal';
 
 export const HouseholdAdvisoryView: React.FC = () => {
+  const [briefModalOpen, setBriefModalOpen] = useState(false);
+
   return (
     <div className="space-y-20 pb-20 font-sans-body">
       {/* 1. HERO HEADER */}
@@ -35,8 +38,11 @@ export const HouseholdAdvisoryView: React.FC = () => {
           </p>
           
           <div className="pt-6">
-            <button className="py-3.5 px-8 rounded-xl text-xs sm:text-sm font-bold bg-[#d4af37] text-black hover:bg-[#f3e1a9] uppercase tracking-wider transition-all shadow-lg shadow-[#d4af37]/20 active:scale-95">
-              Book a Private Consultation
+            <button 
+              onClick={() => setBriefModalOpen(true)}
+              className="py-3.5 px-8 rounded-xl text-xs sm:text-sm font-bold bg-[#d4af37] text-black hover:bg-[#f3e1a9] uppercase tracking-wider transition-all shadow-lg shadow-[#d4af37]/20 active:scale-95"
+            >
+              Submit Confidential Staffing Brief
             </button>
           </div>
         </div>
@@ -206,16 +212,27 @@ export const HouseholdAdvisoryView: React.FC = () => {
             Your household deserves a professional standard. Whether you need an assessment, staffing strategy, or ongoing advisory support, the first step is a confidential consultation.
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-4 pt-4">
-            <button className="py-3.5 px-6 rounded-xl text-xs font-bold bg-[#d4af37] text-black hover:bg-[#f3e1a9] uppercase tracking-wider transition-all">
-              Book a Consultation
+            <button 
+              onClick={() => setBriefModalOpen(true)}
+              className="py-3.5 px-6 rounded-xl text-xs font-bold bg-[#d4af37] text-black hover:bg-[#f3e1a9] uppercase tracking-wider transition-all"
+            >
+              Submit Confidential Placement Brief
             </button>
-            <button className="py-3.5 px-6 rounded-xl text-xs font-bold bg-[#14141b] text-[#f3e1a9] border border-[#d4af37]/40 hover:border-[#d4af37] uppercase tracking-wider transition-all">
-              Request Assessment
+            <button 
+              onClick={() => setBriefModalOpen(true)}
+              className="py-3.5 px-6 rounded-xl text-xs font-bold bg-[#14141b] text-[#f3e1a9] border border-[#d4af37]/40 hover:border-[#d4af37] uppercase tracking-wider transition-all"
+            >
+              Request Estate Assessment
             </button>
           </div>
           <p className="text-[10px] text-neutral-500 uppercase tracking-widest pt-2">Private & Discreet | Professional Confidentiality Assured</p>
         </div>
       </section>
+
+      <HouseholdBriefModal
+        isOpen={briefModalOpen}
+        onClose={() => setBriefModalOpen(false)}
+      />
     </div>
   );
 };

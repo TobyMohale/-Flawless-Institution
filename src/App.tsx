@@ -19,10 +19,18 @@ import { CoachingMentorshipView } from './views/CoachingMentorshipView';
 import { PrivateHouseholdTrainingView } from './views/PrivateHouseholdTrainingView';
 
 import { CourseDetailView } from './views/CourseDetailView';
+import { FAQView } from './views/FAQView';
+import { LegalView } from './views/LegalView';
+import { BlogView } from './views/BlogView';
+import { ExecutiveDashboardView } from './views/ExecutiveDashboardView';
 import { EnrolmentCheckoutModal } from './components/EnrolmentCheckoutModal';
 import { SpeakingEnquiryModal } from './components/SpeakingEnquiryModal';
 import { StudentPortalModal } from './components/StudentPortalModal';
+import { AuthModal } from './components/AuthModal';
+import { OfflineIndicator } from './components/OfflineIndicator';
+import { OfflineLearningHub } from './components/OfflineLearningHub';
 import { ScrollProgressBar, ViewTransition } from './components/MotionEffects';
+import { authStorage, User } from './lib/api';
 
 import { COURSES, Course } from './data/coursesData';
 
@@ -34,6 +42,13 @@ export function App() {
   const [speakingModalOpen, setSpeakingModalOpen] = useState<boolean>(false);
   const [speakingInitialTopic, setSpeakingInitialTopic] = useState<string | undefined>(undefined);
   const [studentPortalOpen, setStudentPortalOpen] = useState<boolean>(false);
+  const [authModalOpen, setAuthModalOpen] = useState<boolean>(false);
+  const [offlineHubOpen, setOfflineHubOpen] = useState<boolean>(false);
+
+  // Authenticated User State (defaults to institutional Super Admin for turnkey review)
+  const [currentUser, setCurrentUser] = useState<User | null>(() => {
+    return authStorage.getUser() || authStorage.getDefaultSuperAdmin();
+  });
 
   // Student Enrolment State (persisted locally)
   const [enrolledCourses, setEnrolledCourses] = useState<{ course: Course; studentData: any }[]>(() => {
@@ -82,6 +97,15 @@ export function App() {
     handleNavigate('course-details');
   };
 
+  const handleSelectCourseById = (courseId: string) => {
+    const found = COURSES.find(c => c.id === courseId);
+    if (found) {
+      handleSelectCourse(found);
+    } else {
+      handleNavigate('academy');
+    }
+  };
+
   const handleQuickEnrol = (course: Course, mode: 'Online' | 'Physical' = 'Online') => {
     setSelectedCourseDetail(null);
     setEnrolmentInitialMode(mode);
@@ -105,7 +129,14 @@ export function App() {
         onOpenSpeakingEnquiry={() => handleOpenSpeaking()}
         onOpenStudentPortal={() => setStudentPortalOpen(true)}
         enrolledCount={enrolledCourses.length}
+        currentUser={currentUser}
+        onOpenExecutiveDashboard={() => handleNavigate('executive-dashboard')}
+        onOpenAuthModal={() => setAuthModalOpen(true)}
+        onOpenOfflineHub={() => setOfflineHubOpen(true)}
       />
+
+      {/* Offline Status & Cached Guides Alert Banner */}
+      <OfflineIndicator onOpenOfflineHub={() => setOfflineHubOpen(true)} />
 
       {/* Main View Router with Smooth View Transitions */}
       <main className="flex-1 overflow-hidden">
@@ -243,6 +274,53 @@ export function App() {
               />
             </ViewTransition>
           )}
+
+          {currentView === 'faq' && (
+            <ViewTransition key="faq" viewKey="faq">
+              <FAQView
+                setCurrentView={handleNavigate}
+                onOpenSpeakingEnquiry={() => handleOpenSpeaking()}
+              />
+            </ViewTransition>
+          )}
+
+          {(currentView === 'blog' || currentView === 'journal' || currentView === 'articles') && (
+            <ViewTransition key="blog" viewKey="blog">
+              <BlogView
+                setCurrentView={handleNavigate}
+                onSelectCourseById={handleSelectCourseById}
+                onOpenSpeakingEnquiry={() => handleOpenSpeaking()}
+              />
+            </ViewTransition>
+          )}
+
+          {['terms-conditions', 'privacy-policy', 'refund-policy', 'disclaimer', 'paia-manual'].includes(currentView) && (
+            <ViewTransition key={currentView} viewKey={currentView}>
+              <LegalView
+                currentPolicy={currentView as any}
+                onSelectPolicy={(policy) => handleNavigate(policy)}
+                setCurrentView={handleNavigate}
+              />
+            </ViewTransition>
+          )}
+
+          {currentView === 'executive-dashboard' && (
+            <ViewTransition key="executive-dashboard" viewKey="executive-dashboard">
+              <ExecutiveDashboardView
+                currentUser={currentUser}
+                onOpenAuthModal={() => setAuthModalOpen(true)}
+                onNavigate={handleNavigate}
+              />
+            </ViewTransition>
+          )}
+
+          {currentView === 'offline-learning' && (
+            <ViewTransition key="offline-learning" viewKey="offline-learning">
+              <div className="max-w-7xl mx-auto px-4 py-8">
+                <OfflineLearningHub />
+              </div>
+            </ViewTransition>
+          )}
         </AnimatePresence>
       </main>
 
@@ -284,7 +362,27 @@ export function App() {
             setStudentPortalOpen(false);
             handleNavigate('academy');
           }}
+          onOpenOfflineHub={() => {
+            setStudentPortalOpen(false);
+            setOfflineHubOpen(true);
+          }}
         />
+      )}
+
+      {/* 4. IAM / POPIA Authentication & Role Switcher Modal */}
+      <AuthModal
+        isOpen={authModalOpen}
+        onClose={() => setAuthModalOpen(false)}
+        onLoginSuccess={(user) => setCurrentUser(user)}
+      />
+
+      {/* 5. Progressive Web App (PWA) Offline Learning Hub Modal */}
+      {offlineHubOpen && (
+        <div className="fixed inset-0 z-50 bg-black/85 backdrop-blur-md p-3 sm:p-6 overflow-y-auto flex items-center justify-center animate-in fade-in duration-200">
+          <div className="w-full max-w-5xl my-auto">
+            <OfflineLearningHub onClose={() => setOfflineHubOpen(false)} />
+          </div>
+        </div>
       )}
     </div>
   );

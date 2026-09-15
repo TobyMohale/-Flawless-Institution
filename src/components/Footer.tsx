@@ -221,6 +221,18 @@ export const Footer: React.FC<FooterProps> = ({ setCurrentView, onOpenSpeakingEn
                   The Knowledge Store
                 </button>
               </li>
+              <li>
+                <button onClick={() => navigateTo('blog')} className="hover:text-[#f3e1a9] transition-colors flex items-center gap-1.5">
+                  <span>The Flawless Journal (Blog)</span>
+                  <span className="text-[9px] bg-[#d4af37]/20 border border-[#d4af37]/40 px-1 py-0.2 rounded text-[#d4af37]">Articles</span>
+                </button>
+              </li>
+              <li>
+                <button onClick={() => navigateTo('faq')} className="text-[#f3e1a9] hover:text-white transition-colors font-medium flex items-center gap-1.5">
+                  <span>Frequently Asked Questions (FAQ)</span>
+                  <span className="text-[9px] bg-[#d4af37]/20 border border-[#d4af37]/40 px-1 py-0.2 rounded text-[#d4af37]">27 Q&As</span>
+                </button>
+              </li>
             </ul>
           </div>
 
@@ -231,25 +243,76 @@ export const Footer: React.FC<FooterProps> = ({ setCurrentView, onOpenSpeakingEn
             </div>
             <div className="space-y-3 text-[11px] text-neutral-400 leading-relaxed">
               <p>
-                <strong className="text-neutral-300">Skills Training:</strong> Flawless Academy programmes are skills training courses designed for practical knowledge and professional development.
+                <strong className="text-neutral-300">Skills Training:</strong> Flawless Academy programmes are practical skills training courses designed for hands-on capability and professional standards.
               </p>
               <p>
                 <strong className="text-neutral-300">Registration Fee:</strong> A separate R300 registration fee applies to course enrolments.
               </p>
               <p>
-                <strong className="text-neutral-300">No Refunds Policy:</strong> All Flawless Institution services and course purchases are strictly non-refundable.
+                <strong className="text-neutral-300">Strict No Refunds Policy:</strong> All Flawless Institution services, training and course bookings are non-refundable.
               </p>
               <p>
-                <strong className="text-neutral-300">Employment Notice:</strong> Completion does not guarantee employment or immigration approval.
+                <strong className="text-neutral-300">No Employment Guarantee:</strong> Course completion does not guarantee employment, job placement or specific earnings.
               </p>
             </div>
           </div>
         </div>
 
+        {/* Dedicated Legal & Governance Links Bar (Recommended by User) */}
+        <div className="mt-12 pt-6 border-t border-neutral-800 flex flex-wrap items-center justify-center gap-x-3 gap-y-2 text-xs text-neutral-400">
+          <button 
+            onClick={() => navigateTo('terms-conditions')}
+            id="footer-link-terms"
+            className="hover:text-[#f3e1a9] transition-colors"
+          >
+            Terms & Conditions
+          </button>
+          <span className="text-neutral-600">|</span>
+          <button 
+            onClick={() => navigateTo('privacy-policy')}
+            id="footer-link-privacy"
+            className="hover:text-[#f3e1a9] transition-colors"
+          >
+            Privacy Policy
+          </button>
+          <span className="text-neutral-600">|</span>
+          <button 
+            onClick={() => navigateTo('refund-policy')}
+            id="footer-link-refund"
+            className="hover:text-[#f3e1a9] transition-colors"
+          >
+            Refund & Cancellation Policy
+          </button>
+          <span className="text-neutral-600">|</span>
+          <button 
+            onClick={() => navigateTo('disclaimer')}
+            id="footer-link-disclaimer"
+            className="hover:text-[#f3e1a9] transition-colors"
+          >
+            Disclaimer
+          </button>
+          <span className="text-neutral-600">|</span>
+          <button 
+            onClick={() => navigateTo('paia-manual')}
+            id="footer-link-paia"
+            className="hover:text-[#f3e1a9] transition-colors"
+          >
+            PAIA Manual
+          </button>
+          <span className="text-neutral-600">|</span>
+          <button 
+            onClick={() => navigateTo('contact')}
+            id="footer-link-contact"
+            className="hover:text-[#f3e1a9] transition-colors"
+          >
+            Contact
+          </button>
+        </div>
+
         {/* Bottom copyright, motto & share */}
-        <div className="mt-14 pt-8 border-t border-neutral-800/80 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-neutral-500">
+        <div className="mt-6 pt-6 border-t border-neutral-800/80 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-neutral-500">
           <div>
-            © {new Date().getFullYear()} Flawless Institution. All rights reserved. Founded 2016.
+            © {new Date().getFullYear()} Flawless Institution™. All rights reserved. Founded 2016. Fourways, South Africa.
           </div>
           <div className="text-neutral-400 font-cinzel text-xs tracking-wider text-center">
             Empowering People • Elevating Homes • Building Businesses

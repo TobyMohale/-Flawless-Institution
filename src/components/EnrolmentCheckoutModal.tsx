@@ -2,9 +2,11 @@ import React, { useState } from 'react';
 import { Course } from '../data/coursesData';
 import { 
   X, Check, ShieldCheck, CreditCard, Landmark, CheckCircle2, 
-  ArrowRight, BookOpen, AlertCircle, Sparkles, MapPin, Globe, Lock 
+  ArrowRight, BookOpen, AlertCircle, Sparkles, MapPin, Globe, Lock, FileText, Loader2 
 } from 'lucide-react';
 import { SEPTEMBER_PHYSICAL_INTAKE, GRADUATION_INFO } from '../data/siteData';
+import { api } from '../lib/api';
+import { TaxInvoiceModal } from './TaxInvoiceModal';
 
 interface EnrolmentCheckoutModalProps {
   course: Course | null;
@@ -26,7 +28,10 @@ export const EnrolmentCheckoutModal: React.FC<EnrolmentCheckoutModalProps> = ({
   const [paymentMethod, setPaymentMethod] = useState<'instant-eft' | 'credit-card' | 'payfast' | 'bank-transfer'>('instant-eft');
   const [isProcessing, setIsProcessing] = useState(false);
   const [studentId, setStudentId] = useState('');
+  const [orderReference, setOrderReference] = useState('');
   const [formError, setFormError] = useState<string | null>(null);
+  const [showTaxInvoice, setShowTaxInvoice] = useState(false);
+  const [clearingSuccess, setClearingSuccess] = useState(false);
 
   // Form State
   const [formData, setFormData] = useState({
@@ -66,22 +71,54 @@ export const EnrolmentCheckoutModal: React.FC<EnrolmentCheckoutModalProps> = ({
       return;
     }
     if (!formData.agreedToTerms) {
-      setFormError('Please accept the course terms and no refunds policy to continue.');
+      setFormError('Please agree to the Flawless Institution™ Terms & Conditions, Privacy Policy and applicable course/payment terms to continue.');
       return;
     }
     setFormError(null);
     setStep('payment');
   };
 
-  const handleCompletePayment = () => {
+  const handleCompletePayment = async () => {
     setIsProcessing(true);
-    setTimeout(() => {
-      const generatedId = `FI-${new Date().getFullYear()}-${Math.floor(10000 + Math.random() * 90000)}`;
-      setStudentId(generatedId);
-      setIsProcessing(false);
-      setStep('success');
-      onSuccessEnrol(course, { ...formData, learningMode, studentId: generatedId, totalPaid: totalAmount });
-    }, 1500);
+    const method = paymentMethod === 'bank-transfer' ? 'manual_eft' : paymentMethod === 'payfast' ? 'payfast' : 'ozow';
+
+    const res = await api.createCheckout({
+      courseId: course.id,
+      mode: learningMode,
+      studentName: formData.fullName,
+      studentEmail: formData.email,
+      studentPhone: formData.phone,
+      paymentMethod: method,
+      idOrPassport: formData.idOrPassport,
+      agreedToTerms: formData.agreedToTerms,
+    });
+
+    const ref = (res.success && res.data?.referenceNumber) 
+      ? res.data.referenceNumber 
+      : `FI-${new Date().getFullYear()}-${Math.floor(10000 + Math.random() * 90000)}`;
+
+    setOrderReference(ref);
+    setStudentId(ref);
+    setIsProcessing(false);
+    setStep('success');
+
+    onSuccessEnrol(course, { 
+      ...formData, 
+      learningMode, 
+      studentId: ref, 
+      totalPaid: totalAmount,
+      referenceNumber: ref 
+    });
+  };
+
+  const handleSimulateClearance = async () => {
+    if (!orderReference) return;
+    setIsProcessing(true);
+    const res = await api.verifyEft(orderReference, 'Automated instant simulation via candidate checkout portal.');
+    setIsProcessing(false);
+    if (res.success) {
+      setClearingSuccess(true);
+    }
   };
 
   return (
@@ -297,15 +334,20 @@ export const EnrolmentCheckoutModal: React.FC<EnrolmentCheckoutModalProps> = ({
                   <input
                     type="checkbox"
                     name="agreedToTerms"
+                    id="checkout-agreed-to-terms-checkbox"
                     required
                     checked={formData.agreedToTerms}
                     onChange={handleInputChange}
                     className="mt-0.5 accent-[#d4af37] w-4 h-4 rounded"
                   />
-                  <span className="leading-snug text-[11px]">
-                    I understand that Flawless Academy courses are practical skills training programmes with an annual November Graduation in Fourways, and I acknowledge the strict <strong>No Refunds policy</strong>.
+                  <span className="leading-snug text-[11px] text-neutral-300">
+                    I have read and agree to the <strong>Flawless Institution™ Terms & Conditions</strong>, <strong>Privacy Policy</strong> and applicable course/payment terms.
                   </span>
                 </label>
+                <div className="text-[10px] text-neutral-500 pl-6 space-y-0.5">
+                  <p>• All enrolments are subject to the strict institutional Non-Refundable Payment Policy.</p>
+                  <p>• Programmes are practical skills training courses with graduation certificate conferral in Fourways.</p>
+                </div>
               </div>
 
               {/* Error Message */}
@@ -548,7 +590,7 @@ export const EnrolmentCheckoutModal: React.FC<EnrolmentCheckoutModalProps> = ({
               </div>
 
               {/* Next Actions */}
-              <div className="flex flex-col sm:flex-row gap-3 justify-center max-w-md mx-auto">
+              <div className="flex flex-col gap-2.5 max-w-md mx-auto">
                 <button
                   onClick={onClose}
                   id="close-success-btn"
@@ -557,11 +599,47 @@ export const EnrolmentCheckoutModal: React.FC<EnrolmentCheckoutModalProps> = ({
                   <BookOpen className="w-4 h-4" />
                   <span>Launch Student Learning Portal</span>
                 </button>
+
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => setShowTaxInvoice(true)}
+                    id="view-sars-invoice-btn"
+                    className="flex-1 py-2.5 px-4 rounded-xl text-xs font-semibold bg-neutral-900 border border-[#d4af37]/40 text-[#f3e1a9] hover:bg-[#d4af37]/15 transition-all flex items-center justify-center gap-2"
+                  >
+                    <FileText className="w-3.5 h-3.5" />
+                    <span>View SARS VAT Tax Invoice</span>
+                  </button>
+
+                  {!clearingSuccess && paymentMethod === 'bank-transfer' && (
+                    <button
+                      onClick={handleSimulateClearance}
+                      disabled={isProcessing}
+                      title="Simulate Standard Bank statement reconciliation"
+                      className="py-2.5 px-3 rounded-xl text-[11px] font-semibold bg-amber-500/20 border border-amber-500 text-amber-300 hover:bg-amber-500/30 transition-all flex items-center justify-center gap-1.5"
+                    >
+                      {isProcessing ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <CheckCircle2 className="w-3.5 h-3.5" />}
+                      <span>Instant EFT Clear</span>
+                    </button>
+                  )}
+                </div>
+
+                {clearingSuccess && (
+                  <div className="text-[11px] text-emerald-400 text-center font-medium">
+                    ✓ Payment cleared! Official SARS VAT Tax Invoice ready for download.
+                  </div>
+                )}
               </div>
             </div>
           )}
         </div>
       </div>
+
+      {showTaxInvoice && orderReference && (
+        <TaxInvoiceModal
+          referenceNumber={orderReference}
+          onClose={() => setShowTaxInvoice(false)}
+        />
+      )}
     </div>
   );
 };

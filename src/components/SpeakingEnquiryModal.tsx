@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { 
   X, Sparkles, Send, CheckCircle2, Calendar, MapPin, 
-  Users, Clock, Mic, Mail, Phone, Building, Copy, Check 
+  Users, Clock, Mic, Mail, Phone, Building, Copy, Check, Loader2 
 } from 'lucide-react';
 import { SPEAKING_TOPICS, FOUNDER_CONTACT } from '../data/speakingData';
+import { api } from '../lib/api';
 
 interface SpeakingEnquiryModalProps {
   initialTopic?: string;
@@ -41,15 +42,31 @@ export const SpeakingEnquiryModal: React.FC<SpeakingEnquiryModalProps> = ({
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    setTimeout(() => {
-      const ref = `TELDAH-SPK-${Math.floor(1000 + Math.random() * 9000)}`;
-      setBookingRef(ref);
-      setIsSubmitting(false);
-      setIsSubmitted(true);
-    }, 1200);
+
+    const res = await api.submitSpeakingEnquiry({
+      hostOrganization: formData.organisation || formData.name,
+      contactPerson: formData.name,
+      contactEmail: formData.email,
+      contactPhone: formData.phone,
+      eventTheme: formData.eventName || formData.preferredTopic,
+      requestedDate: formData.eventDate || 'To be determined',
+      location: formData.location || 'South Africa',
+      estimatedAudienceSize: parseInt(formData.attendees) || 100,
+      eventFormat: formData.speakingFormat.includes('Keynote') ? 'Keynote' : 'Executive Masterclass',
+      budgetZAR: 'R 35,000 - R 75,000',
+      specialRequests: `${formData.preferredTopic} — ${formData.objectives}`,
+    });
+
+    const ref = (res.success && res.data?.enquiryId)
+      ? res.data.enquiryId
+      : `TELDAH-SPK-${Math.floor(1000 + Math.random() * 9000)}`;
+
+    setBookingRef(ref);
+    setIsSubmitting(false);
+    setIsSubmitted(true);
   };
 
   const handleCopyRef = () => {

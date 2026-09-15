@@ -2,9 +2,10 @@ import React, { useState } from 'react';
 import { Course } from '../data/coursesData';
 import { 
   X, BookOpen, CheckCircle, Award, Play, 
-  GraduationCap, ShieldCheck, CheckCircle2, AlertCircle, ArrowRight
+  GraduationCap, ShieldCheck, CheckCircle2, AlertCircle, ArrowRight, FileText, Printer
 } from 'lucide-react';
 import { GRADUATION_INFO } from '../data/siteData';
+import { TaxInvoiceModal } from './TaxInvoiceModal';
 
 interface StudentPortalModalProps {
   enrolledCourses: {
@@ -13,15 +14,18 @@ interface StudentPortalModalProps {
   }[];
   onClose: () => void;
   onExploreMore: () => void;
+  onOpenOfflineHub?: () => void;
 }
 
 export const StudentPortalModal: React.FC<StudentPortalModalProps> = ({
   enrolledCourses,
   onClose,
-  onExploreMore
+  onExploreMore,
+  onOpenOfflineHub
 }) => {
   const [selectedCourseIndex, setSelectedCourseIndex] = useState<number>(0);
-  const [activeTab, setActiveTab] = useState<'modules' | 'certificate' | 'graduation'>('modules');
+  const [activeTab, setActiveTab] = useState<'modules' | 'certificate' | 'graduation' | 'invoice'>('modules');
+  const [showFullInvoiceModal, setShowFullInvoiceModal] = useState(false);
   const [completedModules, setCompletedModules] = useState<{ [key: string]: boolean }>({
     '0-0': true,
     '0-1': true
@@ -143,6 +147,16 @@ export const StudentPortalModal: React.FC<StudentPortalModalProps> = ({
                   </div>
 
                   <div className="flex items-center gap-2 w-full md:w-auto justify-end">
+                    {onOpenOfflineHub && (
+                      <button
+                        onClick={onOpenOfflineHub}
+                        className="px-3.5 py-2 rounded-lg text-xs font-semibold bg-amber-950/40 border border-amber-500/40 text-amber-300 hover:bg-amber-900/30 flex items-center gap-1.5"
+                        title="Open cached offline syllabus checklists and etiquette guides"
+                      >
+                        <BookOpen className="w-3.5 h-3.5 text-amber-400" />
+                        <span>Offline Guides</span>
+                      </button>
+                    )}
                     <span className="text-xs text-neutral-400 hidden sm:inline">Target: Nov Ceremony</span>
                     <button
                       onClick={() => setActiveTab('certificate')}
@@ -191,6 +205,18 @@ export const StudentPortalModal: React.FC<StudentPortalModalProps> = ({
                 >
                   <GraduationCap className="w-3.5 h-3.5 text-[#d4af37]" />
                   <span>November Fourways Ceremony</span>
+                </button>
+
+                <button
+                  onClick={() => setActiveTab('invoice')}
+                  className={`py-2.5 px-4 rounded-t-lg transition-all flex items-center gap-1.5 shrink-0 ${
+                    activeTab === 'invoice'
+                      ? 'bg-[#181822] text-[#f3e1a9] border-t-2 border-x border-[#d4af37]/60'
+                      : 'text-neutral-400 hover:text-white'
+                  }`}
+                >
+                  <FileText className="w-3.5 h-3.5 text-[#d4af37]" />
+                  <span>SARS Tax Invoice</span>
                 </button>
               </div>
 
@@ -426,10 +452,63 @@ export const StudentPortalModal: React.FC<StudentPortalModalProps> = ({
                   </div>
                 </div>
               )}
+
+              {/* TAB 4: SARS TAX INVOICE */}
+              {activeTab === 'invoice' && activeEnrolment && (
+                <div className="space-y-6">
+                  <div className="bg-[#15151e] border border-[#d4af37]/30 rounded-2xl p-6 space-y-4">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                      <div>
+                        <div className="text-[10px] text-[#d4af37] font-semibold uppercase tracking-wider">
+                          Official Financial Documentation
+                        </div>
+                        <h3 className="font-cinzel text-lg font-bold text-white">
+                          SARS Value-Added Tax (VAT) Invoice
+                        </h3>
+                        <p className="text-xs text-neutral-300">
+                          Issued pursuant to Section 20 of the South African VAT Act No 89 of 1991.
+                        </p>
+                      </div>
+
+                      <button
+                        onClick={() => setShowFullInvoiceModal(true)}
+                        className="px-4 py-2 rounded-xl bg-gradient-to-r from-[#d4af37] via-[#c5a059] to-[#9e7b25] text-black font-bold text-xs hover:brightness-110 flex items-center gap-2 shadow-md"
+                      >
+                        <FileText className="w-4 h-4" />
+                        <span>View / Print Formal Invoice</span>
+                      </button>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2 text-xs">
+                      <div className="bg-[#0e0e13] p-3.5 rounded-xl border border-neutral-800">
+                        <span className="text-[10px] text-neutral-400 block uppercase">VAT Registration</span>
+                        <strong className="text-white block mt-0.5 font-mono">4710298841</strong>
+                      </div>
+                      <div className="bg-[#0e0e13] p-3.5 rounded-xl border border-neutral-800">
+                        <span className="text-[10px] text-neutral-400 block uppercase">Reference Number</span>
+                        <strong className="text-[#f3e1a9] block mt-0.5 font-mono">
+                          {activeEnrolment.studentData?.studentId || 'FI-2026-ACTIVE'}
+                        </strong>
+                      </div>
+                      <div className="bg-[#0e0e13] p-3.5 rounded-xl border border-neutral-800">
+                        <span className="text-[10px] text-neutral-400 block uppercase">Tax Clearance</span>
+                        <strong className="text-emerald-400 block mt-0.5 font-semibold">PAID IN FULL (15% VAT)</strong>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           )}
         </div>
       </div>
+
+      {showFullInvoiceModal && (
+        <TaxInvoiceModal
+          referenceNumber={activeEnrolment?.studentData?.studentId || 'FI-2026-ACTIVE'}
+          onClose={() => setShowFullInvoiceModal(false)}
+        />
+      )}
     </div>
   );
 };

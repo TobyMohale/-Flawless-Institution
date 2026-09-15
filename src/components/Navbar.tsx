@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { 
   Menu, X, Phone, Mail, Award, BookOpen, Mic, Home as HomeIcon, 
-  Briefcase, Users, ChevronDown, Sparkles, GraduationCap, MapPin, Globe 
+  Briefcase, Users, ChevronDown, Sparkles, GraduationCap, MapPin, Globe,
+  ShieldCheck, UserCheck, Lock, Crown, Download, BookmarkCheck
 } from 'lucide-react';
+import { PWAInstallButton } from './PWAInstallButton';
 
 interface NavbarProps {
   currentView: string;
@@ -10,6 +12,10 @@ interface NavbarProps {
   onOpenSpeakingEnquiry: (topic?: string) => void;
   onOpenStudentPortal: () => void;
   enrolledCount: number;
+  currentUser?: any;
+  onOpenExecutiveDashboard?: () => void;
+  onOpenAuthModal?: () => void;
+  onOpenOfflineHub?: () => void;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
@@ -17,7 +23,11 @@ export const Navbar: React.FC<NavbarProps> = ({
   setCurrentView,
   onOpenSpeakingEnquiry,
   onOpenStudentPortal,
-  enrolledCount
+  enrolledCount,
+  currentUser,
+  onOpenExecutiveDashboard,
+  onOpenAuthModal,
+  onOpenOfflineHub
 }) => {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [aboutDropdownOpen, setAboutDropdownOpen] = useState(false);
@@ -390,6 +400,30 @@ export const Navbar: React.FC<NavbarProps> = ({
             </button>
 
             <button
+              onClick={() => navigateTo('blog')}
+              id="nav-link-blog"
+              className={`px-3 py-2 rounded-md transition-all ${
+                currentView === 'blog' || currentView === 'journal' || currentView === 'articles'
+                  ? 'text-[#f3e1a9] bg-[#d4af37]/20 border border-[#d4af37]/60 font-semibold' 
+                  : 'text-neutral-300 hover:text-white hover:bg-neutral-800/40'
+              }`}
+            >
+              Blog
+            </button>
+
+            <button
+              onClick={() => navigateTo('faq')}
+              id="nav-link-faq"
+              className={`px-3 py-2 rounded-md transition-all ${
+                currentView === 'faq' 
+                  ? 'text-[#f3e1a9] bg-[#d4af37]/20 border border-[#d4af37]/60 font-semibold' 
+                  : 'text-neutral-300 hover:text-white hover:bg-neutral-800/40'
+              }`}
+            >
+              FAQ
+            </button>
+
+            <button
               onClick={() => navigateTo('contact')}
               id="nav-link-contact"
               className={`px-3 py-2 rounded-md transition-all ${
@@ -403,7 +437,58 @@ export const Navbar: React.FC<NavbarProps> = ({
           </nav>
 
           {/* Right Action Group */}
-          <div className="hidden lg:flex items-center gap-2.5">
+          <div className="hidden lg:flex items-center gap-2">
+            {/* Executive Dashboard Portal */}
+            <button
+              onClick={onOpenExecutiveDashboard}
+              id="executive-hub-button"
+              className={`px-3 py-2 rounded-md text-xs font-semibold flex items-center gap-1.5 transition-all ${
+                currentView === 'executive-dashboard'
+                  ? 'text-black bg-[#d4af37] font-bold shadow-md shadow-[#d4af37]/30'
+                  : 'text-[#f3e1a9] bg-neutral-900/90 border border-[#d4af37]/40 hover:bg-[#d4af37]/15'
+              }`}
+              title="Super Admin, Academic Registry & Advisory Command Hub"
+            >
+              <ShieldCheck className="w-3.5 h-3.5 text-[#d4af37]" />
+              <span>Executive Hub</span>
+              {currentUser?.role === 'super_admin' && (
+                <span className="text-[9px] bg-amber-400 text-black px-1.5 py-0.2 rounded font-bold uppercase">
+                  Admin
+                </span>
+              )}
+            </button>
+
+            {/* Auth / Role Switcher Modal Button */}
+            <button
+              onClick={onOpenAuthModal}
+              id="auth-role-switcher-button"
+              className="px-2.5 py-2 rounded-md text-xs font-medium text-neutral-300 hover:text-white bg-neutral-900 border border-neutral-800 hover:border-neutral-700 flex items-center gap-1.5 transition-all"
+              title="Switch roles or inspect security credentials"
+            >
+              <UserCheck className="w-3.5 h-3.5 text-neutral-400" />
+              <span className="hidden xl:inline text-[11px] text-neutral-400">Role:</span>
+              <span className="text-[11px] text-[#f3e1a9] font-medium capitalize max-w-[90px] truncate">
+                {currentUser?.role ? currentUser.role.replace('_', ' ') : 'Sign In'}
+              </span>
+            </button>
+
+            {/* PWA In-App Install Button */}
+            <PWAInstallButton compact />
+
+            {/* Offline Guides & Syllabus Hub */}
+            {onOpenOfflineHub && (
+              <button
+                onClick={onOpenOfflineHub}
+                id="header-offline-hub-button"
+                className="px-2.5 py-2 rounded-md text-xs font-medium text-amber-300/90 hover:text-amber-200 bg-amber-950/30 border border-amber-500/30 hover:border-amber-500/60 flex items-center gap-1.5 transition-all"
+                title="Offline Syllabus Checklists & Household Etiquette Guides"
+              >
+                <BookmarkCheck className="w-3.5 h-3.5 text-amber-400" />
+                <span className="hidden 2xl:inline">Offline</span>
+                <span>Guides</span>
+              </button>
+            )}
+
             {/* Student Portal Access */}
             <button
               onClick={onOpenStudentPortal}
@@ -424,10 +509,10 @@ export const Navbar: React.FC<NavbarProps> = ({
             <button
               onClick={() => onOpenSpeakingEnquiry()}
               id="header-invite-teldah-button"
-              className="px-4 py-2 rounded-md text-xs font-semibold tracking-wide bg-gradient-to-r from-[#d4af37] via-[#c5a059] to-[#9e7b25] text-black hover:brightness-110 shadow-md shadow-[#d4af37]/20 transition-all flex items-center gap-1.5"
+              className="px-3.5 py-2 rounded-md text-xs font-semibold tracking-wide bg-gradient-to-r from-[#d4af37] via-[#c5a059] to-[#9e7b25] text-black hover:brightness-110 shadow-md shadow-[#d4af37]/20 transition-all flex items-center gap-1.5"
             >
               <Sparkles className="w-3.5 h-3.5" />
-              <span>Invite Teldah to Speak</span>
+              <span>Invite Teldah</span>
             </button>
           </div>
 
@@ -604,6 +689,28 @@ export const Navbar: React.FC<NavbarProps> = ({
           </button>
 
           <button
+            onClick={() => navigateTo('blog')}
+            id="mobile-nav-blog"
+            className="w-full text-left px-3 py-2.5 text-sm text-neutral-200 hover:bg-neutral-800/60 rounded-md flex items-center justify-between"
+          >
+            <span>The Flawless Journal (Blog)</span>
+            <span className="text-[10px] bg-[#d4af37]/20 text-[#d4af37] border border-[#d4af37]/40 px-2 py-0.5 rounded-full font-semibold">
+              Insights & Essays
+            </span>
+          </button>
+
+          <button
+            onClick={() => navigateTo('faq')}
+            id="mobile-nav-faq"
+            className="w-full text-left px-3 py-2.5 text-sm text-neutral-200 hover:bg-neutral-800/60 rounded-md flex items-center justify-between"
+          >
+            <span>Frequently Asked Questions (FAQ)</span>
+            <span className="text-[10px] bg-[#d4af37]/20 text-[#d4af37] border border-[#d4af37]/40 px-2 py-0.5 rounded-full font-semibold">
+              27 Questions
+            </span>
+          </button>
+
+          <button
             onClick={() => navigateTo('contact')}
             id="mobile-nav-contact"
             className="w-full text-left px-3 py-2.5 text-sm text-neutral-200 hover:bg-neutral-800/60 rounded-md"
@@ -612,6 +719,47 @@ export const Navbar: React.FC<NavbarProps> = ({
           </button>
 
           <div className="pt-3 space-y-2">
+            <div className="pt-2 grid grid-cols-2 gap-2">
+              <PWAInstallButton compact className="w-full justify-center" />
+              {onOpenOfflineHub && (
+                <button
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                    onOpenOfflineHub();
+                  }}
+                  id="mobile-offline-guides-button"
+                  className="w-full py-1.5 px-2 bg-amber-950/30 border border-amber-500/30 text-amber-300 text-xs font-semibold rounded-lg flex items-center justify-center gap-1.5"
+                >
+                  <BookmarkCheck className="w-3.5 h-3.5 text-amber-400" />
+                  <span>Offline Guides</span>
+                </button>
+              )}
+            </div>
+
+            <button
+              onClick={() => {
+                setMobileMenuOpen(false);
+                if (onOpenExecutiveDashboard) onOpenExecutiveDashboard();
+              }}
+              id="mobile-executive-hub-button"
+              className="w-full py-2.5 bg-neutral-900 border border-[#d4af37]/40 text-[#f3e1a9] text-xs font-semibold rounded-lg flex items-center justify-center gap-2"
+            >
+              <ShieldCheck className="w-4 h-4 text-[#d4af37]" />
+              <span>Executive Command Hub</span>
+            </button>
+
+            <button
+              onClick={() => {
+                setMobileMenuOpen(false);
+                if (onOpenAuthModal) onOpenAuthModal();
+              }}
+              id="mobile-auth-switcher-button"
+              className="w-full py-2 bg-neutral-950 border border-neutral-800 text-neutral-300 text-xs font-medium rounded-lg flex items-center justify-center gap-1.5"
+            >
+              <UserCheck className="w-3.5 h-3.5 text-neutral-400" />
+              <span>Switch Security Role ({currentUser?.role || 'Sign In'})</span>
+            </button>
+
             <button
               onClick={() => {
                 setMobileMenuOpen(false);
