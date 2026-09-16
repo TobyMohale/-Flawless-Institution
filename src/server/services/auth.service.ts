@@ -1,52 +1,62 @@
 /**
- * Flawless Institution™ - Authentication & IAM Service
- * Handles user lifecycle, PBKDF2 credential verification, and POPIA consent tracking.
+ * Flawless Institution™ - Authentication & Identity Service
+ * Fourways, Johannesburg, South Africa
+ *
+ * Implements PBKDF2 Password Hashing (100,000 iterations),
+ * JWT Generation, and POPIA-Compliant Consent Tracking.
  */
+import crypto from 'crypto';
 import jwt from 'jsonwebtoken';
-import { dbStore } from '../storage/inMemoryStore';
-import { User, JwtUserPayload, UserRole } from '../types/domain.types';
-import { hashPassword, verifyPassword } from '../utils/crypto';
-import { AppError } from '../middleware/errorHandler';
-import { config } from '../config';
+import { User, AuthCredential, JwtUserPayload, UserRole } from '../types/domain.types';
+import { dbStore } from '../storage/supabaseStore';
+import { communicationsService } from './communications.service';
 
-export interface RegisterInput {
+const JWT_SECRET = process.env.JWT_SECRET || 'flawless_secret_key_prod_fourways_2026';
+const JWT_EXPIRES_IN = '24h';
+const PBKDF2_ITERATIONS = 100000;
+const PBKDF2_KEYLEN = 64;
+const PBKDF2_DIGEST = 'sha512';
+
+export interface RegisterDTO {
   email: string;
   password: string;
   fullName: string;
   phone: string;
   role?: UserRole;
-  agreedToPopia: boolean;
+  popiaConsent: boolean;
   ipAddress?: string;
 }
 
-export interface LoginInput {
+export interface LoginDTO {
   email: string;
   password: string;
 }
 
-export interface AuthResponse {
+export interface AuthResult {
   token: string;
+  user: User;
   expiresIn: string;
-  user: {
-    id: string;
-    email: string;
-    fullName: string;
-    phone: string;
-    role: UserRole;
-    status: string;
-    createdAt: string;
-    lastLoginAt?: string;
-    popiaConsent: {
-      agreed: boolean;
-      agreedAt: string;
-      version: string;
-    };
-  };
 }
 
-export class AuthService {
+class AuthService {
   /**
-   * Issue signed stateless JWT for an authenticated user.
+   * Hashes a plaintext password using crypto.pbkdf2Sync
+   */
+  private hashPassword(password: string, salt: string): string {
+    return crypto
+      .pbkdf2Sync(password, salt, PBKDF2_ITERATIONS, PBKDF2_KEYLEN, PBKDF2_DIGEST)
+      .toString('hex');
+  }
+
+  /**
+   * Generates a random cryptographic salt
+   */
+  private generateSalt(): string {
+    return crypto.randomBytes(32).toString('hex');
+  }
+
+  /**
+   * Issues a signed HS256 JWT
    */
   public generateToken(user: User): string {
     const payload: JwtUserPayload = {
@@ -55,204 +65,161 @@ export class AuthService {
       role: user.role,
       fullName: user.fullName,
     };
-
-    return jwt.sign(payload, config.security.jwtSecret, {
-      expiresIn: '7d',
-      issuer: 'flawless-institution-fourways',
-      audience: 'flawless-client',
-    });
+    return jwt.sign(payload, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN });
   }
 
   /**
-   * Verify and decode a JWT.
+   * Verifies and decodes a signed JWT
    */
   public verifyToken(token: string): JwtUserPayload {
-    try {
-      const decoded = jwt.verify(token, config.security.jwtSecret, {
-        issuer: 'flawless-institution-fourways',
-        audience: 'flawless-client',
-      }) as JwtUserPayload;
-      return decoded;
-    } catch (err: any) {
-      if (err.name === 'TokenExpiredError') {
-        throw new AppError('Authentication token has expired. Please sign in again.', 401, 'TOKEN_EXPIRED');
-      }
-      throw new AppError('Invalid or corrupted authentication token', 401, 'INVALID_TOKEN');
-    }
+    return jwt.verify(token, JWT_SECRET) as JwtUserPayload;
   }
 
   /**
-   * Register a new Student or Employer account with POPIA consent audit.
+   * Registers a new student or platform user with POPIA compliance
    */
-  public async register(input: RegisterInput): Promise<AuthResponse> {
-    const normalizedEmail = input.email.toLowerCase().trim();
+  public async register(dto: RegisterDTO): Promise<AuthResult> {
+    const cleanEmail = dto.email.toLowerCase().trim();
 
-    // 1. Check for duplicate account
-    const existing = dbStore.getUserByEmail(normalizedEmail);
+    // Check email uniqueness
+    const existing = await dbStore.getUserByEmail(cleanEmail);
     if (existing) {
-      throw new AppError('An account with this email address is already registered', 409, 'ACCOUNT_EXISTS');
+      throw new Error(`An account is already registered with email: ${cleanEmail}`);
     }
 
-    // 2. Enforce South African POPIA compliance
-    if (!input.agreedToPopia) {
-      throw new AppError(
-        'Registration cannot proceed without acceptance of the POPIA Policy and Institutional Terms.',
-        400,
-        'POPIA_CONSENT_REQUIRED'
-      );
+    if (!dto.popiaConsent) {
+      throw new Error('POPIA consent is legally required to register with Flawless Institution.');
     }
 
-    const userId = `usr-${Math.random().toString(36).substring(2, 11)}`;
+    if (!dto.password || dto.password.length < 8) {
+      throw new Error('Password must be at least 8 characters in length.');
+    }
+
+    const salt = this.generateSalt();
+    const passwordHash = this.hashPassword(dto.password, salt);
+    const userId = crypto.randomUUID();
     const now = new Date().toISOString();
 
-    // 3. Create domain user
     const newUser: User = {
       id: userId,
-      email: normalizedEmail,
-      fullName: input.fullName.trim(),
-      phone: input.phone.trim(),
-      role: input.role || 'student',
+      email: cleanEmail,
+      fullName: dto.fullName.trim(),
+      phone: dto.phone.trim(),
+      role: dto.role || 'student',
       status: 'active',
       createdAt: now,
-      lastLoginAt: now,
       popiaConsent: {
         agreed: true,
         agreedAt: now,
-        ipAddress: input.ipAddress || 'unknown',
+        ipAddress: dto.ipAddress,
         version: '2026-v1.0',
       },
     };
 
-    // 4. Hash password with PBKDF2 and dedicated salt
-    const { hash, salt } = hashPassword(input.password);
-    dbStore.saveCredential({
-      userId,
-      email: normalizedEmail,
-      passwordHash: hash,
+    const savedUser = await dbStore.createUser(newUser);
+
+    const credential: AuthCredential = {
+      userId: savedUser.id,
+      email: cleanEmail,
+      passwordHash,
       salt,
       updatedAt: now,
-    });
+    };
 
-    dbStore.createUser(newUser);
+    await dbStore.saveCredential(credential);
 
-    // 5. Generate session token
-    const token = this.generateToken(newUser);
+    const token = this.generateToken(savedUser);
+
+    // Dispatch welcome notification asynchronously
+    try {
+      await communicationsService.sendWelcomeNotification(savedUser);
+    } catch (commErr) {
+      console.warn('[AuthService] Welcome communication skipped:', commErr);
+    }
 
     return {
       token,
-      expiresIn: config.security.jwtExpiresIn,
-      user: {
-        id: newUser.id,
-        email: newUser.email,
-        fullName: newUser.fullName,
-        phone: newUser.phone,
-        role: newUser.role,
-        status: newUser.status,
-        createdAt: newUser.createdAt,
-        lastLoginAt: newUser.lastLoginAt,
-        popiaConsent: {
-          agreed: newUser.popiaConsent.agreed,
-          agreedAt: newUser.popiaConsent.agreedAt,
-          version: newUser.popiaConsent.version,
-        },
-      },
+      user: savedUser,
+      expiresIn: JWT_EXPIRES_IN,
     };
   }
 
   /**
-   * Authenticate user credentials and return session token.
+   * Authenticates a user and returns a fresh JWT
    */
-  public async login(input: LoginInput): Promise<AuthResponse> {
-    const normalizedEmail = input.email.toLowerCase().trim();
+  public async login(dto: LoginDTO): Promise<AuthResult> {
+    const cleanEmail = dto.email.toLowerCase().trim();
+    const user = await dbStore.getUserByEmail(cleanEmail);
+    const credential = await dbStore.getCredentialByEmail(cleanEmail);
 
-    const user = dbStore.getUserByEmail(normalizedEmail);
-    if (!user) {
-      throw new AppError('Invalid email or password', 401, 'INVALID_CREDENTIALS');
+    if (!user || !credential) {
+      throw new Error('Invalid email or password provided.');
     }
 
     if (user.status === 'suspended') {
-      throw new AppError('This account has been suspended. Please contact institutional faculty.', 403, 'ACCOUNT_SUSPENDED');
+      throw new Error('Your account has been suspended. Please contact the Registrar at Fourways.');
     }
 
-    const credential = dbStore.getCredentialByEmail(normalizedEmail);
-    if (!credential) {
-      throw new AppError('Authentication credentials not found for this account', 401, 'INVALID_CREDENTIALS');
+    const testHash = this.hashPassword(dto.password, credential.salt);
+    const match = crypto.timingSafeEqual(
+      Buffer.from(testHash, 'hex'),
+      Buffer.from(credential.passwordHash, 'hex')
+    );
+
+    if (!match) {
+      throw new Error('Invalid email or password provided.');
     }
 
-    const isValid = verifyPassword(input.password, credential.passwordHash, credential.salt);
-    if (!isValid) {
-      throw new AppError('Invalid email or password', 401, 'INVALID_CREDENTIALS');
-    }
+    // Update last login timestamp
+    const now = new Date().toISOString();
+    await dbStore.updateUser(user.id, { lastLoginAt: now });
+    user.lastLoginAt = now;
 
-    // Update last login
-    const updatedUser = dbStore.updateUser(user.id, {
-      lastLoginAt: new Date().toISOString(),
-    }) || user;
-
-    const token = this.generateToken(updatedUser);
+    const token = this.generateToken(user);
 
     return {
       token,
-      expiresIn: config.security.jwtExpiresIn,
-      user: {
-        id: updatedUser.id,
-        email: updatedUser.email,
-        fullName: updatedUser.fullName,
-        phone: updatedUser.phone,
-        role: updatedUser.role,
-        status: updatedUser.status,
-        createdAt: updatedUser.createdAt,
-        lastLoginAt: updatedUser.lastLoginAt,
-        popiaConsent: {
-          agreed: updatedUser.popiaConsent.agreed,
-          agreedAt: updatedUser.popiaConsent.agreedAt,
-          version: updatedUser.popiaConsent.version,
-        },
-      },
+      user,
+      expiresIn: JWT_EXPIRES_IN,
     };
   }
 
   /**
-   * Get user profile by user ID.
+   * Retrieves profile by user ID
    */
-  public getUserProfile(userId: string): User {
-    const user = dbStore.getUserById(userId);
+  public async getProfile(userId: string): Promise<User> {
+    const user = await dbStore.getUserById(userId);
     if (!user) {
-      throw new AppError('User account not found', 404, 'USER_NOT_FOUND');
+      throw new Error('User account not found.');
     }
     return user;
   }
 
   /**
-   * Update profile details.
+   * Creates or retrieves a designated Demo Student session for seamless previewing
    */
-  public updateProfile(userId: string, updates: { fullName?: string; phone?: string }): User {
-    const updated = dbStore.updateUser(userId, updates);
-    if (!updated) {
-      throw new AppError('User not found', 404, 'USER_NOT_FOUND');
-    }
-    return updated;
-  }
+  public async getOrCreateDemoStudentSession(): Promise<AuthResult> {
+    const demoEmail = 'student.demo@flawlessinstitution.co.za';
+    let user = await dbStore.getUserByEmail(demoEmail);
 
-  /**
-   * Record updated POPIA consent.
-   */
-  public recordPopiaConsent(userId: string, version: string, ipAddress?: string): User {
-    const user = dbStore.getUserById(userId);
     if (!user) {
-      throw new AppError('User not found', 404, 'USER_NOT_FOUND');
+      const demoResult = await this.register({
+        email: demoEmail,
+        fullName: 'Thabo Mokoena (Demo Scholar)',
+        phone: '+27 82 555 0192',
+        password: 'DemoPassword2026!',
+        role: 'student',
+        popiaConsent: true,
+      });
+      return demoResult;
     }
 
-    const updated = dbStore.updateUser(userId, {
-      popiaConsent: {
-        agreed: true,
-        agreedAt: new Date().toISOString(),
-        ipAddress: ipAddress || 'unknown',
-        version,
-      },
-    });
-
-    return updated!;
+    const token = this.generateToken(user);
+    return {
+      token,
+      user,
+      expiresIn: JWT_EXPIRES_IN,
+    };
   }
 }
 

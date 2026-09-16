@@ -1,225 +1,176 @@
 /**
- * Flawless Institution™ - Academy & Enrolment Routes
- * API Mount: /api/v1/academy
+ * Flawless Institution™ - Academy & Academic Progress Routes
+ * Fourways, Johannesburg, South Africa
  */
-import { Router, Request, Response, NextFunction } from 'express';
+import { Router, Request, Response } from 'express';
 import { academyService } from '../services/academy.service';
-import { authService } from '../services/auth.service';
-import { dbStore } from '../storage/inMemoryStore';
-import { validateBody } from '../middleware/errorHandler';
 import { requireAuth, requireRole } from '../middleware/auth.middleware';
-import { 
-  CourseCheckoutSchema, 
-  UpdateProgressSchema, 
-  ConferGraduationSchema 
-} from '../models/schemas';
 
 const router = Router();
 
-/**
- * GET /api/v1/academy/cohorts
- * Public/Dashboard endpoint: list all active academic cohorts and capacity metrics.
- */
-router.get('/cohorts', (_req: Request, res: Response, next: NextFunction) => {
+// POST /api/v1/academy/enrol
+router.post('/enrol', requireAuth, async (req: Request, res: Response): Promise<void> => {
   try {
-    const cohorts = dbStore.getCohorts();
-    res.status(200).json({
-      success: true,
-      count: cohorts.length,
-      data: cohorts,
+    const { courseId, cohortId, mode, studentPhone } = req.body;
+
+    if (!courseId || !cohortId || !mode) {
+      res.status(400).json({
+        success: false,
+        error: 'Missing required enrolment fields (courseId, cohortId, mode).',
+      });
+      return;
+    }
+
+    const enrolment = await academyService.enrolStudent({
+      studentId: req.user!.userId,
+      studentName: req.user!.fullName,
+      studentEmail: req.user!.email,
+      studentPhone: studentPhone || '+27',
+      courseId,
+      cohortId,
+      mode,
     });
-  } catch (err) {
-    next(err);
+
+    res.status(201).json({
+      success: true,
+      message: 'Enrolment created successfully. Please finalize tuition/registration payment.',
+      data: enrolment,
+    });
+  } catch (error: any) {
+    res.status(400).json({
+      success: false,
+      error: error.message || 'Failed to complete enrolment.',
+    });
   }
 });
 
-/**
- * GET /api/v1/academy/courses
- * Public/Dashboard endpoint: list all active academy courses.
- */
-router.get('/courses', (_req: Request, res: Response, next: NextFunction) => {
+// GET /api/v1/academy/my-enrolments
+router.get('/my-enrolments', requireAuth, async (req: Request, res: Response): Promise<void> => {
   try {
-    const courses = dbStore.getCourses();
+    const enrolments = await academyService.getStudentEnrolments(req.user!.userId);
     res.status(200).json({
       success: true,
-      count: courses.length,
-      data: courses,
-    });
-  } catch (err) {
-    next(err);
-  }
-});
-
-/**
- * GET /api/v1/academy/enrolments
- * Institutional registry endpoint: list all candidate enrolments across all cohorts.
- */
-router.get('/enrolments', (_req: Request, res: Response, next: NextFunction) => {
-  try {
-    const enrolments = dbStore.getAllEnrolments();
-    res.status(200).json({
-      success: true,
-      count: enrolments.length,
       data: enrolments,
     });
-  } catch (err) {
-    next(err);
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      error: error.message || 'Failed to fetch your enrolments.',
+    });
   }
 });
 
-// Optional auth helper to check if a bearer token is present during guest checkout
-function tryGetAuthenticatedUser(req: Request) {
-  const authHeader = req.headers.authorization;
-  if (authHeader && authHeader.startsWith('Bearer ')) {
-    const token = authHeader.split(' ')[1];
-    try {
-      return authService.verifyToken(token);
-    } catch {
-      return undefined;
-    }
-  }
-  return undefined;
-}
-
-/**
- * POST /api/v1/academy/checkout
- * Initiate enrolment for a course (Online or Fourways Physical Practical).
- */
-router.post(
-  '/checkout',
-  validateBody(CourseCheckoutSchema),
-  async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const user = tryGetAuthenticatedUser(req);
-      const result = await academyService.createEnrolmentCheckout({
-        ...req.body,
-        authenticatedUserId: user?.userId,
-      });
-
-      res.status(201).json({
-        success: true,
-        message: 'Course enrolment order created successfully. Please complete payment.',
-        data: result,
-      });
-    } catch (err) {
-      next(err);
-    }
-  }
-);
-
-/**
- * GET /api/v1/academy/my-courses
- * Student Portal endpoint: retrieve all enrolled courses for the authenticated student.
- */
-router.get('/my-courses', requireAuth, (req: Request, res: Response, next: NextFunction) => {
+// GET /api/v1/academy/enrolments/:id
+router.get('/enrolments/:id', requireAuth, async (req: Request, res: Response): Promise<void> => {
   try {
-    const enrolments = academyService.getStudentEnrolments(req.user!.userId, req.user!.email);
+    const enrolment = await academyService.getEnrolmentById(req.params.id);
+    if (!enrolment) {
+      res.status(404).json({ success: false, error: 'Enrolment record not found.' });
+      return;
+    }
+
+    // Authorization check: student can only view own enrolment unless staff
+    if (
+      req.user!.role === 'student' &&
+      enrolment.studentId !== req.user!.userId &&
+      enrolment.studentEmail !== req.user!.email
+    ) {
+      res.status(403).json({ success: false, error: 'Access denied to this academic record.' });
+      return;
+    }
 
     res.status(200).json({
       success: true,
-      count: enrolments.length,
-      data: enrolments,
+      data: enrolment,
     });
-  } catch (err) {
-    next(err);
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      error: error.message,
+    });
   }
 });
 
-/**
- * GET /api/v1/academy/enrolments/:id
- * Retrieve comprehensive syllabus modules, completion indicators, and academic standings.
- */
-router.get('/enrolments/:id', requireAuth, (req: Request, res: Response, next: NextFunction) => {
+// POST /api/v1/academy/enrolments/:id/progress
+router.post('/enrolments/:id/progress', requireAuth, async (req: Request, res: Response): Promise<void> => {
   try {
-    const isStaff = req.user!.role === 'super_admin' || req.user!.role === 'faculty';
-    const details = academyService.getEnrolmentDetails(req.params.id, req.user!.userId, isStaff);
+    const { moduleIndex } = req.body;
+    if (moduleIndex === undefined) {
+      res.status(400).json({ success: false, error: 'moduleIndex is required.' });
+      return;
+    }
 
+    const updated = await academyService.updateModuleProgress(req.params.id, Number(moduleIndex));
     res.status(200).json({
       success: true,
-      data: details,
+      message: 'Curriculum module progress updated successfully.',
+      data: updated,
     });
-  } catch (err) {
-    next(err);
+  } catch (error: any) {
+    res.status(400).json({
+      success: false,
+      error: error.message,
+    });
   }
 });
 
-/**
- * POST /api/v1/academy/enrolments/:id/progress
- * Update completion status for a specific syllabus module.
- */
+// POST /api/v1/academy/enrolments/:id/confer-graduation (Registrar / Admin only)
 router.post(
-  '/enrolments/:id/progress',
+  '/enrolments/:id/confer-graduation',
   requireAuth,
-  validateBody(UpdateProgressSchema),
-  (req: Request, res: Response, next: NextFunction) => {
+  requireRole(['super_admin', 'admin', 'faculty']),
+  async (req: Request, res: Response): Promise<void> => {
     try {
-      const isStaff = req.user!.role === 'super_admin' || req.user!.role === 'faculty';
-      const result = academyService.updateModuleProgress(
-        req.params.id,
-        req.body.moduleTitle,
-        req.body.completed,
-        req.user!.userId,
-        isStaff
-      );
-
+      const conferred = await academyService.conferGraduation(req.params.id);
       res.status(200).json({
         success: true,
-        message: 'Academic module progress updated successfully',
-        data: result,
+        message: 'Graduation credential conferred by the Registrar.',
+        data: conferred,
       });
-    } catch (err) {
-      next(err);
+    } catch (error: any) {
+      res.status(400).json({
+        success: false,
+        error: error.message,
+      });
     }
   }
 );
 
-/**
- * GET /api/v1/academy/graduation-roster
- * Institutional endpoint: retrieve candidates eligible for the Annual Fourways Graduation Ceremony.
- * Restricted to Faculty and Super Admin (Director).
- */
+// GET /api/v1/academy/enrolments/:id/verify-specimen
+router.get('/enrolments/:id/verify-specimen', async (req: Request, res: Response): Promise<void> => {
+  try {
+    const verification = await academyService.verifyGraduationSpecimen(req.params.id);
+    res.status(200).json({
+      success: true,
+      data: verification,
+    });
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      error: error.message,
+    });
+  }
+});
+
+// GET /api/v1/academy/admin/all-enrolments (Admin / Faculty)
 router.get(
-  '/graduation-roster',
+  '/admin/all-enrolments',
   requireAuth,
-  requireRole('super_admin', 'faculty'),
-  (_req: Request, res: Response, next: NextFunction) => {
+  requireRole(['super_admin', 'admin', 'faculty']),
+  async (req: Request, res: Response): Promise<void> => {
     try {
-      const roster = academyService.getGraduationRoster();
-
+      const all = await academyService.getAllEnrolments();
       res.status(200).json({
         success: true,
-        data: roster,
+        data: all,
       });
-    } catch (err) {
-      next(err);
+    } catch (error: any) {
+      res.status(500).json({
+        success: false,
+        error: error.message,
+      });
     }
   }
 );
 
-/**
- * POST /api/v1/academy/enrolments/:id/graduate
- * Institutional sign-off marking student as officially graduated.
- * Restricted to Faculty and Super Admin.
- */
-router.post(
-  '/enrolments/:id/graduate',
-  requireAuth,
-  requireRole('super_admin', 'faculty'),
-  validateBody(ConferGraduationSchema),
-  (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const result = academyService.conferGraduationStatus(
-        req.params.id,
-        req.body.instructorSignoffNotes,
-        req.body.honorsAwarded,
-        { fullName: req.user!.fullName, role: req.user!.role }
-      );
-
-      res.status(200).json(result);
-    } catch (err) {
-      next(err);
-    }
-  }
-);
-
-export const academyRoutes = router;
+export default router;

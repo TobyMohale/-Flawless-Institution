@@ -1,60 +1,83 @@
 /**
- * Flawless Institution™ - Course Catalog Routes
- * API Endpoint: /api/v1/catalog
+ * Flawless Institution™ - Public Catalog & Schedules Routes
+ * Fourways, Johannesburg, South Africa
  */
-import { Router, Request, Response, NextFunction } from 'express';
+import { Router, Request, Response } from 'express';
 import { catalogService } from '../services/catalog.service';
-import { AppError } from '../middleware/errorHandler';
 
 const router = Router();
 
-// GET /api/v1/catalog - Complete catalog overview & intake schedule
-router.get('/', (_req: Request, res: Response) => {
-  const summary = catalogService.getCatalogSummary();
-  res.status(200).json({
-    success: true,
-    data: summary,
-  });
-});
-
-// GET /api/v1/catalog/courses - Detailed list of all active courses
-router.get('/courses', (_req: Request, res: Response) => {
-  const courses = catalogService.getAllCourses();
-  res.status(200).json({
-    success: true,
-    count: courses.length,
-    data: courses,
-  });
-});
-
-// GET /api/v1/catalog/courses/:id - Single course with cohorts
-router.get('/courses/:id', (req: Request, res: Response, next: NextFunction) => {
-  const course = catalogService.getCourseById(req.params.id);
-  if (!course) {
-    return next(new AppError(`Course with ID '${req.params.id}' was not found`, 404, 'COURSE_NOT_FOUND'));
+// GET /api/v1/catalog/courses
+router.get('/courses', async (_req: Request, res: Response): Promise<void> => {
+  try {
+    const courses = await catalogService.getAllCourses();
+    res.status(200).json({
+      success: true,
+      data: courses,
+    });
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      error: error.message || 'Failed to load courses.',
+    });
   }
-
-  const cohorts = catalogService.getAvailableCohorts(req.params.id);
-
-  res.status(200).json({
-    success: true,
-    data: {
-      ...course,
-      cohorts,
-    },
-  });
 });
 
-// GET /api/v1/catalog/cohorts - All available Fourways physical & online cohorts
-router.get('/cohorts', (req: Request, res: Response) => {
-  const courseId = typeof req.query.courseId === 'string' ? req.query.courseId : undefined;
-  const cohorts = catalogService.getAvailableCohorts(courseId);
-
-  res.status(200).json({
-    success: true,
-    count: cohorts.length,
-    data: cohorts,
-  });
+// GET /api/v1/catalog/courses/:id
+router.get('/courses/:id', async (req: Request, res: Response): Promise<void> => {
+  try {
+    const course = await catalogService.getCourseById(req.params.id);
+    if (!course) {
+      res.status(404).json({ success: false, error: 'Course not found.' });
+      return;
+    }
+    res.status(200).json({
+      success: true,
+      data: course,
+    });
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      error: error.message,
+    });
+  }
 });
 
-export const catalogRoutes = router;
+// GET /api/v1/catalog/cohorts
+router.get('/cohorts', async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { courseId } = req.query;
+    const cohorts = await catalogService.getCohorts(courseId as string | undefined);
+    res.status(200).json({
+      success: true,
+      data: cohorts,
+    });
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      error: error.message || 'Failed to load intake schedules.',
+    });
+  }
+});
+
+// GET /api/v1/catalog/cohorts/:id
+router.get('/cohorts/:id', async (req: Request, res: Response): Promise<void> => {
+  try {
+    const cohort = await catalogService.getCohortById(req.params.id);
+    if (!cohort) {
+      res.status(404).json({ success: false, error: 'Cohort schedule not found.' });
+      return;
+    }
+    res.status(200).json({
+      success: true,
+      data: cohort,
+    });
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      error: error.message,
+    });
+  }
+});
+
+export default router;

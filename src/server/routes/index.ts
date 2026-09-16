@@ -3,13 +3,13 @@
  * Mounts all domain micro-routes
  */
 import { Router } from 'express';
-import { healthRoutes } from './health.routes';
-import { catalogRoutes } from './catalog.routes';
-import { authRoutes } from './auth.routes';
-import { academyRoutes } from './academy.routes';
-import { paymentRoutes } from './payment.routes';
-import { advisoryRoutes } from './advisory.routes';
-import { communicationsRoutes } from './communications.routes';
+import healthRoutes from './health.routes';
+import catalogRoutes from './catalog.routes';
+import authRoutes from './auth.routes';
+import academyRoutes from './academy.routes';
+import paymentRoutes from './payment.routes';
+import advisoryRoutes from './advisory.routes';
+import communicationsRoutes from './communications.routes';
 
 const apiRouter = Router();
 

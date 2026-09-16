@@ -17,6 +17,17 @@ export class SupabaseService {
   }
 
   /**
+   * Quick connection status summary
+   */
+  public getConnectionStatus(): { connected: boolean; configured: boolean; projectUrl?: string } {
+    return {
+      connected: this.isConfigured(),
+      configured: this.isConfigured(),
+      projectUrl: config.supabase.url,
+    };
+  }
+
+  /**
    * Lazy-initialized public client (using Anon Key)
    */
   public getClient(): SupabaseClient | null {
