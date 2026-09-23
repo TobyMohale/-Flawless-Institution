@@ -8,7 +8,7 @@ import { motion } from 'motion/react';
 import { INSTITUTIONAL_PILLARS, FOUNDATION_VALUES, SEPTEMBER_PHYSICAL_INTAKE, GRADUATION_INFO } from '../data/siteData';
 import { COURSES, Course } from '../data/coursesData';
 import { CourseCard } from '../components/CourseCard';
-import { BACKGROUND_IMAGES, HOMEPAGE_SKILLS_BACKGROUNDS, GalleryImage } from '../data/assetsData';
+import { BACKGROUND_IMAGES, HOMEPAGE_SKILLS_BACKGROUNDS, GalleryImage, INSTITUTION_LOGO } from '../data/assetsData';
 import { AnimatedCounter } from '../components/AnimatedCounter';
 import { ScrollReveal, Tilt3DCard, Floating3D } from '../components/MotionEffects';
 import { ImageLightboxModal } from '../components/ImageLightboxModal';
@@ -64,7 +64,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
       />
 
       {/* 1. HERO BANNER: British-Institutional Prestige with 4 Fully Visible Skills Background Images */}
-      <section className="relative overflow-hidden pt-16 pb-24 sm:pt-24 sm:pb-36 border-b border-[#d4af37]/20 bg-[#09090c]">
+      <section className="relative overflow-hidden pt-16 pb-24 sm:pt-24 sm:pb-36 border-b border-[#d4af37]/20 bg-gradient-to-b from-[#0a122a] via-[#091332] to-[#0a122a]">
         {/* FOUR PROFESSIONAL SKILLS BACKGROUND IMAGES (Fully Visible Panoramic Multi-Panel / Spotlight) */}
         <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none sm:pointer-events-auto">
           {activeSkillBgIndex !== null ? (
@@ -84,8 +84,8 @@ export const HomeView: React.FC<HomeViewProps> = ({
                 decoding="async"
                 className="w-full h-full object-cover object-center brightness-[0.88] contrast-[1.05]"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#09090c] via-black/40 to-[#09090c]/70"></div>
-              <div className="absolute inset-0 bg-gradient-to-r from-[#09090c]/85 via-black/30 to-[#09090c]/85"></div>
+              <div className="absolute inset-0 bg-gradient-to-t from-[#0a122a] via-[#0a122a]/50 to-[#0a122a]/75"></div>
+              <div className="absolute inset-0 bg-gradient-to-r from-[#0a122a]/90 via-[#0a122a]/40 to-[#0a122a]/90"></div>
             </motion.div>
           ) : (
             /* All 4 Professional Skills Images Displayed Side-by-Side in Full Visibility */
@@ -106,11 +106,11 @@ export const HomeView: React.FC<HomeViewProps> = ({
                     className="w-full h-full object-cover object-center group-hover/panel:scale-105 transition-transform duration-700 brightness-[0.82] group-hover/panel:brightness-95 contrast-[1.05]"
                   />
                   {/* Fine transparent overlay for legibility while keeping photos crisp and clear */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#09090c] via-black/30 to-[#09090c]/65 group-hover/panel:bg-black/20 transition-colors"></div>
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#0a122a] via-[#0a122a]/40 to-[#0a122a]/70 group-hover/panel:bg-[#0a122a]/30 transition-colors"></div>
 
                   {/* Panel Identifier Badge */}
                   <div className="absolute bottom-2 sm:bottom-4 left-1.5 sm:left-2.5 right-1.5 sm:right-2.5 flex items-center justify-between z-10 pointer-events-none">
-                    <span className="px-1.5 sm:px-2.5 py-0.5 sm:py-1 rounded text-[8px] sm:text-[10px] font-cinzel font-semibold bg-black/85 border border-[#d4af37]/50 text-[#f3e1a9] backdrop-blur-sm shadow-lg line-clamp-1 max-w-[80%]">
+                    <span className="px-1.5 sm:px-2.5 py-0.5 sm:py-1 rounded text-[8px] sm:text-[10px] font-cinzel font-semibold bg-[#0a122a]/90 border border-[#d4af37]/50 text-[#f3e1a9] backdrop-blur-sm shadow-lg line-clamp-1 max-w-[80%]">
                       {skill.title}
                     </span>
                     <span className="w-4 h-4 sm:w-5 sm:h-5 rounded-full bg-[#d4af37]/90 text-black flex items-center justify-center text-[9px] sm:text-[10px] font-bold shadow-md shrink-0">
@@ -123,8 +123,8 @@ export const HomeView: React.FC<HomeViewProps> = ({
           )}
 
           {/* Vignette Gradients for Text Contrast */}
-          <div className="absolute inset-0 bg-gradient-to-t from-[#09090c] via-transparent to-[#09090c]/60 pointer-events-none"></div>
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,rgba(9,9,12,0.6)_100%)] pointer-events-none"></div>
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0a122a] via-transparent to-[#0a122a]/70 pointer-events-none"></div>
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,rgba(10,18,42,0.65)_100%)] pointer-events-none"></div>
         </div>
 
         {/* Subtle Gold Aura Grid Accent */}
@@ -132,9 +132,16 @@ export const HomeView: React.FC<HomeViewProps> = ({
         <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[350px] bg-[#d4af37]/10 blur-[140px] rounded-full pointer-events-none z-0"></div>
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-8">
-          {/* Institution Header Tag */}
+          {/* Institution Header Tag with Official Crest Emblem */}
           <ScrollReveal direction="down" duration={0.6}>
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#17171d]/90 backdrop-blur-md border border-[#d4af37]/40 shadow-xl shadow-black/60">
+            <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-[#0a1432]/95 backdrop-blur-md border border-[#d4af37]/45 shadow-xl shadow-[#040816]/80">
+              <div className="w-6 h-6 rounded-md overflow-hidden border border-[#d4af37]/40 shrink-0 bg-[#0a122a]">
+                <img 
+                  src={INSTITUTION_LOGO.url} 
+                  alt="Flawless Institution Official Crest"
+                  className="w-full h-full object-contain"
+                />
+              </div>
               <span className="w-2 h-2 rounded-full bg-[#d4af37] animate-pulse"></span>
               <span className="text-xs font-semibold uppercase tracking-widest text-[#f3e1a9] font-cinzel">
                 Flawless Institution • Established 2016
@@ -157,13 +164,13 @@ export const HomeView: React.FC<HomeViewProps> = ({
 
           {/* Interactive 4-Skills Background View Switcher */}
           <ScrollReveal direction="up" delay={0.15}>
-            <div className="inline-flex flex-wrap items-center justify-center gap-1.5 p-1.5 rounded-2xl bg-[#111116]/90 backdrop-blur-md border border-[#d4af37]/40 shadow-2xl max-w-3xl mx-auto">
+            <div className="inline-flex flex-wrap items-center justify-center gap-1.5 p-1.5 rounded-2xl bg-[#0a1432]/95 backdrop-blur-md border border-[#d4af37]/40 shadow-2xl max-w-3xl mx-auto">
               <button
                 onClick={() => setActiveSkillBgIndex(null)}
                 className={`px-3 py-1.5 rounded-xl text-xs font-cinzel font-semibold transition-all ${
                   activeSkillBgIndex === null
                     ? 'bg-[#d4af37] text-black shadow-md'
-                    : 'text-neutral-300 hover:text-white hover:bg-neutral-800/80'
+                    : 'text-neutral-300 hover:text-white hover:bg-[#0e1d4d]'
                 }`}
               >
                 All 4 Skills Visible
@@ -175,7 +182,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
                   className={`px-3 py-1.5 rounded-xl text-xs font-cinzel font-semibold transition-all flex items-center gap-1.5 ${
                     activeSkillBgIndex === idx
                       ? 'bg-[#d4af37] text-black shadow-md'
-                      : 'text-neutral-300 hover:text-white hover:bg-neutral-800/80'
+                      : 'text-neutral-300 hover:text-white hover:bg-[#0e1d4d]'
                   }`}
                 >
                   <span className="w-1.5 h-1.5 rounded-full bg-[#d4af37] inline-block"></span>
@@ -208,7 +215,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
               <button
                 onClick={() => setCurrentView('physical-classes')}
                 id="hero-physical-classes-btn"
-                className="w-full sm:w-auto py-3.5 px-6 rounded-xl text-xs sm:text-sm font-bold bg-[#161622] hover:bg-[#1e1e2d] text-[#f3e1a9] border border-[#d4af37]/60 hover:border-[#d4af37] transition-all flex items-center justify-center gap-2 shadow-lg active:scale-95"
+                className="w-full sm:w-auto py-3.5 px-6 rounded-xl text-xs sm:text-sm font-bold bg-[#0b173c] hover:bg-[#0f1f4e] text-[#f3e1a9] border border-[#d4af37]/60 hover:border-[#d4af37] transition-all flex items-center justify-center gap-2 shadow-lg active:scale-95"
               >
                 <MapPin className="w-4 h-4 text-[#d4af37]" />
                 <span>Fourways Physical Classes</span>
@@ -217,7 +224,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
               <button
                 onClick={() => setCurrentView('household-professionals')}
                 id="hero-services-btn"
-                className="w-full sm:w-auto py-3.5 px-6 rounded-xl text-xs sm:text-sm font-semibold text-neutral-200 hover:text-white bg-[#14141b]/90 backdrop-blur-md border border-neutral-700 hover:border-[#d4af37]/50 transition-all flex items-center justify-center gap-2 shadow-lg active:scale-95"
+                className="w-full sm:w-auto py-3.5 px-6 rounded-xl text-xs sm:text-sm font-semibold text-neutral-200 hover:text-white bg-[#0a1432]/90 backdrop-blur-md border border-[#1a2c5a] hover:border-[#d4af37]/50 transition-all flex items-center justify-center gap-2 shadow-lg active:scale-95"
               >
                 <Users className="w-4 h-4 text-[#d4af37]" />
                 <span>Staffing & Placements</span>
@@ -227,38 +234,38 @@ export const HomeView: React.FC<HomeViewProps> = ({
 
           {/* Metric Bar with 3D Float and Hover Interactivity */}
           <ScrollReveal direction="3d-flip" delay={0.4}>
-            <div className="pt-8 grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto border-t border-neutral-800/80 text-center">
+            <div className="pt-8 grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto border-t border-[#1a2c5a]/80 text-center">
               <Tilt3DCard maxTilt={8} glareOpacity={0.15}>
-                <div className="p-4 bg-[#111116]/85 backdrop-blur-md rounded-xl border border-neutral-800/80 transition-all hover:border-[#d4af37]/50 hover:bg-[#15151c] shadow-lg">
+                <div className="p-4 bg-[#0a1432]/85 backdrop-blur-md rounded-xl border border-[#1a2c5a] transition-all hover:border-[#d4af37]/50 hover:bg-[#0e1d4d] shadow-lg">
                   <div className="font-cinzel text-2xl sm:text-3xl font-bold text-white">
                     <AnimatedCounter to={16} suffix="+" duration={1800} />
                   </div>
-                  <div className="text-[11px] text-neutral-400 uppercase tracking-wider mt-1">Years Industry Experience</div>
+                  <div className="text-[11px] text-neutral-300 uppercase tracking-wider mt-1">Years Industry Experience</div>
                 </div>
               </Tilt3DCard>
 
               <Tilt3DCard maxTilt={8} glareOpacity={0.15}>
-                <div className="p-4 bg-[#111116]/85 backdrop-blur-md rounded-xl border border-neutral-800/80 transition-all hover:border-[#d4af37]/50 hover:bg-[#15151c] shadow-lg">
+                <div className="p-4 bg-[#0a1432]/85 backdrop-blur-md rounded-xl border border-[#1a2c5a] transition-all hover:border-[#d4af37]/50 hover:bg-[#0e1d4d] shadow-lg">
                   <div className="font-cinzel text-2xl sm:text-3xl font-bold text-[#f3e1a9]">
                     <AnimatedCounter from={2000} to={2016} duration={2000} useGrouping={false} />
                   </div>
-                  <div className="text-[11px] text-neutral-400 uppercase tracking-wider mt-1">Year Established</div>
+                  <div className="text-[11px] text-neutral-300 uppercase tracking-wider mt-1">Year Established</div>
                 </div>
               </Tilt3DCard>
 
               <Tilt3DCard maxTilt={8} glareOpacity={0.15}>
-                <div className="p-4 bg-[#111116]/85 backdrop-blur-md rounded-xl border border-neutral-800/80 transition-all hover:border-[#d4af37]/50 hover:bg-[#15151c] shadow-lg">
+                <div className="p-4 bg-[#0a1432]/85 backdrop-blur-md rounded-xl border border-[#1a2c5a] transition-all hover:border-[#d4af37]/50 hover:bg-[#0e1d4d] shadow-lg">
                   <div className="font-cinzel text-2xl sm:text-3xl font-bold text-white">
                     <AnimatedCounter to={20} suffix="+" duration={1800} />
                   </div>
-                  <div className="text-[11px] text-neutral-400 uppercase tracking-wider mt-1">Professional Programmes</div>
+                  <div className="text-[11px] text-neutral-300 uppercase tracking-wider mt-1">Professional Programmes</div>
                 </div>
               </Tilt3DCard>
 
               <Tilt3DCard maxTilt={8} glareOpacity={0.15}>
-                <div className="p-4 bg-[#111116]/85 backdrop-blur-md rounded-xl border border-neutral-800/80 transition-all hover:border-[#d4af37]/50 hover:bg-[#15151c] shadow-lg">
+                <div className="p-4 bg-[#0a1432]/85 backdrop-blur-md rounded-xl border border-[#1a2c5a] transition-all hover:border-[#d4af37]/50 hover:bg-[#0e1d4d] shadow-lg">
                   <div className="font-cinzel text-2xl sm:text-3xl font-bold text-[#f3e1a9]">Fourways</div>
-                  <div className="text-[11px] text-neutral-400 uppercase tracking-wider mt-1">Annual Graduation Hub</div>
+                  <div className="text-[11px] text-neutral-300 uppercase tracking-wider mt-1">Annual Graduation Hub</div>
                 </div>
               </Tilt3DCard>
             </div>
@@ -269,8 +276,8 @@ export const HomeView: React.FC<HomeViewProps> = ({
       {/* 2. CORE SKILLS & SERVICES IN ACTION (4 Flagship Disciplines Showcase) */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <ScrollReveal direction="up">
-          <div className="bg-[#101016] border border-[#d4af37]/40 rounded-3xl p-6 sm:p-10 shadow-2xl space-y-8">
-            <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-neutral-800 pb-5">
+          <div className="bg-[#08112a] border border-[#d4af37]/35 rounded-3xl p-6 sm:p-10 shadow-2xl space-y-8">
+            <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-[#1a2c5a] pb-5">
               <div>
                 <div className="inline-flex items-center gap-2 text-xs uppercase font-bold text-[#d4af37] tracking-widest font-cinzel">
                   <Award className="w-4 h-4 text-[#d4af37]" /> Core Skills & Services
@@ -282,7 +289,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
                   Certified through rigorous curriculum, hands-on Fourways practicum simulations, and placed in premier households and corporate enterprises.
                 </p>
               </div>
-              <div className="text-xs font-mono text-[#f3e1a9] bg-neutral-900 border border-neutral-800 px-3 py-1.5 rounded-lg self-start sm:self-auto">
+              <div className="text-xs font-mono text-[#f3e1a9] bg-[#0a122a] border border-[#1a2c5a] px-3 py-1.5 rounded-lg self-start sm:self-auto">
                 4 Core Career Pathways
               </div>
             </div>
@@ -292,7 +299,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
               {HOMEPAGE_SKILLS_BACKGROUNDS.map((skill, idx) => (
                 <div
                   key={skill.id}
-                  className="group relative rounded-2xl overflow-hidden border border-neutral-800 hover:border-[#d4af37] bg-[#14141c] shadow-xl flex flex-col justify-between transition-all duration-300 hover:-translate-y-1.5"
+                  className="group relative rounded-2xl overflow-hidden border border-[#1a2c5a] hover:border-[#d4af37] bg-[#0a1432] shadow-xl flex flex-col justify-between transition-all duration-300 hover:-translate-y-1.5"
                 >
                   {/* Fully Visible 16:9 Image */}
                   <div 
@@ -310,7 +317,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
                     <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-60 group-hover:opacity-30 transition-opacity"></div>
                     
                     {/* Tag badge */}
-                    <span className="absolute top-2.5 left-2.5 px-2.5 py-1 rounded-md text-[10px] font-mono bg-black/85 border border-neutral-700 text-[#f3e1a9]">
+                    <span className="absolute top-2.5 left-2.5 px-2.5 py-1 rounded-md text-[10px] font-mono bg-[#0a122a]/90 border border-[#1a2c5a] text-[#f3e1a9]">
                       {skill.tag}
                     </span>
 
@@ -336,18 +343,18 @@ export const HomeView: React.FC<HomeViewProps> = ({
                       <p className="text-xs text-[#d4af37] font-medium">
                         {skill.subtitle}
                       </p>
-                      <p className="text-xs text-neutral-400 line-clamp-2 leading-relaxed">
+                      <p className="text-xs text-neutral-300 line-clamp-2 leading-relaxed">
                         {skill.description}
                       </p>
                     </div>
 
-                    <div className="pt-3 border-t border-neutral-800/80 flex items-center gap-2">
+                    <div className="pt-3 border-t border-[#1a2c5a]/80 flex items-center gap-2">
                       <button
                         onClick={() => {
                           const targetCourse = COURSES.find(c => c.id === skill.courseId);
                           if (targetCourse) onSelectCourse(targetCourse);
                         }}
-                        className="flex-1 py-2 px-3 rounded-lg text-xs font-semibold bg-neutral-900 border border-neutral-700 text-neutral-200 hover:text-white hover:border-[#d4af37]/60 transition-all text-center"
+                        className="flex-1 py-2 px-3 rounded-lg text-xs font-semibold bg-[#0a122a] border border-[#1a2c5a] text-neutral-200 hover:text-white hover:border-[#d4af37]/60 transition-all text-center"
                       >
                         Syllabus
                       </button>
@@ -364,6 +371,78 @@ export const HomeView: React.FC<HomeViewProps> = ({
                   </div>
                 </div>
               ))}
+            </div>
+          </div>
+        </ScrollReveal>
+      </section>
+
+      {/* INSTITUTIONAL CREST & HERITAGE SHOWCASE */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <ScrollReveal direction="up">
+          <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-[#0a122a] via-[#0b173c] to-[#0a122a] border-2 border-[#d4af37]/45 shadow-2xl p-6 sm:p-12">
+            {/* Subtle background radial glow */}
+            <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-96 h-96 bg-[#d4af37]/10 rounded-full blur-[100px] pointer-events-none"></div>
+            
+            <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+              {/* Crest Image Presentation */}
+              <div className="lg:col-span-5 flex justify-center">
+                <div className="relative group max-w-sm sm:max-w-md w-full">
+                  <div className="absolute -inset-1 rounded-2xl bg-gradient-to-r from-[#d4af37]/60 via-[#f3e1a9]/40 to-[#d4af37]/60 blur-md opacity-60 group-hover:opacity-100 transition duration-700"></div>
+                  <div className="relative rounded-2xl overflow-hidden border-2 border-[#d4af37]/70 bg-[#0a122a] shadow-2xl p-2">
+                    <img 
+                      src={INSTITUTION_LOGO.url} 
+                      alt="Flawless Institution Official Crest Seal — Empowering People, Developing Professionals, Transforming Futures" 
+                      className="w-full h-auto object-cover rounded-xl transform group-hover:scale-102 transition-transform duration-700"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Crest Narrative & Institutional Authority */}
+              <div className="lg:col-span-7 space-y-5">
+                <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#0a1432] border border-[#d4af37]/40 text-[#f3e1a9] text-xs font-cinzel font-semibold tracking-wider uppercase">
+                  <ShieldCheck className="w-4 h-4 text-[#d4af37]" /> Official Institutional Seal & Crest
+                </div>
+
+                <h3 className="font-cinzel text-2xl sm:text-4xl font-bold text-white tracking-tight leading-tight">
+                  Where Excellence Becomes <br className="hidden sm:inline" />
+                  <span className="gold-gradient-text">Your Institutional Standard</span>
+                </h3>
+
+                <p className="text-sm sm:text-base text-neutral-200 font-serif italic leading-relaxed">
+                  “Empowering People. • Developing Professionals. • Transforming Futures.”
+                </p>
+
+                <p className="text-xs sm:text-sm text-neutral-300 leading-relaxed">
+                  The Flawless Institution Coat of Arms represents our private professional education accreditation, elite household advisory heritage, and faith-driven stewardship established in 2016. Every graduate carries the distinction of our hallmark across South Africa and international estates.
+                </p>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+                  <div className="flex items-center gap-2.5 p-3 rounded-xl bg-[#0a1432]/80 border border-[#1a2c5a]">
+                    <Sparkles className="w-4 h-4 text-[#d4af37] shrink-0" />
+                    <span className="text-xs text-neutral-200">Registered Private Professional Academy</span>
+                  </div>
+                  <div className="flex items-center gap-2.5 p-3 rounded-xl bg-[#0a1432]/80 border border-[#1a2c5a]">
+                    <GraduationCap className="w-4 h-4 text-[#d4af37] shrink-0" />
+                    <span className="text-xs text-neutral-200">Official Graduation Ceremonies</span>
+                  </div>
+                </div>
+
+                <div className="pt-2 flex flex-wrap gap-3">
+                  <button
+                    onClick={() => setCurrentView('about-institution')}
+                    className="py-2.5 px-5 rounded-xl text-xs font-bold bg-[#d4af37] text-black hover:bg-[#f3e1a9] transition-all font-cinzel uppercase tracking-wider shadow-lg active:scale-95"
+                  >
+                    Explore Institutional Identity
+                  </button>
+                  <button
+                    onClick={() => setCurrentView('academy')}
+                    className="py-2.5 px-5 rounded-xl text-xs font-semibold text-[#f3e1a9] bg-[#0a1432] border border-[#d4af37]/50 hover:bg-[#0e1d4d] transition-all active:scale-95"
+                  >
+                    View Accredited Programmes
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         </ScrollReveal>
@@ -390,7 +469,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
             <ScrollReveal key={idx} direction="up" delay={idx * 0.15}>
               <Tilt3DCard maxTilt={8} glareOpacity={0.15} className="h-full">
                 <div
-                  className="h-full bg-[#111116] border border-neutral-800 hover:border-[#d4af37]/60 rounded-2xl p-7 transition-colors duration-300 flex flex-col justify-between group shadow-xl hover:shadow-[#d4af37]/10"
+                  className="h-full bg-[#0a1432] border border-[#1a2c5a] hover:border-[#d4af37]/60 rounded-2xl p-7 transition-colors duration-300 flex flex-col justify-between group shadow-xl hover:shadow-[#d4af37]/10"
                   id={`pillar-card-${pillar.title.toLowerCase()}`}
                 >
                   <div className="space-y-4">
@@ -411,10 +490,10 @@ export const HomeView: React.FC<HomeViewProps> = ({
                       {pillar.description}
                     </p>
 
-                    <div className="pt-2 border-t border-neutral-800/80 space-y-2">
+                    <div className="pt-2 border-t border-[#1a2c5a]/80 space-y-2">
                       <div className="text-[10px] uppercase tracking-wider text-neutral-400 font-semibold">Core Solutions:</div>
                       {pillar.deliverables.map((item, itemIdx) => (
-                        <div key={itemIdx} className="flex items-center gap-2 text-xs text-neutral-400">
+                        <div key={itemIdx} className="flex items-center gap-2 text-xs text-neutral-300">
                           <span className="w-1.5 h-1.5 rounded-full bg-[#d4af37]"></span>
                           <span>{item}</span>
                         </div>
@@ -425,7 +504,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
                   <div className="pt-6">
                     <button
                       onClick={() => setCurrentView(pillar.link)}
-                      className="w-full py-2.5 px-4 rounded-xl text-xs font-semibold text-neutral-200 bg-[#16161f] border border-neutral-700 hover:border-[#d4af37] hover:text-[#f3e1a9] transition-all flex items-center justify-center gap-1.5 active:scale-95"
+                      className="w-full py-2.5 px-4 rounded-xl text-xs font-semibold text-neutral-200 bg-[#0a122a] border border-[#1a2c5a] hover:border-[#d4af37] hover:text-[#f3e1a9] transition-all flex items-center justify-center gap-1.5 active:scale-95"
                     >
                       <span>Explore {pillar.title} Services</span>
                       <ArrowRight className="w-3.5 h-3.5" />
@@ -441,7 +520,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
       {/* 3. SEPTEMBER PHYSICAL INTAKE CALLOUT */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <ScrollReveal direction="scale" duration={0.8}>
-          <div className="bg-gradient-to-r from-[#17140e] via-[#241e12] to-[#17140e] border border-[#d4af37]/40 rounded-3xl p-6 sm:p-10 shadow-2xl relative overflow-hidden">
+          <div className="bg-gradient-to-r from-[#0a122a] via-[#0b173c] to-[#0a122a] border border-[#d4af37]/40 rounded-3xl p-6 sm:p-10 shadow-2xl relative overflow-hidden">
             <div className="absolute top-0 right-0 transform translate-x-12 -translate-y-12 w-64 h-64 bg-[#d4af37]/10 rounded-full blur-3xl pointer-events-none"></div>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-center">
@@ -478,7 +557,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
                 </div>
               </div>
 
-              <div className="bg-[#0e0e13]/90 border border-[#d4af37]/30 rounded-2xl p-6 text-center space-y-4 backdrop-blur-md shadow-xl">
+              <div className="bg-[#070f28]/95 border border-[#d4af37]/35 rounded-2xl p-6 text-center space-y-4 backdrop-blur-md shadow-xl">
                 <div className="text-xs text-[#f3e1a9] font-cinzel uppercase tracking-wider font-bold">
                   Physical Seat Reservation
                 </div>
@@ -546,7 +625,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
       {/* 5. ABOUT FLAWLESS INSTITUTION */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <ScrollReveal direction="up">
-          <div className="relative overflow-hidden bg-[#101016] border border-[#d4af37]/40 rounded-3xl p-6 sm:p-12 shadow-2xl space-y-8">
+          <div className="relative overflow-hidden bg-[#08112a] border border-[#d4af37]/40 rounded-3xl p-6 sm:p-12 shadow-2xl space-y-8">
             {/* Subtle background stage image */}
             <div className="absolute inset-0 z-0 pointer-events-none">
               <img 
@@ -555,10 +634,10 @@ export const HomeView: React.FC<HomeViewProps> = ({
                 referrerPolicy="no-referrer"
                 className="w-full h-full object-cover object-center opacity-10"
               />
-              <div className="absolute inset-0 bg-gradient-to-r from-[#101016] via-[#101016]/90 to-[#101016]/80"></div>
+              <div className="absolute inset-0 bg-gradient-to-r from-[#08112a] via-[#08112a]/90 to-[#08112a]/80"></div>
             </div>
 
-            <div className="relative z-10 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 border-b border-neutral-800/80 pb-8">
+            <div className="relative z-10 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 border-b border-[#1a2c5a] pb-8">
               <div className="space-y-2 max-w-2xl">
                 <div className="inline-flex items-center gap-2 text-xs uppercase font-bold text-[#d4af37] tracking-widest font-cinzel">
                   <Award className="w-3.5 h-3.5" /> About The Institution
@@ -585,13 +664,13 @@ export const HomeView: React.FC<HomeViewProps> = ({
 
             <div className="relative z-10 grid grid-cols-1 md:grid-cols-3 gap-6">
               <Tilt3DCard maxTilt={6} glareOpacity={0.12} className="h-full">
-                <div className="h-full bg-[#15151e]/90 backdrop-blur-md p-5 rounded-xl border border-neutral-800 hover:border-[#d4af37]/50 transition-colors flex flex-col justify-between shadow-lg">
+                <div className="h-full bg-[#0a1432]/90 backdrop-blur-md p-5 rounded-xl border border-[#1a2c5a] hover:border-[#d4af37]/50 transition-colors flex flex-col justify-between shadow-lg">
                   <div>
                     <div className="w-10 h-10 rounded-full bg-[#d4af37]/10 flex items-center justify-center mb-4 border border-[#d4af37]/20">
                       <GraduationCap className="w-5 h-5 text-[#d4af37]" />
                     </div>
                     <h4 className="font-cinzel text-base font-bold text-white mb-1.5">World-Class Academy</h4>
-                    <p className="text-xs text-neutral-400 leading-relaxed">
+                    <p className="text-xs text-neutral-300 leading-relaxed">
                       Rigorous, practical training programmes designed to equip professionals with top-tier skills in hospitality, caregiving, and household management.
                     </p>
                   </div>
@@ -599,13 +678,13 @@ export const HomeView: React.FC<HomeViewProps> = ({
               </Tilt3DCard>
 
               <Tilt3DCard maxTilt={6} glareOpacity={0.12} className="h-full">
-                <div className="h-full bg-[#15151e]/90 backdrop-blur-md p-5 rounded-xl border border-neutral-800 hover:border-[#d4af37]/50 transition-colors flex flex-col justify-between shadow-lg">
+                <div className="h-full bg-[#0a1432]/90 backdrop-blur-md p-5 rounded-xl border border-[#1a2c5a] hover:border-[#d4af37]/50 transition-colors flex flex-col justify-between shadow-lg">
                   <div>
                     <div className="w-10 h-10 rounded-full bg-[#d4af37]/10 flex items-center justify-center mb-4 border border-[#d4af37]/20">
                       <Users className="w-5 h-5 text-[#d4af37]" />
                     </div>
                     <h4 className="font-cinzel text-base font-bold text-white mb-1.5">Elite Staffing</h4>
-                    <p className="text-xs text-neutral-400 leading-relaxed">
+                    <p className="text-xs text-neutral-300 leading-relaxed">
                       Connecting private residences and corporate clients with thoroughly vetted, highly trained personnel who understand the nuances of luxury service.
                     </p>
                   </div>
@@ -613,13 +692,13 @@ export const HomeView: React.FC<HomeViewProps> = ({
               </Tilt3DCard>
 
               <Tilt3DCard maxTilt={6} glareOpacity={0.12} className="h-full">
-                <div className="h-full bg-[#15151e]/90 backdrop-blur-md p-5 rounded-xl border border-neutral-800 hover:border-[#d4af37]/50 transition-colors flex flex-col justify-between shadow-lg">
+                <div className="h-full bg-[#0a1432]/90 backdrop-blur-md p-5 rounded-xl border border-[#1a2c5a] hover:border-[#d4af37]/50 transition-colors flex flex-col justify-between shadow-lg">
                   <div>
                     <div className="w-10 h-10 rounded-full bg-[#d4af37]/10 flex items-center justify-center mb-4 border border-[#d4af37]/20">
                       <Briefcase className="w-5 h-5 text-[#d4af37]" />
                     </div>
                     <h4 className="font-cinzel text-base font-bold text-white mb-1.5">Enterprise Advisory</h4>
-                    <p className="text-xs text-neutral-400 leading-relaxed">
+                    <p className="text-xs text-neutral-300 leading-relaxed">
                       Consulting services that help emerging businesses and established households streamline their operations and human resource management.
                     </p>
                   </div>
@@ -651,13 +730,13 @@ export const HomeView: React.FC<HomeViewProps> = ({
             <ScrollReveal key={idx} direction="up" delay={idx * 0.08}>
               <Tilt3DCard maxTilt={5} glareOpacity={0.08} className="h-full">
                 <div
-                  className="h-full bg-[#111116] border border-neutral-800 hover:border-[#d4af37]/40 rounded-2xl p-6 space-y-3 transition-colors shadow-lg"
+                  className="h-full bg-[#0a1432] border border-[#1a2c5a] hover:border-[#d4af37]/40 rounded-2xl p-6 space-y-3 transition-colors shadow-lg"
                 >
                   <div className="flex items-center justify-between">
                     <span className="font-cinzel text-lg font-bold text-[#f3e1a9]">
                       {val.title}
                     </span>
-                    <span className="text-[10px] text-neutral-500 font-mono">0{idx + 1}</span>
+                    <span className="text-[10px] text-neutral-400 font-mono">0{idx + 1}</span>
                   </div>
                   <p className="text-xs text-neutral-300 leading-relaxed">
                     {val.desc}

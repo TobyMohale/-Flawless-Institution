@@ -5,6 +5,7 @@ import {
   ShieldCheck, UserCheck, Lock, Crown, Download, BookmarkCheck
 } from 'lucide-react';
 import { PWAInstallButton } from './PWAInstallButton';
+import { INSTITUTION_LOGO } from '../data/assetsData';
 
 interface NavbarProps {
   currentView: string;
@@ -44,9 +45,9 @@ export const Navbar: React.FC<NavbarProps> = ({
   };
 
   return (
-    <header className="sticky top-0 z-40 w-full bg-[#0a0a0c]/95 backdrop-blur-md border-b border-[#d4af37]/20 transition-all">
+    <header className="sticky top-0 z-40 w-full bg-[#0a122a]/95 backdrop-blur-md border-b border-[#d4af37]/25 transition-all">
       {/* Top Banner for Intake & Quick Contact */}
-      <div className="bg-gradient-to-r from-[#14120c] via-[#241e12] to-[#14120c] border-b border-[#d4af37]/15 py-1.5 px-4 text-xs font-sans-body">
+      <div className="bg-gradient-to-r from-[#040816] via-[#0b173c] to-[#040816] border-b border-[#d4af37]/20 py-1.5 px-4 text-xs font-sans-body">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2 text-neutral-300">
           <div className="flex items-center gap-2 text-center sm:text-left flex-wrap">
             <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold bg-[#d4af37] text-black tracking-wider uppercase">
@@ -98,11 +99,12 @@ export const Navbar: React.FC<NavbarProps> = ({
             className="cursor-pointer flex items-center gap-3 group"
             id="brand-logo-button"
           >
-            <div className="w-11 h-11 rounded-lg bg-gradient-to-br from-[#d4af37] via-[#c5a059] to-[#8f7023] p-[1.5px] shadow-lg shadow-[#d4af37]/10 flex items-center justify-center transition-transform group-hover:scale-105">
-              <div className="w-full h-full bg-[#0d0d10] rounded-[7px] flex flex-col items-center justify-center">
-                <span className="font-cinzel text-lg font-bold text-[#f3e1a9] leading-none">FI</span>
-                <span className="text-[8px] text-[#c5a059] tracking-widest leading-none mt-0.5">2016</span>
-              </div>
+            <div className="relative w-12 h-12 rounded-lg overflow-hidden border border-[#d4af37]/45 shadow-lg shadow-[#040816]/70 flex items-center justify-center transition-transform group-hover:scale-105 bg-[#0a122a] shrink-0 p-0.5">
+              <img 
+                src={INSTITUTION_LOGO.url} 
+                alt={INSTITUTION_LOGO.alt} 
+                className="w-full h-full object-contain"
+              />
             </div>
             <div className="flex flex-col">
               <div className="flex items-center gap-1.5">
@@ -113,7 +115,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   INSTITUTION
                 </span>
               </div>
-              <span className="text-[10px] text-neutral-400 tracking-wider font-light hidden sm:block">
+              <span className="text-[10px] text-neutral-300 tracking-wider font-light hidden sm:block">
                 People • Homes • Businesses
               </span>
             </div>
@@ -152,7 +154,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               {aboutDropdownOpen && (
                 <div 
                   onMouseLeave={() => setAboutDropdownOpen(false)}
-                  className="absolute left-0 mt-1 w-64 bg-[#111115] border border-[#d4af37]/30 rounded-lg shadow-2xl p-2 z-50 animate-in fade-in slide-in-from-top-2 duration-150"
+                  className="absolute left-0 mt-1 w-64 bg-[#0a1432] border border-[#d4af37]/35 rounded-lg shadow-2xl shadow-[#040816]/80 p-2 z-50 animate-in fade-in slide-in-from-top-2 duration-150"
                 >
                   <button
                     onClick={() => navigateTo('about-founder')}
@@ -166,7 +168,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                       Our Story, Faith, 16+ Years Experience
                     </div>
                   </button>
-                  <div className="my-1 border-t border-neutral-800"></div>
+                  <div className="my-1 border-t border-[#1a2c5a]"></div>
                   <button
                     onClick={() => navigateTo('about-institution')}
                     id="dropdown-link-institution"
@@ -202,7 +204,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               {servicesDropdownOpen && (
                 <div 
                   onMouseLeave={() => setServicesDropdownOpen(false)}
-                  className="absolute left-0 mt-1 w-64 bg-[#111115] border border-[#d4af37]/30 rounded-lg shadow-2xl p-2 z-50 animate-in fade-in slide-in-from-top-2 duration-150"
+                  className="absolute left-0 mt-1 w-64 bg-[#0a1432] border border-[#d4af37]/35 rounded-lg shadow-2xl shadow-[#040816]/80 p-2 z-50 animate-in fade-in slide-in-from-top-2 duration-150"
                 >
                   <button
                     onClick={() => navigateTo('household-advisory')}
@@ -252,7 +254,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                       Individual Training & Development
                     </div>
                   </button>
-                  <div className="my-1 border-t border-neutral-800"></div>
+                  <div className="my-1 border-t border-[#1a2c5a]"></div>
                   <button
                     onClick={() => navigateTo('enterprise')}
                     id="dropdown-link-enterprise"
@@ -289,7 +291,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 id="nav-link-academy"
                 className={`px-3 py-2 rounded-md flex items-center gap-1.5 font-semibold transition-all ${
                   currentView === 'academy' || currentView === 'physical-classes'
-                    ? 'text-[#0a0a0c] bg-gradient-to-r from-[#d4af37] to-[#c5a059] shadow-sm' 
+                    ? 'text-[#0a122a] bg-gradient-to-r from-[#d4af37] to-[#c5a059] shadow-sm' 
                     : 'text-[#f3e1a9] hover:bg-[#d4af37]/15 border border-[#d4af37]/40'
                 }`}
               >
@@ -301,7 +303,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               {academyDropdownOpen && (
                 <div 
                   onMouseLeave={() => setAcademyDropdownOpen(false)}
-                  className="absolute left-0 mt-1 w-72 bg-[#111115] border border-[#d4af37]/30 rounded-lg shadow-2xl p-2 z-50 animate-in fade-in slide-in-from-top-2 duration-150"
+                  className="absolute left-0 mt-1 w-72 bg-[#0a1432] border border-[#d4af37]/35 rounded-lg shadow-2xl shadow-[#040816]/80 p-2 z-50 animate-in fade-in slide-in-from-top-2 duration-150"
                 >
                   <button
                     onClick={() => navigateTo('academy')}
@@ -545,8 +547,8 @@ export const Navbar: React.FC<NavbarProps> = ({
 
       {/* Mobile Drawer Menu */}
       {mobileMenuOpen && (
-        <div className="xl:hidden bg-[#0d0d11] border-b border-[#d4af37]/30 px-4 pt-3 pb-6 space-y-2 font-sans-body max-h-[85vh] overflow-y-auto">
-          <div className="p-3 bg-[#17171d] rounded-lg border border-[#d4af37]/20 mb-3 flex items-center justify-between">
+        <div className="xl:hidden bg-[#0a122a] border-b border-[#d4af37]/30 px-4 pt-3 pb-6 space-y-2 font-sans-body max-h-[85vh] overflow-y-auto">
+          <div className="p-3 bg-[#0a1432] rounded-lg border border-[#d4af37]/25 mb-3 flex items-center justify-between">
             <div>
               <div className="text-xs text-neutral-400">Next Physical Intake:</div>
               <div className="text-xs font-semibold text-[#f3e1a9]">Fourways • 7 September 2026</div>

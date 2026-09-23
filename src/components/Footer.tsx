@@ -1,6 +1,7 @@
 import React from 'react';
 import { Phone, Mail, MapPin, Sparkles, GraduationCap, ShieldCheck, Heart, ArrowUpRight } from 'lucide-react';
 import { FOUNDER_CONTACT, GRADUATION_INFO, SEPTEMBER_PHYSICAL_INTAKE } from '../data/siteData';
+import { INSTITUTION_LOGO } from '../data/assetsData';
 
 interface FooterProps {
   setCurrentView: (view: string) => void;
@@ -14,11 +15,11 @@ export const Footer: React.FC<FooterProps> = ({ setCurrentView, onOpenSpeakingEn
   };
 
   return (
-    <footer className="bg-[#070709] border-t border-[#d4af37]/25 text-neutral-400 font-sans-body">
+    <footer className="bg-[#040816] border-t border-[#d4af37]/25 text-neutral-300 font-sans-body">
       {/* Pre-Footer Institutional Callout */}
-      <div className="border-b border-neutral-800/80 bg-gradient-to-b from-[#0c0c10] to-[#070709] py-12 px-4 sm:px-6 lg:px-8">
+      <div className="border-b border-[#1a2c5a]/60 bg-gradient-to-b from-[#070f28] to-[#040816] py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
-          <div className="flex items-start gap-4 p-5 rounded-xl bg-neutral-900/40 border border-neutral-800">
+          <div className="flex items-start gap-4 p-5 rounded-xl bg-[#0a1432]/70 border border-[#1a2c5a] hover:border-[#d4af37]/40 transition-colors">
             <div className="p-3 rounded-lg bg-[#d4af37]/10 text-[#d4af37] shrink-0">
               <GraduationCap className="w-6 h-6" />
             </div>
@@ -39,7 +40,7 @@ export const Footer: React.FC<FooterProps> = ({ setCurrentView, onOpenSpeakingEn
             </div>
           </div>
 
-          <div className="flex items-start gap-4 p-5 rounded-xl bg-neutral-900/40 border border-neutral-800">
+          <div className="flex items-start gap-4 p-5 rounded-xl bg-[#0a1432]/70 border border-[#1a2c5a] hover:border-[#d4af37]/40 transition-colors">
             <div className="p-3 rounded-lg bg-[#d4af37]/10 text-[#d4af37] shrink-0">
               <Sparkles className="w-6 h-6" />
             </div>
@@ -60,7 +61,7 @@ export const Footer: React.FC<FooterProps> = ({ setCurrentView, onOpenSpeakingEn
             </div>
           </div>
 
-          <div className="flex items-start gap-4 p-5 rounded-xl bg-neutral-900/40 border border-neutral-800">
+          <div className="flex items-start gap-4 p-5 rounded-xl bg-[#0a1432]/70 border border-[#1a2c5a] hover:border-[#d4af37]/40 transition-colors">
             <div className="p-3 rounded-lg bg-[#d4af37]/10 text-[#d4af37] shrink-0">
               <ShieldCheck className="w-6 h-6" />
             </div>
@@ -89,10 +90,12 @@ export const Footer: React.FC<FooterProps> = ({ setCurrentView, onOpenSpeakingEn
           {/* Brand Column */}
           <div className="lg:col-span-2 space-y-4">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-[#d4af37] to-[#8f7023] p-[1.5px] flex items-center justify-center">
-                <div className="w-full h-full bg-[#0a0a0d] rounded-[7px] flex items-center justify-center font-cinzel font-bold text-[#f3e1a9] text-base">
-                  FI
-                </div>
+              <div className="w-12 h-12 rounded-lg border border-[#d4af37]/45 p-0.5 flex items-center justify-center bg-[#0a122a] shrink-0 shadow-md">
+                <img 
+                  src={INSTITUTION_LOGO.url} 
+                  alt={INSTITUTION_LOGO.alt} 
+                  className="w-full h-full object-contain"
+                />
               </div>
               <div>
                 <span className="font-cinzel text-lg font-bold tracking-wider text-white">FLAWLESS </span>

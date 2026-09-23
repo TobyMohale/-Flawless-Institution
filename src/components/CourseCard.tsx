@@ -25,7 +25,7 @@ export const CourseCard: React.FC<CourseCardProps> = ({ course, onSelectCourse, 
       id={`course-card-${course.id}`}
     >
       <div 
-        className="group relative h-full bg-[#111115] border border-neutral-800 hover:border-[#d4af37]/60 rounded-xl overflow-hidden shadow-lg hover:shadow-2xl hover:shadow-[#d4af37]/15 transition-colors duration-300 flex flex-col justify-between"
+        className="group relative h-full bg-[#0a1432] border border-[#1a2c5a] hover:border-[#d4af37]/60 rounded-xl overflow-hidden shadow-lg hover:shadow-2xl hover:shadow-[#d4af37]/15 transition-colors duration-300 flex flex-col justify-between"
       >
         {/* Top Banner Accent */}
         {course.featured && (
@@ -99,7 +99,7 @@ export const CourseCard: React.FC<CourseCardProps> = ({ course, onSelectCourse, 
 
           {/* Pricing Block & Action Buttons */}
           <div>
-            <div className="bg-[#17171d] rounded-lg p-3 border border-neutral-800 mb-4">
+            <div className="bg-[#0a122a] rounded-lg p-3 border border-[#1a2c5a] mb-4">
               <div className="flex items-baseline justify-between">
                 <div>
                   <span className="text-[10px] text-neutral-400 block">{isPhysicalView ? 'Physical Tuition:' : 'Promotional Fee:'}</span>
@@ -108,7 +108,7 @@ export const CourseCard: React.FC<CourseCardProps> = ({ course, onSelectCourse, 
                       R{currentPrice.toLocaleString()}
                     </span>
                     {hasDiscount && (
-                      <span className="text-xs text-neutral-500 line-through">
+                      <span className="text-xs text-neutral-400 line-through">
                         R{course.normalPrice.toLocaleString()}
                       </span>
                     )}
@@ -131,7 +131,7 @@ export const CourseCard: React.FC<CourseCardProps> = ({ course, onSelectCourse, 
               <button
                 onClick={() => onSelectCourse(course)}
                 id={`view-details-${course.id}`}
-                className="py-2.5 px-3 rounded-lg text-xs font-medium text-neutral-300 hover:text-white bg-neutral-900 border border-neutral-700 hover:border-[#d4af37]/40 transition-all text-center active:scale-95"
+                className="py-2.5 px-3 rounded-lg text-xs font-medium text-neutral-300 hover:text-white bg-[#0a122a] border border-[#1a2c5a] hover:border-[#d4af37]/40 transition-all text-center active:scale-95"
               >
                 Course Overview
               </button>

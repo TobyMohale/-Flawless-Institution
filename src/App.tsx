@@ -118,7 +118,7 @@ export function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0a0a0d] text-neutral-100 flex flex-col font-sans-body selection:bg-[#d4af37] selection:text-black">
+    <div className="min-h-screen bg-[#0a122a] text-neutral-100 flex flex-col font-sans-body selection:bg-[#d4af37] selection:text-black">
       {/* 3D Gold Ambient Top Scroll Progress Bar */}
       <ScrollProgressBar />
 

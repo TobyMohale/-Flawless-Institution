@@ -75,6 +75,14 @@ export interface GalleryImage {
 }
 
 // 1. FOUNDER & EXECUTIVE ASSETS
+export const INSTITUTION_LOGO = {
+  url: 'https://res.cloudinary.com/dagphoc0j/image/upload/v1790148188/flawless_new_theme_6_n8p8wz.jpg',
+  alt: 'Flawless Institution Official Crest Logo — Private Professional Education & Development Institution',
+  title: 'Flawless Institution Crest',
+  motto: 'Empowering People. • Developing Professionals. • Transforming Futures.',
+  tagline: 'Education • Training • Transformation'
+};
+
 export const FOUNDER_IMAGE = {
   url: 'https://res.cloudinary.com/dagphoc0j/image/upload/v1788454926/Founder_rltzec.jpg',
   name: 'Teldah Siyawamwaya',
@@ -296,6 +304,8 @@ export const ADMIN_GALLERY: GalleryImage[] = [
 
 // CENTRAL DICTIONARY FOR DIRECT ACCESSIBILITY
 export const CLOUDINARY_IMAGES = {
+  logo: INSTITUTION_LOGO.url,
+  crest: INSTITUTION_LOGO.url,
   founder: FOUNDER_IMAGE.url,
   nursing: {
     nursing1: 'https://res.cloudinary.com/dagphoc0j/image/upload/v1788454906/old_age_nursing_1_fiv2ky.jpg',
