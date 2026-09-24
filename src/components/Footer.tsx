@@ -6,9 +6,14 @@ import { INSTITUTION_LOGO } from '../data/assetsData';
 interface FooterProps {
   setCurrentView: (view: string) => void;
   onOpenSpeakingEnquiry: () => void;
+  onOpenEftOptions?: () => void;
 }
 
-export const Footer: React.FC<FooterProps> = ({ setCurrentView, onOpenSpeakingEnquiry }) => {
+export const Footer: React.FC<FooterProps> = ({ 
+  setCurrentView, 
+  onOpenSpeakingEnquiry,
+  onOpenEftOptions 
+}) => {
   const navigateTo = (view: string) => {
     setCurrentView(view);
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -257,12 +262,36 @@ export const Footer: React.FC<FooterProps> = ({ setCurrentView, onOpenSpeakingEn
               <p>
                 <strong className="text-neutral-300">No Employment Guarantee:</strong> Course completion does not guarantee employment, job placement or specific earnings.
               </p>
+              {onOpenEftOptions && (
+                <div className="pt-2">
+                  <button
+                    type="button"
+                    onClick={onOpenEftOptions}
+                    className="w-full text-left p-2.5 rounded-lg bg-[#0e1630] border border-[#d4af37]/40 hover:border-[#d4af37] text-xs text-[#f3e1a9] transition-all flex items-center justify-between group"
+                  >
+                    <span className="font-semibold font-cinzel">EFT Payment Options</span>
+                    <span className="text-[10px] text-[#d4af37] group-hover:translate-x-0.5 transition-transform">FNB & Mukuru →</span>
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         </div>
 
         {/* Dedicated Legal & Governance Links Bar (Recommended by User) */}
         <div className="mt-12 pt-6 border-t border-neutral-800 flex flex-wrap items-center justify-center gap-x-3 gap-y-2 text-xs text-neutral-400">
+          {onOpenEftOptions && (
+            <>
+              <button 
+                onClick={onOpenEftOptions}
+                id="footer-link-eft-options"
+                className="hover:text-[#f3e1a9] text-[#d4af37] font-semibold transition-colors"
+              >
+                EFT Payment Options
+              </button>
+              <span className="text-neutral-600">|</span>
+            </>
+          )}
           <button 
             onClick={() => navigateTo('terms-conditions')}
             id="footer-link-terms"

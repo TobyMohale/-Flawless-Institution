@@ -29,6 +29,7 @@ import { StudentPortalModal } from './components/StudentPortalModal';
 import { AuthModal } from './components/AuthModal';
 import { OfflineIndicator } from './components/OfflineIndicator';
 import { OfflineLearningHub } from './components/OfflineLearningHub';
+import { EftPaymentModal } from './components/EftPaymentModal';
 import { ScrollProgressBar, ViewTransition } from './components/MotionEffects';
 import { authStorage, User } from './lib/api';
 
@@ -44,6 +45,7 @@ export function App() {
   const [studentPortalOpen, setStudentPortalOpen] = useState<boolean>(false);
   const [authModalOpen, setAuthModalOpen] = useState<boolean>(false);
   const [offlineHubOpen, setOfflineHubOpen] = useState<boolean>(false);
+  const [eftModalOpen, setEftModalOpen] = useState<boolean>(false);
 
   // Authenticated User State (defaults to institutional Super Admin for turnkey review)
   const [currentUser, setCurrentUser] = useState<User | null>(() => {
@@ -133,6 +135,7 @@ export function App() {
         onOpenExecutiveDashboard={() => handleNavigate('executive-dashboard')}
         onOpenAuthModal={() => setAuthModalOpen(true)}
         onOpenOfflineHub={() => setOfflineHubOpen(true)}
+        onOpenEftOptions={() => setEftModalOpen(true)}
       />
 
       {/* Offline Status & Cached Guides Alert Banner */}
@@ -328,9 +331,16 @@ export function App() {
       <Footer
         setCurrentView={handleNavigate}
         onOpenSpeakingEnquiry={() => handleOpenSpeaking()}
+        onOpenEftOptions={() => setEftModalOpen(true)}
       />
 
       {/* MODALS */}
+      {/* 0. EFT Banking & Remittance Options Modal */}
+      <EftPaymentModal
+        isOpen={eftModalOpen}
+        onClose={() => setEftModalOpen(false)}
+      />
+
       {/* 1. Enrolment / Checkout Modal */}
       {enrolmentCourse && (
         <EnrolmentCheckoutModal

@@ -27,7 +27,15 @@ class CommunicationsService {
    * Internal helper to record every sent communication to the audit trail
    */
   private async logCommunication(log: Omit<CommunicationLog, 'id'>): Promise<CommunicationLog> {
-    return await dbStore.createCommunicationLog(log);
+    try {
+      return await dbStore.createCommunicationLog(log);
+    } catch (e) {
+      console.warn('[CommunicationsService] DB logging fallback:', e);
+      return {
+        id: `comm-log-${Date.now()}`,
+        ...log,
+      };
+    }
   }
 
   /**
@@ -149,40 +157,61 @@ class CommunicationsService {
   }
 
   /**
-   * Official Standard Bank Manual EFT Instructions
+   * Official Institutional Manual EFT Instructions (FNB & Mukuru)
    */
   public async sendEftBankInstructions(
     tx: Transaction,
     bankDetails: {
-      bankName: string;
-      accountHolder: string;
-      accountNumber: string;
-      branchCode: string;
-      swiftCode: string;
+      bankName?: string;
+      accountHolder?: string;
+      accountNumber?: string;
+      branchCode?: string;
       reference: string;
       amountZAR: number;
     }
   ): Promise<void> {
-    const subject = `EFT Banking Instructions: ${bankDetails.reference} | Standard Bank`;
-    const snippet = `Deposit R${bankDetails.amountZAR} to Standard Bank Acc ${bankDetails.accountNumber}. Reference: ${bankDetails.reference}.`;
+    const subject = `EFT Banking Instructions: ${bankDetails.reference} | Flawless Institution`;
+    const snippet = `EFT Payment Options: FNB Acc 62797216647 or Mukuru Acc 51672409431. POP via WhatsApp to +27 65 944 9409. Ref: ${bankDetails.reference}.`;
 
     const html = `
-      <div style="font-family: 'Georgia', serif; color: #1a1a1a; max-width: 600px; margin: 0 auto; padding: 24px; border: 1px solid #e5e5e5; background: #ffffff;">
-        <h2 style="color: #003366; margin-top: 0;">Standard Bank Official EFT Instructions</h2>
-        <p>Dear ${tx.studentName},</p>
-        <p>Please execute your Electronic Funds Transfer (EFT) using the verified institutional account details below:</p>
-        <div style="background: #f1f5f9; padding: 18px; border: 1px solid #cbd5e1; border-radius: 4px; font-family: monospace; font-size: 13px;">
-          <p style="margin: 4px 0;"><strong>Bank:</strong> ${bankDetails.bankName}</p>
-          <p style="margin: 4px 0;"><strong>Account Name:</strong> ${bankDetails.accountHolder}</p>
-          <p style="margin: 4px 0;"><strong>Account Number:</strong> ${bankDetails.accountNumber}</p>
-          <p style="margin: 4px 0;"><strong>Branch Code:</strong> ${bankDetails.branchCode}</p>
-          <p style="margin: 4px 0;"><strong>SWIFT / BIC:</strong> ${bankDetails.swiftCode}</p>
-          <p style="margin: 8px 0; color: #dc2626; font-size: 14px;"><strong>CRITICAL REFERENCE:</strong> ${bankDetails.reference}</p>
-          <p style="margin: 4px 0;"><strong>Total Amount:</strong> R ${bankDetails.amountZAR.toLocaleString()} ZAR</p>
+      <div style="font-family: 'Helvetica Neue', Arial, sans-serif; color: #1a1a1a; max-width: 600px; margin: 0 auto; padding: 24px; border: 1px solid #d4af37; background: #ffffff; border-radius: 8px;">
+        <div style="text-align: center; border-bottom: 2px solid #0a122a; padding-bottom: 12px; margin-bottom: 16px;">
+          <h2 style="color: #0a122a; margin: 0; font-size: 20px; letter-spacing: 1px;">EFT PAYMENT OPTIONS</h2>
+          <p style="color: #64748b; font-size: 12px; margin: 4px 0 0 0;">Flawless Institution™ • Fourways, Johannesburg</p>
         </div>
-        <p style="color: #64748b; font-size: 12px; margin-top: 16px;">
-          Once paid, please upload your PDF Proof of Payment (POP) directly into the portal or email accounts@flawlessinstitution.co.za.
-        </p>
+
+        <p>Dear ${tx.studentName},</p>
+        <p>Thank you for booking <strong>${tx.courseTitle}</strong>. Please find the verified payment options below:</p>
+
+        <div style="background: #f8fafc; padding: 16px; border: 1px solid #e2e8f0; border-radius: 6px; margin-bottom: 14px;">
+          <h3 style="color: #0a122a; margin: 0 0 8px 0; font-size: 14px;">1. FNB BANK TRANSFER</h3>
+          <p style="margin: 4px 0; font-size: 13px;"><strong>Account Holder:</strong> Zim Angels</p>
+          <p style="margin: 4px 0; font-size: 13px;"><strong>Account Number:</strong> 62797216647</p>
+          <p style="margin: 4px 0; font-size: 13px;"><strong>Branch Code:</strong> 250655</p>
+          <p style="margin: 4px 0; font-size: 13px;"><strong>Reference:</strong> <span style="font-family: monospace; font-weight: bold; color: #0284c7;">${bankDetails.reference}</span></p>
+          <p style="margin: 4px 0; font-size: 13px;"><strong>Total Amount:</strong> R ${bankDetails.amountZAR.toLocaleString()} ZAR</p>
+        </div>
+
+        <div style="background: #f8fafc; padding: 16px; border: 1px solid #e2e8f0; border-radius: 6px; margin-bottom: 16px;">
+          <h3 style="color: #ea580c; margin: 0 0 8px 0; font-size: 14px;">2. MUKURU</h3>
+          <p style="margin: 4px 0; font-size: 13px;"><strong>Account Holder:</strong> Teldah Siyawamwaya</p>
+          <p style="margin: 4px 0; font-size: 13px;"><strong>Account Number:</strong> 51672409431</p>
+          <p style="margin: 4px 0; font-size: 13px;"><strong>Linked Number:</strong> +27 83 872 2001</p>
+        </div>
+
+        <div style="background: #ecfdf5; padding: 16px; border: 1px solid #a7f3d0; border-radius: 6px; margin-bottom: 16px;">
+          <h3 style="color: #047857; margin: 0 0 6px 0; font-size: 14px;">PROOF OF PAYMENT</h3>
+          <p style="margin: 4px 0; font-size: 13px;">After completing your payment, please send your proof of payment to our Training & Support Team:</p>
+          <p style="margin: 8px 0; font-size: 15px; font-weight: bold; color: #065f46;">
+            📲 WhatsApp: <a href="https://wa.me/27659449409" style="color: #047857; text-decoration: underline;">+27 65 944 9409</a>
+          </p>
+          <p style="margin: 6px 0; font-size: 12px; color: #374151;">
+            Please include your full Name and the Course or Courses you have booked when submitting your proof of payment.
+          </p>
+          <div style="background: #fffbeb; border-left: 3px solid #f59e0b; padding: 8px 12px; margin-top: 10px; font-size: 12px; color: #92400e;">
+            <strong>Important:</strong> Your booking will be processed once payment and proof of payment have been received.
+          </div>
+        </div>
       </div>
     `;
 
@@ -192,7 +221,7 @@ class CommunicationsService {
       channel: 'email',
       recipientName: tx.studentName,
       recipientContact: tx.studentEmail,
-      templateType: 'standard_bank_eft_instructions',
+      templateType: 'eft_payment_instructions',
       subjectOrTitle: subject,
       contentSnippet: snippet,
       status: delivered ? 'sent' : 'mock_logged',

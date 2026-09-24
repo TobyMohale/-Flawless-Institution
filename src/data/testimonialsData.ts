@@ -1,37 +1,31 @@
 /**
- * Flawless Institution™ - Course Catalog & Cohort Schedule Service
+ * Flawless Institution™ - Verified Student Success Stories & Testimonials
  * Fourways, Johannesburg, South Africa
  */
-import { CourseCatalogItem, Cohort, TestimonialItem } from '../types/domain.types';
-import { dbStore } from '../storage/supabaseStore';
-import { COURSES } from '../../data/coursesData';
+import nomvulaImg from '../assets/images/nomvula_housekeeping_graduate_1790193002911.jpg';
+import thaboImg from '../assets/images/thabo_butler_graduate_1790193015268.jpg';
+import preciousImg from '../assets/images/precious_caregiver_graduate_1790193025357.jpg';
 
-function mapCourseToCatalogItem(c: any): CourseCatalogItem {
-  const price = c.specialPrice || c.normalPrice || 1500;
-  return {
-    id: c.id,
-    slug: c.id,
-    title: c.title,
-    category: (c.category || '').toLowerCase().includes('care')
-      ? 'caregiving'
-      : (c.category || '').toLowerCase().includes('butler') || (c.category || '').toLowerCase().includes('hospitality')
-      ? 'hospitality'
-      : 'housekeeping',
-    priceZAR: price,
-    originalPriceZAR: c.normalPrice || price,
-    registrationFeeZAR: 300,
-    durationWeeks: 4,
-    durationLabel: c.duration || '2 - 4 Weeks',
-    availableModes: ['Online', 'Physical', 'Hybrid'],
-    graduationEligible: true,
-    requiresPhysicalAssessment: true,
-    syllabusModules: c.modules || [],
-    description: c.description || c.title,
-    isActive: true,
-  };
+export interface StudentTestimonial {
+  id: string;
+  name: string;
+  role: string;
+  placement: string;
+  location: string;
+  courseId: string;
+  courseTitle: string;
+  cohort: string;
+  category: 'caregiving' | 'hospitality' | 'housekeeping' | 'childcare' | 'entrepreneurship';
+  quote: string;
+  outcomeMetric: string;
+  rating: number;
+  verifiedId: string;
+  graduationYear: string;
+  photoUrl: string;
+  isFeatured?: boolean;
 }
 
-const SEED_TESTIMONIALS: TestimonialItem[] = [
+export const STUDENT_TESTIMONIALS: StudentTestimonial[] = [
   {
     id: 'test-nomvula-dlamini',
     name: 'Nomvula Dlamini',
@@ -47,7 +41,7 @@ const SEED_TESTIMONIALS: TestimonialItem[] = [
     rating: 5,
     verifiedId: 'FI-CERT-2025-0814',
     graduationYear: '2025',
-    photoUrl: '/assets/images/nomvula_housekeeping_graduate_1790193002911.jpg',
+    photoUrl: nomvulaImg,
     isFeatured: true
   },
   {
@@ -65,7 +59,7 @@ const SEED_TESTIMONIALS: TestimonialItem[] = [
     rating: 5,
     verifiedId: 'FI-CERT-2025-1102',
     graduationYear: '2025',
-    photoUrl: '/assets/images/thabo_butler_graduate_1790193015268.jpg',
+    photoUrl: thaboImg,
     isFeatured: true
   },
   {
@@ -83,7 +77,7 @@ const SEED_TESTIMONIALS: TestimonialItem[] = [
     rating: 5,
     verifiedId: 'FI-CERT-2025-0428',
     graduationYear: '2025',
-    photoUrl: '/assets/images/precious_caregiver_graduate_1790193025357.jpg',
+    photoUrl: preciousImg,
     isFeatured: true
   },
   {
@@ -141,58 +135,3 @@ const SEED_TESTIMONIALS: TestimonialItem[] = [
     isFeatured: false
   }
 ];
-
-class CatalogService {
-  /**
-   * Retrieves all accredited course programs
-   */
-  public async getAllCourses(): Promise<CourseCatalogItem[]> {
-    try {
-      const courses = await dbStore.getCourses();
-      if (courses && courses.length > 0) return courses;
-    } catch (err) {
-      console.warn('[CatalogService] getCourses fallback to local catalog:', err);
-    }
-    return COURSES.map(mapCourseToCatalogItem);
-  }
-
-  /**
-   * Retrieves a single course by its ID
-   */
-  public async getCourseById(id: string): Promise<CourseCatalogItem | undefined> {
-    try {
-      const course = await dbStore.getCourseById(id);
-      if (course) return course;
-    } catch (err) {
-      console.warn('[CatalogService] getCourseById fallback to local catalog:', err);
-    }
-    const local = COURSES.find(c => c.id === id || c.id.toLowerCase() === id.toLowerCase());
-    return local ? mapCourseToCatalogItem(local) : undefined;
-  }
-
-  /**
-   * Retrieves active intake cohorts, optionally filtered by course ID
-   */
-  public async getCohorts(courseId?: string): Promise<Cohort[]> {
-    return await dbStore.getCohorts(courseId);
-  }
-
-  /**
-   * Retrieves a single intake cohort by ID
-   */
-  public async getCohortById(id: string): Promise<Cohort | undefined> {
-    return await dbStore.getCohortById(id);
-  }
-
-  /**
-   * Retrieves verified student testimonials and success stories
-   */
-  public async getTestimonials(category?: string): Promise<TestimonialItem[]> {
-    if (!category || category === 'all') {
-      return SEED_TESTIMONIALS;
-    }
-    return SEED_TESTIMONIALS.filter(t => t.category === category);
-  }
-}
-
-export const catalogService = new CatalogService();

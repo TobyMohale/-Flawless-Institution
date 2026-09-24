@@ -17,6 +17,7 @@ interface NavbarProps {
   onOpenExecutiveDashboard?: () => void;
   onOpenAuthModal?: () => void;
   onOpenOfflineHub?: () => void;
+  onOpenEftOptions?: () => void;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
@@ -28,7 +29,8 @@ export const Navbar: React.FC<NavbarProps> = ({
   currentUser,
   onOpenExecutiveDashboard,
   onOpenAuthModal,
-  onOpenOfflineHub
+  onOpenOfflineHub,
+  onOpenEftOptions
 }) => {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [aboutDropdownOpen, setAboutDropdownOpen] = useState(false);
@@ -86,6 +88,19 @@ export const Navbar: React.FC<NavbarProps> = ({
             <span className="hidden lg:flex items-center gap-1 text-neutral-400">
               <MapPin className="w-3 h-3 text-[#d4af37]" /> Fourways, South Africa
             </span>
+            {onOpenEftOptions && (
+              <>
+                <span className="text-neutral-700 hidden sm:inline">|</span>
+                <button
+                  type="button"
+                  onClick={onOpenEftOptions}
+                  className="px-2 py-0.5 rounded bg-[#d4af37]/15 border border-[#d4af37]/40 text-[#f3e1a9] hover:bg-[#d4af37] hover:text-black transition-all font-medium text-[10px] uppercase tracking-wider"
+                  title="View official FNB & Mukuru EFT payment options"
+                >
+                  EFT Details
+                </button>
+              </>
+            )}
           </div>
         </div>
       </div>

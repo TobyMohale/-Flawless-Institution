@@ -4,9 +4,58 @@
  */
 import { Router, Request, Response } from 'express';
 import { academyService } from '../services/academy.service';
+import { paymentService } from '../services/payment.service';
 import { requireAuth, requireRole } from '../middleware/auth.middleware';
 
 const router = Router();
+
+// POST /api/v1/academy/checkout (Public candidate enrollment checkout)
+router.post('/checkout', async (req: Request, res: Response): Promise<void> => {
+  try {
+    const {
+      courseId,
+      mode,
+      cohortId,
+      studentName,
+      studentEmail,
+      studentPhone,
+      paymentMethod,
+      agreedToTerms,
+    } = req.body;
+
+    if (!courseId || !studentName || !studentEmail) {
+      res.status(400).json({
+        success: false,
+        error: 'Missing required enrolment fields (courseId, studentName, studentEmail).',
+      });
+      return;
+    }
+
+    const payResult = await paymentService.initiatePayment({
+      studentEmail,
+      studentName,
+      courseId,
+      cohortId,
+      paymentMethod: paymentMethod === 'bank-transfer' ? 'manual_eft' : (paymentMethod || 'manual_eft'),
+      nonRefundableAcknowledged: agreedToTerms ?? true,
+    });
+
+    res.status(200).json({
+      success: true,
+      message: 'Enrolment checkout initiated successfully.',
+      data: {
+        referenceNumber: payResult.transaction.referenceNumber,
+        transaction: payResult.transaction,
+        eftInstructions: payResult.eftInstructions,
+      },
+    });
+  } catch (error: any) {
+    res.status(400).json({
+      success: false,
+      error: error.message || 'Checkout initiation failed.',
+    });
+  }
+});
 
 // POST /api/v1/academy/enrol
 router.post('/enrol', requireAuth, async (req: Request, res: Response): Promise<void> => {

@@ -80,4 +80,21 @@ router.get('/cohorts/:id', async (req: Request, res: Response): Promise<void> =>
   }
 });
 
+// GET /api/v1/catalog/testimonials
+router.get('/testimonials', async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { category } = req.query;
+    const testimonials = await catalogService.getTestimonials(category as string | undefined);
+    res.status(200).json({
+      success: true,
+      data: testimonials,
+    });
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      error: error.message || 'Failed to load student testimonials.',
+    });
+  }
+});
+
 export default router;

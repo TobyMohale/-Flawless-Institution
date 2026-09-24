@@ -7,6 +7,7 @@ import {
 import { SEPTEMBER_PHYSICAL_INTAKE, GRADUATION_INFO } from '../data/siteData';
 import { api } from '../lib/api';
 import { TaxInvoiceModal } from './TaxInvoiceModal';
+import { EftPaymentOptions } from './EftPaymentOptions';
 
 interface EnrolmentCheckoutModalProps {
   course: Course | null;
@@ -482,9 +483,20 @@ export const EnrolmentCheckoutModal: React.FC<EnrolmentCheckoutModalProps> = ({
                       <Lock className="w-4 h-4 text-[#d4af37]" />
                       <span>Direct Institutional EFT</span>
                     </div>
-                    <span className="text-[10px] text-neutral-400 block mt-1">Manual bank transfer with proof of payment</span>
+                    <span className="text-[10px] text-neutral-400 block mt-1">FNB Bank Transfer & Mukuru with WhatsApp POP</span>
                   </button>
                 </div>
+
+                {/* EFT Payment Options Display */}
+                {paymentMethod === 'bank-transfer' && (
+                  <div className="pt-3 animate-in fade-in duration-300">
+                    <EftPaymentOptions
+                      studentName={formData.fullName}
+                      courseTitle={course.title}
+                      amountZAR={totalAmount}
+                    />
+                  </div>
+                )}
               </div>
 
               {/* Trust Badge */}
@@ -576,6 +588,19 @@ export const EnrolmentCheckoutModal: React.FC<EnrolmentCheckoutModalProps> = ({
                   </div>
                 </div>
               </div>
+
+              {/* EFT Payment & WhatsApp Proof of Payment Instructions */}
+              {paymentMethod === 'bank-transfer' && (
+                <div className="max-w-md mx-auto text-left animate-in fade-in duration-300">
+                  <EftPaymentOptions
+                    studentName={formData.fullName}
+                    courseTitle={course.title}
+                    referenceNumber={orderReference || studentId}
+                    amountZAR={totalAmount}
+                    compact={true}
+                  />
+                </div>
+              )}
 
               {/* Instructions */}
               <div className="bg-[#121217] p-4 rounded-xl border border-neutral-800 text-xs text-neutral-400 text-left space-y-1.5 max-w-md mx-auto">

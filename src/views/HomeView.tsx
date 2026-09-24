@@ -8,6 +8,7 @@ import { motion } from 'motion/react';
 import { INSTITUTIONAL_PILLARS, FOUNDATION_VALUES, SEPTEMBER_PHYSICAL_INTAKE, GRADUATION_INFO } from '../data/siteData';
 import { COURSES, Course } from '../data/coursesData';
 import { CourseCard } from '../components/CourseCard';
+import { TestimonialCarousel } from '../components/TestimonialCarousel';
 import { BACKGROUND_IMAGES, HOMEPAGE_SKILLS_BACKGROUNDS, GalleryImage, INSTITUTION_LOGO } from '../data/assetsData';
 import { AnimatedCounter } from '../components/AnimatedCounter';
 import { ScrollReveal, Tilt3DCard, Floating3D } from '../components/MotionEffects';
@@ -622,7 +623,18 @@ export const HomeView: React.FC<HomeViewProps> = ({
         </div>
       </section>
 
-      {/* 5. ABOUT FLAWLESS INSTITUTION */}
+      {/* 5. VERIFIED GRADUATE SUCCESS STORIES (SOCIAL PROOF CAROUSEL) */}
+      <ScrollReveal direction="up">
+        <TestimonialCarousel
+          onSelectCourse={onSelectCourse}
+          onNavigateToAcademy={() => {
+            setCurrentView('academy');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }}
+        />
+      </ScrollReveal>
+
+      {/* 6. ABOUT FLAWLESS INSTITUTION */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <ScrollReveal direction="up">
           <div className="relative overflow-hidden bg-[#08112a] border border-[#d4af37]/40 rounded-3xl p-6 sm:p-12 shadow-2xl space-y-8">

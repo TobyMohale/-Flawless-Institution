@@ -6,6 +6,7 @@ import {
 import { COURSES, CATEGORIES, Course } from '../data/coursesData';
 import { CourseCard } from '../components/CourseCard';
 import { BACKGROUND_IMAGES } from '../data/assetsData';
+import { EftPaymentOptions } from '../components/EftPaymentOptions';
 
 interface AcademyViewProps {
   onSelectCourse: (course: Course) => void;
@@ -301,6 +302,11 @@ export const AcademyView: React.FC<AcademyViewProps> = ({
             </div>
           </div>
         </div>
+      </section>
+
+      {/* 6B. OFFICIAL EFT PAYMENT OPTIONS */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <EftPaymentOptions className="border-[#d4af37]/60 shadow-2xl" />
       </section>
 
       {/* 7. IMPORTANT COURSE INFORMATION & POLICIES */}

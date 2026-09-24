@@ -8,6 +8,7 @@ import { COURSES, CATEGORIES, Course } from '../data/coursesData';
 import { BACKGROUND_IMAGES, HEALTHCARE_NURSING_GALLERY, GalleryImage } from '../data/assetsData';
 import { Tilt3DCard } from '../components/MotionEffects';
 import { ImageLightboxModal } from '../components/ImageLightboxModal';
+import { EftPaymentOptions } from '../components/EftPaymentOptions';
 
 interface PhysicalClassesViewProps {
   onSelectCourse: (course: Course) => void;
@@ -494,6 +495,11 @@ export const PhysicalClassesView: React.FC<PhysicalClassesViewProps> = ({
             </div>
           </div>
 
+          {/* Official EFT Payment Options Card */}
+          <div className="pt-2">
+            <EftPaymentOptions className="border-[#d4af37]/60 shadow-2xl" />
+          </div>
+
           {/* Direct Support Contacts */}
           <div className="pt-4 border-t border-neutral-800 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-neutral-400">
             <div className="flex items-center gap-2">
@@ -504,8 +510,8 @@ export const PhysicalClassesView: React.FC<PhysicalClassesViewProps> = ({
               <a href="mailto:training@flawlessinstitution.co.za" className="hover:text-white transition-colors flex items-center gap-1.5">
                 <Mail className="w-3.5 h-3.5 text-[#d4af37]" /> training@flawlessinstitution.co.za
               </a>
-              <a href="tel:+27110000000" className="hover:text-white transition-colors flex items-center gap-1.5">
-                <Phone className="w-3.5 h-3.5 text-[#d4af37]" /> Contact Admissions
+              <a href="https://wa.me/27659449409" target="_blank" rel="noopener noreferrer" className="hover:text-emerald-400 text-neutral-300 transition-colors flex items-center gap-1.5">
+                <Phone className="w-3.5 h-3.5 text-emerald-400" /> WhatsApp +27 65 944 9409
               </a>
             </div>
           </div>

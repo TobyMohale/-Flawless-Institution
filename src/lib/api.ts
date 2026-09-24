@@ -153,6 +153,11 @@ export const api = {
   getCohorts: () => 
     apiRequest<any[]>('/academy/cohorts'),
 
+  getTestimonials: (category?: string) => {
+    const query = category && category !== 'all' ? `?category=${encodeURIComponent(category)}` : '';
+    return apiRequest<any[]>(`/catalog/testimonials${query}`);
+  },
+
   getEnrolments: () => 
     apiRequest<any[]>('/academy/enrolments'),
 

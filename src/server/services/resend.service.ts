@@ -131,13 +131,28 @@ export class ResendService {
             </table>
           </div>
 
-          <h3 style="color: #0f172a; font-size: 15px; margin-bottom: 8px;">Standard Bank Institutional Banking Details:</h3>
-          <div style="background-color: #f1f5f9; padding: 16px; border-radius: 6px; font-size: 13px; color: #334155; line-height: 1.5;">
-            <strong>Bank:</strong> ${banking.bank}<br/>
-            <strong>Account Name:</strong> ${banking.accountName}<br/>
-            <strong>Account Number:</strong> ${banking.accountNumber}<br/>
-            <strong>Branch Code:</strong> ${banking.branchCode}<br/>
+          <h3 style="color: #0f172a; font-size: 15px; margin-bottom: 8px;">EFT PAYMENT OPTIONS:</h3>
+          <div style="background-color: #f1f5f9; padding: 14px; border-radius: 6px; font-size: 13px; color: #334155; line-height: 1.5; margin-bottom: 12px;">
+            <strong style="color: #0a122a;">FNB BANK TRANSFER:</strong><br/>
+            <strong>Account Holder:</strong> Zim Angels<br/>
+            <strong>Account Number:</strong> 62797216647<br/>
+            <strong>Branch Code:</strong> 250655<br/>
             <strong>Reference to Quote:</strong> <span style="font-family: monospace; font-weight: 700; color: #0369a1;">${params.referenceNumber}</span>
+          </div>
+
+          <div style="background-color: #f1f5f9; padding: 14px; border-radius: 6px; font-size: 13px; color: #334155; line-height: 1.5; margin-bottom: 12px;">
+            <strong style="color: #ea580c;">MUKURU:</strong><br/>
+            <strong>Account Holder:</strong> Teldah Siyawamwaya<br/>
+            <strong>Account Number:</strong> 51672409431<br/>
+            <strong>Linked Number:</strong> +27 83 872 2001
+          </div>
+
+          <div style="background-color: #ecfdf5; padding: 14px; border-radius: 6px; font-size: 13px; color: #065f46; line-height: 1.5;">
+            <strong>PROOF OF PAYMENT:</strong><br/>
+            After completing your payment, please send your proof of payment to our Training & Support Team:<br/>
+            📲 <strong>WhatsApp:</strong> <a href="https://wa.me/27659449409" style="color: #047857;">+27 65 944 9409</a><br/>
+            <em>Please include your full Name and the Course or Courses you have booked when submitting your proof of payment.</em><br/>
+            <strong style="color: #b45309; display: block; margin-top: 6px;">Important: Your booking will be processed once payment and proof of payment have been received.</strong>
           </div>
 
           <p style="color: #64748b; font-size: 12px; margin-top: 24px; line-height: 1.5;">

@@ -74,6 +74,25 @@ export interface CourseCatalogItem {
   isActive: boolean;
 }
 
+export interface TestimonialItem {
+  id: string;
+  name: string;
+  role: string;
+  placement: string;
+  location: string;
+  courseId: string;
+  courseTitle: string;
+  cohort: string;
+  category: 'caregiving' | 'hospitality' | 'housekeeping' | 'childcare' | 'entrepreneurship';
+  quote: string;
+  outcomeMetric: string;
+  rating: number;
+  verifiedId: string;
+  graduationYear: string;
+  photoUrl: string;
+  isFeatured?: boolean;
+}
+
 export type EnrolmentStatus = 'pending_payment' | 'active' | 'in_progress' | 'completed' | 'suspended';
 
 export interface Enrolment {
@@ -188,7 +207,7 @@ export interface CommunicationLog {
   channel: CommunicationChannel;
   recipientName: string;
   recipientContact: string; // email address or phone number
-  templateType: 'enrolment_confirmation' | 'standard_bank_eft_instructions' | 'sars_tax_invoice' | 'cohort_start_reminder' | 'graduation_invitation' | 'custom_direct';
+  templateType: 'enrolment_confirmation' | 'standard_bank_eft_instructions' | 'eft_payment_instructions' | 'sars_tax_invoice' | 'cohort_start_reminder' | 'graduation_invitation' | 'custom_direct';
   subjectOrTitle: string;
   contentSnippet: string;
   status: CommunicationStatus;
