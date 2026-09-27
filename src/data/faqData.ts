@@ -244,7 +244,7 @@ export const FAQ_LIST: FAQItem[] = [
         role: 'Flawless Academy & Training',
         name: 'Precious',
         phone: '+27 65 944 9409',
-        email: 'training@flawlessinstitution.co.za'
+        email: 'flawlessinstitution@gmail.com'
       }
     ]
   }

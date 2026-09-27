@@ -436,7 +436,7 @@ export const TERMS_AND_CONDITIONS: LegalSection = {
       body: [
         'FLAWLESS INSTITUTION™ — Fourways, South Africa',
         'Employers & Private Clients: Teldah Siyawamwaya | Tel: +27 83 872 2001 | Email: info@flawlessinstitution.co.za',
-        'Flawless Academy & Training: Precious | Tel: +27 65 944 9409 | Email: training@flawlessinstitution.co.za'
+        'Flawless Academy & Training: Precious | Tel: +27 65 944 9409 | Email: flawlessinstitution@gmail.com'
       ]
     }
   ]
@@ -564,7 +564,7 @@ export const REFUND_POLICY: LegalSection = {
       heading: '6. Queries & Resolution',
       body: [
         'If you have any questions regarding your booking or payment confirmation, please contact our administration department:',
-        'Flawless Academy & Training: Precious | Tel: +27 65 944 9409 | Email: training@flawlessinstitution.co.za',
+        'Flawless Academy & Training: Precious | Tel: +27 65 944 9409 | Email: flawlessinstitution@gmail.com',
         'General Administration: info@flawlessinstitution.co.za'
       ]
     }

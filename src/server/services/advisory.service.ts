@@ -101,7 +101,7 @@ class AdvisoryService {
   }
 
   /**
-   * Submits a keynote speaking or executive masterclass enquiry for Toby Mohale
+   * Submits a keynote speaking or executive masterclass enquiry for Teldah Siyawamwaya
    */
   public async submitSpeakingEnquiry(dto: SpeakingEnquiryDTO): Promise<SpeakingEnquiry> {
     const enquiryId = `spk-${Date.now()}-${Math.random().toString(36).substr(2, 6)}`;

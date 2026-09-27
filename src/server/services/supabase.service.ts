@@ -40,6 +40,9 @@ export class SupabaseService {
           persistSession: false,
           autoRefreshToken: false,
         },
+        global: {
+          fetch: (url: any, options: any) => fetch(url, { ...options, signal: AbortSignal.timeout(1500) }),
+        },
       });
     }
     return supabaseClient;
@@ -58,6 +61,9 @@ export class SupabaseService {
         auth: {
           persistSession: false,
           autoRefreshToken: false,
+        },
+        global: {
+          fetch: (url: any, options: any) => fetch(url, { ...options, signal: AbortSignal.timeout(1500) }),
         },
       });
     }

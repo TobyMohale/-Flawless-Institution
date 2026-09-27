@@ -212,7 +212,7 @@ export const LegalView: React.FC<LegalViewProps> = ({
                 <div className="font-semibold text-white font-cinzel">Flawless Academy & Training</div>
                 <div className="text-neutral-300">Precious (Academy Administration)</div>
                 <div className="text-[#d4af37]">+27 65 944 9409</div>
-                <div className="text-neutral-400">training@flawlessinstitution.co.za</div>
+                <div className="text-neutral-400">flawlessinstitution@gmail.com</div>
               </div>
             </div>
             <div className="text-[11px] text-neutral-500 pt-2">

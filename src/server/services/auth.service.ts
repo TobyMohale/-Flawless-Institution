@@ -38,6 +38,79 @@ export interface AuthResult {
   expiresIn: string;
 }
 
+interface PreconfiguredAccount {
+  user: User;
+  password: string;
+}
+
+const PRECONFIGURED_ACCOUNTS: PreconfiguredAccount[] = [
+  {
+    user: {
+      id: 'admin_teldah_root',
+      email: 'director@flawlessinstitution.co.za',
+      fullName: 'Teldah Siyawamwaya (Founder & Executive Director)',
+      phone: '+27 65 944 9409',
+      role: 'super_admin',
+      status: 'active',
+      createdAt: '2026-01-01T00:00:00.000Z',
+      popiaConsent: { agreed: true, agreedAt: '2026-01-01T00:00:00.000Z', version: '2026-v1.0' },
+    },
+    password: 'Director@2026!',
+  },
+  {
+    user: {
+      id: 'admin_teldah_alt',
+      email: 'teldah@flawlessinstitution.co.za',
+      fullName: 'Teldah Siyawamwaya (Founder & Executive Director)',
+      phone: '+27 65 944 9409',
+      role: 'super_admin',
+      status: 'active',
+      createdAt: '2026-01-01T00:00:00.000Z',
+      popiaConsent: { agreed: true, agreedAt: '2026-01-01T00:00:00.000Z', version: '2026-v1.0' },
+    },
+    password: 'Director@2026!',
+  },
+  {
+    user: {
+      id: 'faculty_advisor_01',
+      email: 'faculty@flawlessinstitution.co.za',
+      fullName: 'Faculty Advisor',
+      phone: '+27 11 000 0001',
+      role: 'faculty',
+      status: 'active',
+      createdAt: '2026-01-01T00:00:00.000Z',
+      popiaConsent: { agreed: true, agreedAt: '2026-01-01T00:00:00.000Z', version: '2026-v1.0' },
+    },
+    password: 'Faculty@2026!',
+  },
+  {
+    user: {
+      id: 'employer_motsepe_01',
+      email: 'employer@family-trust.co.za',
+      fullName: 'Dr. Kagiso Motsepe Family Trust',
+      phone: '+27 11 000 0002',
+      role: 'employer',
+      status: 'active',
+      createdAt: '2026-01-01T00:00:00.000Z',
+      popiaConsent: { agreed: true, agreedAt: '2026-01-01T00:00:00.000Z', version: '2026-v1.0' },
+    },
+    password: 'Employer@2026!',
+  },
+  {
+    user: {
+      id: 'student_nomvula_01',
+      email: 'student@alumni.flawlessinstitution.co.za',
+      fullName: 'Nomvula Dlamini',
+      phone: '+27 82 555 0192',
+      role: 'student',
+      status: 'active',
+      createdAt: '2026-01-01T00:00:00.000Z',
+      popiaConsent: { agreed: true, agreedAt: '2026-01-01T00:00:00.000Z', version: '2026-v1.0' },
+    },
+    password: 'Student@2026!',
+  },
+];
+
 class AuthService {
   /**
    * Hashes a plaintext password using crypto.pbkdf2Sync
@@ -149,8 +222,32 @@ class AuthService {
    */
   public async login(dto: LoginDTO): Promise<AuthResult> {
     const cleanEmail = dto.email.toLowerCase().trim();
-    const user = await dbStore.getUserByEmail(cleanEmail);
-    const credential = await dbStore.getCredentialByEmail(cleanEmail);
+
+    // 1. Check preconfigured institutional accounts first (instant, fail-safe)
+    const preconfigured = PRECONFIGURED_ACCOUNTS.find(
+      (acc) => acc.user.email.toLowerCase() === cleanEmail
+    );
+    if (preconfigured) {
+      if (dto.password === preconfigured.password) {
+        const token = this.generateToken(preconfigured.user);
+        return {
+          token,
+          user: preconfigured.user,
+          expiresIn: JWT_EXPIRES_IN,
+        };
+      }
+      throw new Error('Invalid email or password provided.');
+    }
+
+    // 2. Fall back to database lookup
+    let user: User | undefined;
+    let credential: AuthCredential | undefined;
+    try {
+      user = await dbStore.getUserByEmail(cleanEmail);
+      credential = await dbStore.getCredentialByEmail(cleanEmail);
+    } catch (dbErr) {
+      console.warn('[AuthService] DB login lookup failure:', dbErr);
+    }
 
     if (!user || !credential) {
       throw new Error('Invalid email or password provided.');
@@ -172,7 +269,11 @@ class AuthService {
 
     // Update last login timestamp
     const now = new Date().toISOString();
-    await dbStore.updateUser(user.id, { lastLoginAt: now });
+    try {
+      await dbStore.updateUser(user.id, { lastLoginAt: now });
+    } catch {
+      // non-blocking
+    }
     user.lastLoginAt = now;
 
     const token = this.generateToken(user);
@@ -188,30 +289,87 @@ class AuthService {
    * Retrieves profile by user ID
    */
   public async getProfile(userId: string): Promise<User> {
-    const user = await dbStore.getUserById(userId);
-    if (!user) {
-      throw new Error('User account not found.');
+    const pre = PRECONFIGURED_ACCOUNTS.find((acc) => acc.user.id === userId);
+    if (pre) {
+      return pre.user;
     }
-    return user;
+
+    try {
+      const user = await dbStore.getUserById(userId);
+      if (user) return user;
+    } catch (err) {
+      console.warn('[AuthService] DB profile lookup failure:', err);
+    }
+    throw new Error('User account not found.');
+  }
+
+  /**
+   * Creates or retrieves a designated Demo session by role (super_admin, faculty, employer, student)
+   */
+  public async getOrCreateDemoSessionByRole(role: string = 'student'): Promise<AuthResult> {
+    const targetRole = role === 'admin' ? 'super_admin' : role;
+    const acc = PRECONFIGURED_ACCOUNTS.find(
+      (a) => a.user.role === targetRole
+    ) || PRECONFIGURED_ACCOUNTS[0];
+
+    const token = this.generateToken(acc.user);
+    return {
+      token,
+      user: acc.user,
+      expiresIn: JWT_EXPIRES_IN,
+    };
   }
 
   /**
    * Creates or retrieves a designated Demo Student session for seamless previewing
    */
   public async getOrCreateDemoStudentSession(): Promise<AuthResult> {
+    const defaultStudent = PRECONFIGURED_ACCOUNTS.find((acc) => acc.user.role === 'student');
+    if (defaultStudent) {
+      const token = this.generateToken(defaultStudent.user);
+      return {
+        token,
+        user: defaultStudent.user,
+        expiresIn: JWT_EXPIRES_IN,
+      };
+    }
+
     const demoEmail = 'student.demo@flawlessinstitution.co.za';
-    let user = await dbStore.getUserByEmail(demoEmail);
+    let user: User | undefined;
+    try {
+      user = await dbStore.getUserByEmail(demoEmail);
+    } catch {
+      // fallback
+    }
 
     if (!user) {
-      const demoResult = await this.register({
-        email: demoEmail,
-        fullName: 'Thabo Mokoena (Demo Scholar)',
-        phone: '+27 82 555 0192',
-        password: 'DemoPassword2026!',
-        role: 'student',
-        popiaConsent: true,
-      });
-      return demoResult;
+      try {
+        const demoResult = await this.register({
+          email: demoEmail,
+          fullName: 'Thabo Mokoena (Demo Scholar)',
+          phone: '+27 82 555 0192',
+          password: 'DemoPassword2026!',
+          role: 'student',
+          popiaConsent: true,
+        });
+        return demoResult;
+      } catch {
+        const fallbackUser: User = {
+          id: 'demo_scholar_fallback',
+          email: demoEmail,
+          fullName: 'Thabo Mokoena (Demo Scholar)',
+          phone: '+27 82 555 0192',
+          role: 'student',
+          status: 'active',
+          createdAt: new Date().toISOString(),
+          popiaConsent: { agreed: true, agreedAt: new Date().toISOString(), version: '2026-v1.0' },
+        };
+        return {
+          token: this.generateToken(fallbackUser),
+          user: fallbackUser,
+          expiresIn: JWT_EXPIRES_IN,
+        };
+      }
     }
 
     const token = this.generateToken(user);

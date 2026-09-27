@@ -134,8 +134,9 @@ export const GRADUATION_INFO = {
 
 export const FOUNDER_CONTACT = {
   phone: '+27 65 944 9409',
-  email: 'training@flawlessinstitution.co.za',
-  speakingEmail: 'speaking@flawlessinstitution.co.za',
+  email: 'info@flawlessinstitution.co.za',
+  altEmail: 'flawlessinstitution@gmail.com',
+  speakingEmail: 'info@flawlessinstitution.co.za',
   location: 'Fourways, South Africa',
   title: 'Founder & Director, Flawless Institution',
   name: 'Teldah Siyawamwaya'

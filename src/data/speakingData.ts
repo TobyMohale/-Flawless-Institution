@@ -199,7 +199,8 @@ export const FOUNDER_CONTACT = {
   experience: '16+ Years Industry Experience',
   established: 2016,
   phone: '+27 65 944 9409',
-  email: 'training@flawlessinstitution.co.za',
+  email: 'info@flawlessinstitution.co.za',
+  altEmail: 'flawlessinstitution@gmail.com',
   location: 'Fourways, South Africa',
   serviceArea: 'Serving South Africa and beyond'
 };

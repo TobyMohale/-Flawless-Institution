@@ -507,8 +507,8 @@ export const PhysicalClassesView: React.FC<PhysicalClassesViewProps> = ({
               <span>Campus Address: Fourways, Johannesburg, Gauteng, South Africa</span>
             </div>
             <div className="flex items-center gap-4">
-              <a href="mailto:training@flawlessinstitution.co.za" className="hover:text-white transition-colors flex items-center gap-1.5">
-                <Mail className="w-3.5 h-3.5 text-[#d4af37]" /> training@flawlessinstitution.co.za
+              <a href="mailto:info@flawlessinstitution.co.za" className="hover:text-white transition-colors flex items-center gap-1.5">
+                <Mail className="w-3.5 h-3.5 text-[#d4af37]" /> info@flawlessinstitution.co.za
               </a>
               <a href="https://wa.me/27659449409" target="_blank" rel="noopener noreferrer" className="hover:text-emerald-400 text-neutral-300 transition-colors flex items-center gap-1.5">
                 <Phone className="w-3.5 h-3.5 text-emerald-400" /> WhatsApp +27 65 944 9409

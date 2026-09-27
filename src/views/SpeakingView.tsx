@@ -641,7 +641,9 @@ export const SpeakingView: React.FC<SpeakingViewProps> = ({ onOpenSpeakingEnquir
           <div className="flex flex-col sm:flex-row items-center gap-4 text-neutral-300">
             <span>+27 65 944 9409</span>
             <span>•</span>
-            <span>training@flawlessinstitution.co.za</span>
+            <a href="mailto:info@flawlessinstitution.co.za" className="hover:text-[#d4af37] transition-colors">
+              info@flawlessinstitution.co.za
+            </a>
             <span>•</span>
             <span>Fourways, South Africa</span>
           </div>

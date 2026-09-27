@@ -77,12 +77,20 @@ export const Navbar: React.FC<NavbarProps> = ({
             </a>
             <span className="text-neutral-700 hidden sm:inline">|</span>
             <a 
-              href="mailto:training@flawlessinstitution.co.za" 
+              href="mailto:info@flawlessinstitution.co.za" 
               className="flex items-center gap-1 hover:text-[#d4af37] transition-colors hidden md:flex"
               id="top-bar-email"
             >
               <Mail className="w-3 h-3 text-[#d4af37]" />
-              <span>training@flawlessinstitution.co.za</span>
+              <span>info@flawlessinstitution.co.za</span>
+            </a>
+            <span className="text-neutral-700 hidden xl:inline">|</span>
+            <a 
+              href="mailto:flawlessinstitution@gmail.com" 
+              className="items-center gap-1 hover:text-[#d4af37] transition-colors hidden xl:flex text-neutral-400 hover:text-white"
+              id="top-bar-alt-email"
+            >
+              <span>flawlessinstitution@gmail.com</span>
             </a>
             <span className="text-neutral-700 hidden md:inline">|</span>
             <span className="hidden lg:flex items-center gap-1 text-neutral-400">

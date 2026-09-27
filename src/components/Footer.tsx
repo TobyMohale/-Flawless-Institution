@@ -125,11 +125,16 @@ export const Footer: React.FC<FooterProps> = ({
                 <Phone className="w-4 h-4 text-[#d4af37] shrink-0" />
                 <a href="tel:+27659449409" className="hover:text-white transition-colors">+27 65 944 9409</a>
               </div>
-              <div className="flex items-center gap-2">
-                <Mail className="w-4 h-4 text-[#d4af37] shrink-0" />
-                <a href="mailto:training@flawlessinstitution.co.za" className="hover:text-white transition-colors">
-                  training@flawlessinstitution.co.za
-                </a>
+              <div className="flex items-start gap-2">
+                <Mail className="w-4 h-4 text-[#d4af37] shrink-0 mt-0.5" />
+                <div className="flex flex-col gap-1">
+                  <a href="mailto:info@flawlessinstitution.co.za" className="hover:text-white transition-colors">
+                    info@flawlessinstitution.co.za
+                  </a>
+                  <a href="mailto:flawlessinstitution@gmail.com" className="hover:text-white transition-colors text-neutral-400">
+                    flawlessinstitution@gmail.com
+                  </a>
+                </div>
               </div>
             </div>
           </div>

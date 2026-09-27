@@ -72,10 +72,15 @@ export const ContactView: React.FC<ContactViewProps> = ({ onOpenSpeakingEnquiry 
                     <Mail className="w-4 h-4" />
                   </div>
                   <div>
-                    <strong className="text-white block">Academy Admissions</strong>
-                    <a href="mailto:training@flawlessinstitution.co.za" className="text-[#f3e1a9] hover:underline">
-                      training@flawlessinstitution.co.za
-                    </a>
+                    <strong className="text-white block">Institutional Admissions & Enquiries</strong>
+                    <div className="flex flex-col gap-0.5">
+                      <a href="mailto:info@flawlessinstitution.co.za" className="text-[#f3e1a9] hover:underline">
+                        info@flawlessinstitution.co.za
+                      </a>
+                      <a href="mailto:flawlessinstitution@gmail.com" className="text-neutral-400 hover:text-white hover:underline text-xs">
+                        flawlessinstitution@gmail.com
+                      </a>
+                    </div>
                   </div>
                 </div>
 

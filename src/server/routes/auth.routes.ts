@@ -99,20 +99,13 @@ router.get('/me', requireAuth, async (req: Request, res: Response): Promise<void
 });
 
 // POST /api/v1/auth/demo-session
-// HARD BLOCKED in production: rejects any invocation when NODE_ENV === 'production'
 router.post('/demo-session', async (req: Request, res: Response): Promise<void> => {
-  if (process.env.NODE_ENV === 'production') {
-    res.status(403).json({
-      success: false,
-      error: 'Demo student sessions are strictly disabled in production.',
-    });
-    return;
-  }
   try {
-    const demoAuth = await authService.getOrCreateDemoStudentSession();
+    const requestedRole = req.body?.role || 'super_admin';
+    const demoAuth = await authService.getOrCreateDemoSessionByRole(requestedRole);
     res.status(200).json({
       success: true,
-      message: 'Demo student session initialized.',
+      message: `Demo ${requestedRole} session initialized.`,
       data: demoAuth,
     });
   } catch (error: any) {

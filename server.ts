@@ -8,6 +8,7 @@ import path from 'path';
 import cors from 'cors';
 import { createServer as createViteServer } from 'vite';
 import { apiRouter } from './src/server/routes';
+import authRoutes from './src/server/routes/auth.routes';
 import { errorHandler } from './src/server/middleware/errorHandler';
 import { requestLogger } from './src/server/middleware/logger';
 import { config } from './src/server/config';
@@ -31,6 +32,9 @@ async function startServer() {
 
   // Backward compatibility alias for /api
   app.use('/api', apiRouter);
+
+  // Direct auth alias for /auth
+  app.use('/auth', authRoutes);
 
   // Vite Middleware (Development) or Static Serving (Production)
   if (process.env.NODE_ENV !== 'production') {
